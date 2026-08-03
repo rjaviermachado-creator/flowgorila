@@ -1,0 +1,17 @@
+// CONFIGURACIÓN PÚBLICA DE SUPABASE
+// 1. Entra en Supabase > Project Settings > API.
+// 2. Copia Project URL y la Publishable key (o anon key si tu proyecto antiguo la muestra).
+// 3. Sustituye SOLO los textos entre comillas.
+// IMPORTANTE: nunca pegues aquí service_role ni secret keys.
+
+const SUPABASE_URL = "PEGA_AQUI_TU_PROJECT_URL";
+const SUPABASE_PUBLISHABLE_KEY = "PEGA_AQUI_TU_PUBLISHABLE_KEY";
+
+window.FLOW_SUPABASE_READY =
+  SUPABASE_URL.startsWith("https://") &&
+  !SUPABASE_URL.includes("PEGA_AQUI") &&
+  !SUPABASE_PUBLISHABLE_KEY.includes("PEGA_AQUI");
+
+window.supabaseClient = window.FLOW_SUPABASE_READY
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+  : null;
