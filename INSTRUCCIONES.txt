@@ -1,0 +1,9 @@
+FLOWGORILA FASE 3 FUNCIONAL
+
+1. Sube index.html y flowgorila-logo.jpeg juntos a la raíz de GitHub.
+2. Sustituye el index.html anterior.
+3. Confirma los cambios.
+4. Espera 1-2 minutos y pulsa Ctrl+F5 en la web.
+
+Esta versión NO necesita Supabase ni configuración externa.
+Todos los datos se guardan en el navegador mediante localStorage.
