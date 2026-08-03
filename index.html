@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flowgorila, mi espacio personal para publicar novedades y vender productos.">
+  <title>Flowgorila | Mi tienda personal</title>
+
+  <style>
+    :root {
+      --bg: #090909;
+      --card: #151515;
+      --text: #ffffff;
+      --muted: #b7b7b7;
+      --accent: #ff5a1f;
+      --accent-2: #f7c948;
+      --line: #2a2a2a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 6%;
+      background: rgba(9, 9, 9, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      min-height: 82vh;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 50px;
+      padding: 80px 6%;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255, 90, 31, 0.25), transparent 30%),
+        radial-gradient(circle at 10% 80%, rgba(247, 201, 72, 0.12), transparent 28%);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.92;
+      letter-spacing: -4px;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+    }
+
+    .button-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .button-secondary {
+      background: transparent;
+    }
+
+    .hero-logo {
+      min-height: 390px;
+      border-radius: 34px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01)),
+        var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    }
+
+    .hero-logo strong {
+      display: block;
+      font-size: clamp(5rem, 12vw, 9rem);
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .hero-logo span {
+      display: block;
+      margin-top: 12px;
+      letter-spacing: 5px;
+      font-weight: 900;
+    }
+
+    .section {
+      padding: 90px 6%;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1;
+    }
+
+    .section-header p {
+      max-width: 520px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .card-image {
+      height: 240px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background:
+        linear-gradient(135deg, rgba(255,90,31,0.9), rgba(247,201,72,0.65));
+    }
+
+    .card-content {
+      padding: 22px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 90, 31, 0.14);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      color: var(--muted);
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .product-price strong {
+      font-size: 1.25rem;
+    }
+
+    .buy-button {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      background: var(--accent);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      background: #101010;
+    }
+
+    .about p {
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .contact {
+      text-align: center;
+      background:
+        radial-gradient(circle at center, rgba(255,90,31,0.18), transparent 45%);
+    }
+
+    .contact h2 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      margin-bottom: 16px;
+    }
+
+    .contact p {
+      color: var(--muted);
+      max-width: 650px;
+      margin: 0 auto 28px;
+    }
+
+    .footer {
+      padding: 35px 6%;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 60px;
+      }
+
+      .hero-logo {
+        min-height: 280px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header p {
+        margin-top: 18px;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <a class="logo" href="#inicio">FLOWGORILA</a>
+
+    <nav class="nav">
+      <a href="#inicio">Inicio</a>
+      <a href="#publicaciones">Publicaciones</a>
+      <a href="#tienda">Tienda</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div>
+        <p class="eyebrow">MI ESPACIO · MIS IDEAS · MI TIENDA</p>
+
+        <h1>FLOW<br>GORILA</h1>
+
+        <p>
+          Mi web personal para compartir publicaciones, novedades, proyectos
+          y productos que puedes comprar.
+        </p>
+
+        <div class="buttons">
+          <a class="button button-primary" href="#tienda">Ver productos</a>
+          <a class="button button-secondary" href="#publicaciones">Ver publicaciones</a>
+        </div>
+      </div>
+
+      <div class="hero-logo">
+        <div>
+          <strong>FG</strong>
+          <span>FLOWGORILA</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="publicaciones">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">NOVEDADES</p>
+          <h2>Mis publicaciones</h2>
+        </div>
+
+        <p>
+          Aquí podrás publicar fotos, noticias, proyectos, consejos,
+          recomendaciones y cualquier contenido que quieras enseñar.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-image">NUEVO</div>
+          <div class="card-content">
+            <span class="tag">Destacado</span>
+            <h3>Bienvenidos a Flowgorila</h3>
+            <p>
+              Esta es la primera publicación de mi nueva web personal.
+              Muy pronto habrá más novedades.
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">IDEAS</div>
+          <div class="card-content">
+            <span class="tag">Inspiración</span>
+            <h3>Próximos proyectos</h3>
+            <p>
+              Aquí podré compartir nuevas ideas, proyectos y cosas
+              interesantes que vaya creando.
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">FLOW</div>
+          <div class="card-content">
+            <span class="tag">Novedades</span>
+            <h3>Contenido nuevo</h3>
+            <p>
+              Este espacio se irá actualizando con fotografías,
+              noticias y publicaciones personales.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="tienda">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">TIENDA PERSONAL</p>
+          <h2>Productos</h2>
+        </div>
+
+        <p>
+          Estos son productos de ejemplo. Después cambiaremos las fotos,
+          nombres, precios y descripciones por los tuyos.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-image">CAMISETA</div>
+          <div class="card-content">
+            <span class="tag">Ropa</span>
+            <h3>Camiseta Flowgorila</h3>
+            <p>Producto de ejemplo para mostrar cómo quedará tu tienda.</p>
+
+            <div class="product-price">
+              <strong>19,99 €</strong>
+              <button class="buy-button" onclick="alert('La compra se activará próximamente')">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">GORRA</div>
+          <div class="card-content">
+            <span class="tag">Accesorios</span>
+            <h3>Gorra Flowgorila</h3>
+            <p>Segundo producto de muestra para tu catálogo personal.</p>
+
+            <div class="product-price">
+              <strong>14,99 €</strong>
+              <button class="buy-button" onclick="alert('La compra se activará próximamente')">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">LIMITED</div>
+          <div class="card-content">
+            <span class="tag">Edición especial</span>
+            <h3>Producto exclusivo</h3>
+            <p>Ideal para productos únicos o disponibles durante poco tiempo.</p>
+
+            <div class="product-price">
+              <strong>29,99 €</strong>
+              <button class="buy-button" onclick="alert('La compra se activará próximamente')">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section about" id="sobre-mi">
+      <div>
+        <p class="eyebrow">SOBRE LA WEB</p>
+        <h2>Un espacio personal que puede crecer contigo.</h2>
+      </div>
+
+      <div>
+        <p>
+          Flowgorila será tu lugar para publicar cosas que te interesan
+          y vender los productos que tú decidas.
+        </p>
+
+        <p>
+          Esta primera versión es un escaparate. Más adelante podremos añadir
+          carrito real, pagos, pedidos, envíos y un sistema para subir productos.
+        </p>
+      </div>
+    </section>
+
+    <section class="section contact" id="contacto">
+      <p class="eyebrow">CONTACTO</p>
+      <h2>¿Te interesa algo?</h2>
+
+      <p>
+        Próximamente conectaremos aquí tu WhatsApp, Instagram,
+        correo electrónico y demás redes sociales.
+      </p>
+
+      <a class="button button-primary" href="mailto:contacto@flowgorila.com">
+        Contactar
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <strong>FLOWGORILA</strong>
+    <p>© 2026 Flowgorila. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
