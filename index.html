@@ -3,359 +3,654 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Flowgorila: videojuegos, colección, publicaciones y tienda.">
-  <title>Flowgorila | Universo gamer y coleccionista</title>
+  <meta name="theme-color" content="#fff8fb">
+  <meta name="description" content="FlowGorila: contenido, tienda, comunidad y minijuegos.">
+  <title>FlowGorila | Contenido, comunidad y juegos</title>
 
   <style>
     :root{
-      --ink:#15183b;
-      --muted:#58607e;
+      --ink:#18204b;
+      --muted:#66708f;
       --white:#fff;
       --pink:#ff2f7d;
-      --red:#ff3a36;
-      --yellow:#ffd42a;
-      --orange:#ff9f1c;
-      --blue:#2387ff;
-      --cyan:#22d5e6;
-      --purple:#7a3cff;
-      --green:#16bb74;
-      --cream:#fff8ec;
-      --shadow:0 20px 55px rgba(55,56,120,.17);
-      --line:rgba(36,38,86,.12);
-      --radius:26px;
-      --max:1480px;
+      --red:#ff4036;
+      --yellow:#ffd52e;
+      --orange:#ff9d22;
+      --blue:#2587ff;
+      --cyan:#22d8e8;
+      --purple:#7c45ff;
+      --green:#20bf7b;
+      --cream:#fffaf1;
+      --panel:rgba(255,255,255,.86);
+      --border:rgba(47,53,116,.12);
+      --shadow:0 22px 60px rgba(67,73,141,.16);
+      --radius:28px;
+      --max:1460px;
     }
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      color:var(--ink);
-      background:
-        radial-gradient(circle at 8% 4%,rgba(255,47,125,.18),transparent 24%),
-        radial-gradient(circle at 94% 5%,rgba(35,135,255,.18),transparent 25%),
-        radial-gradient(circle at 50% 88%,rgba(255,212,42,.2),transparent 26%),
-        linear-gradient(135deg,#fff,#fff8fd 38%,#f5fbff 68%,#fff8e8);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+      min-height:100vh;
       overflow-x:hidden;
+      color:var(--ink);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 6% 4%,rgba(255,47,125,.20),transparent 24%),
+        radial-gradient(circle at 94% 4%,rgba(37,135,255,.20),transparent 25%),
+        radial-gradient(circle at 50% 98%,rgba(255,213,46,.22),transparent 26%),
+        linear-gradient(135deg,#fff,#fff7fc 38%,#f3fbff 68%,#fff8df);
     }
 
+    body.lock{overflow:hidden}
     a{text-decoration:none;color:inherit}
-    button,input{font:inherit}
+    button,input,textarea,select{font:inherit}
     button{cursor:pointer}
-    img{max-width:100%;display:block}
-    .wrap{width:min(calc(100% - 32px),var(--max));margin:auto}
+    img{display:block;max-width:100%}
+    section{scroll-margin-top:115px}
+    .wrap{width:min(calc(100% - 30px),var(--max));margin:auto}
 
-    .topbar{
-      position:sticky;top:0;z-index:50;
-      padding:14px 0;
-      background:rgba(255,255,255,.82);
-      backdrop-filter:blur(18px);
-      border-bottom:1px solid rgba(255,255,255,.85);
-      box-shadow:0 8px 24px rgba(44,46,94,.08);
+    .header{
+      position:sticky;top:0;z-index:60;
+      padding:13px 0;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.9);
     }
     .nav{
-      min-height:82px;
+      min-height:78px;
       display:grid;
       grid-template-columns:300px 1fr auto;
       align-items:center;
-      gap:22px;
-      padding:10px 18px;
+      gap:20px;
+      padding:9px 18px;
       background:rgba(255,255,255,.95);
-      border:1px solid rgba(255,255,255,.9);
+      border:1px solid rgba(255,255,255,.95);
       border-radius:26px;
       box-shadow:var(--shadow);
     }
     .brand{display:flex;align-items:center;gap:12px}
-    .brand img{width:58px;height:58px;border-radius:16px;object-fit:cover;box-shadow:0 10px 24px rgba(122,60,255,.25)}
-    .brand-title{font-size:clamp(1.2rem,2.4vw,2rem);font-weight:1000;letter-spacing:-.05em}
-    .brand-title span:first-child{color:var(--pink)}
-    .brand-title span:last-child{color:#15183b}
-    .tagline{font-size:.68rem;font-weight:900;letter-spacing:.23em;color:#ff356c}
+    .brand img{width:58px;height:58px;object-fit:cover;border-radius:17px;box-shadow:0 10px 28px rgba(124,69,255,.24)}
+    .brand-name{font-weight:1000;font-size:clamp(1.2rem,2.4vw,2rem);letter-spacing:-.055em}
+    .brand-name b:first-child{color:var(--pink)}
+    .brand-line{font-size:.68rem;font-weight:950;letter-spacing:.21em;color:#f53168}
 
-    .navlinks{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    .navlinks{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
     .navlinks a{
-      min-width:102px;
-      display:grid;place-items:center;
-      gap:4px;
-      padding:10px 12px;
-      border-radius:16px;
-      font-size:.76rem;
-      font-weight:950;
-      transition:.2s ease;
+      min-width:94px;padding:10px 11px;border-radius:15px;
+      display:grid;place-items:center;gap:3px;
+      font-size:.72rem;font-weight:950;transition:.2s;
     }
-    .navlinks a:hover,.navlinks a.active{background:#fff;box-shadow:0 10px 26px rgba(63,67,130,.14);transform:translateY(-2px)}
-    .nav-icon{font-size:1.55rem}
-    .navlinks a:nth-child(1) .nav-icon{color:var(--pink)}
-    .navlinks a:nth-child(2) .nav-icon{color:var(--blue)}
-    .navlinks a:nth-child(3) .nav-icon{color:var(--purple)}
-    .navlinks a:nth-child(4) .nav-icon{color:var(--yellow)}
-    .navlinks a:nth-child(5) .nav-icon{color:var(--red)}
-    .navlinks a:nth-child(6) .nav-icon{color:var(--cyan)}
-
-    .actions{display:flex;gap:10px}
-    .round{
-      width:52px;height:52px;border:0;border-radius:17px;background:#fff;
-      display:grid;place-items:center;font-size:1.35rem;box-shadow:0 10px 28px rgba(44,46,94,.15);position:relative
+    .navlinks a:hover,.navlinks a.active{transform:translateY(-2px);background:#fff;box-shadow:0 10px 26px rgba(53,59,122,.14)}
+    .navlinks span{font-size:1.4rem}
+    .actions{display:flex;gap:9px}
+    .icon-btn{
+      width:50px;height:50px;border:0;border-radius:17px;background:#fff;
+      box-shadow:0 10px 25px rgba(50,56,120,.14);
+      display:grid;place-items:center;font-size:1.3rem;position:relative
     }
-    .badge{position:absolute;right:-4px;top:-5px;background:var(--pink);color:#fff;font-size:.7rem;font-weight:900;padding:3px 7px;border-radius:99px}
+    .badge{position:absolute;top:-5px;right:-5px;background:var(--pink);color:#fff;border-radius:99px;font-size:.68rem;font-weight:1000;padding:3px 7px}
 
     .hero{
       margin-top:18px;
+      min-height:530px;
       position:relative;
       overflow:hidden;
-      min-height:520px;
-      border-radius:34px;
-      background:
-        linear-gradient(115deg,rgba(255,255,255,.94) 0 33%,rgba(255,255,255,.3) 55%,rgba(255,255,255,.84) 100%),
-        radial-gradient(circle at 52% 42%,rgba(255,212,42,.88),transparent 20%),
-        radial-gradient(circle at 67% 20%,rgba(255,47,125,.65),transparent 27%),
-        radial-gradient(circle at 88% 33%,rgba(35,135,255,.55),transparent 28%),
-        linear-gradient(135deg,#fff,#ffe6f2 36%,#dff8ff 68%,#fff5c9);
-      box-shadow:var(--shadow);
+      border-radius:36px;
       border:1px solid rgba(255,255,255,.95);
+      box-shadow:var(--shadow);
+      background:
+        radial-gradient(circle at 53% 41%,rgba(255,213,46,.88),transparent 19%),
+        radial-gradient(circle at 68% 16%,rgba(255,47,125,.55),transparent 27%),
+        radial-gradient(circle at 91% 26%,rgba(37,135,255,.48),transparent 29%),
+        linear-gradient(120deg,#fff 0 27%,#ffeaf4 43%,#dbf8ff 68%,#fff4bd);
     }
-    .paint{position:absolute;inset:0;pointer-events:none;opacity:.85}
-    .paint:before,.paint:after{
-      content:"";position:absolute;width:52%;height:42%;filter:saturate(1.25);
-      background:conic-gradient(from 20deg,transparent,rgba(255,47,125,.42),transparent,rgba(35,135,255,.42),transparent,rgba(255,212,42,.55),transparent);
-      border-radius:50%;filter:blur(4px)
+    .hero:before,.hero:after{
+      content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.48;
+      background:conic-gradient(transparent,var(--pink),transparent,var(--blue),transparent,var(--yellow),transparent)
     }
-    .paint:before{right:18%;top:-18%;transform:rotate(8deg)}
-    .paint:after{left:-18%;bottom:-22%;transform:rotate(-18deg)}
-    .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1.25fr .78fr;gap:26px;align-items:center;padding:52px 38px}
-    .hero-copy h1{font-size:clamp(3.6rem,7vw,7rem);line-height:.84;margin:8px 0 18px;letter-spacing:-.07em}
-    .hero-copy h1 .rainbow{
-      display:block;
-      color:transparent;
+    .hero:before{width:760px;height:380px;right:16%;top:-160px;transform:rotate(12deg)}
+    .hero:after{width:620px;height:320px;left:-220px;bottom:-180px;transform:rotate(-18deg)}
+    .hero-grid{
+      position:relative;z-index:2;
+      min-height:530px;
+      display:grid;
+      grid-template-columns:1fr 1.25fr .76fr;
+      gap:28px;align-items:center;
+      padding:48px 38px;
+    }
+    .hero-copy h1{font-size:clamp(3.6rem,7vw,6.9rem);line-height:.84;letter-spacing:-.075em;margin:8px 0 20px}
+    .rainbow{
+      display:block;color:transparent;
       background:linear-gradient(90deg,var(--pink),var(--red),var(--orange),var(--yellow),var(--blue),var(--purple));
       -webkit-background-clip:text;background-clip:text
     }
-    .hero-copy p{max-width:520px;color:#30385e;font-size:1.08rem;line-height:1.6}
-    .hero-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
-    .cta{border:0;border-radius:18px;padding:15px 23px;font-weight:950;box-shadow:0 12px 28px rgba(52,50,107,.18);transition:.2s}
-    .cta:hover{transform:translateY(-3px) scale(1.02)}
-    .cta.pink{background:linear-gradient(135deg,var(--pink),#ff5d9a);color:#fff}
-    .cta.blue{background:#fff;color:#1856ca;border:2px solid rgba(35,135,255,.5)}
+    .hero-copy p{font-size:1.06rem;line-height:1.65;max-width:520px;color:#333b62}
+    .buttons{display:flex;gap:13px;flex-wrap:wrap;margin-top:24px}
+    .btn{border:0;border-radius:18px;padding:14px 22px;font-weight:950;box-shadow:0 13px 30px rgba(53,56,121,.18);transition:.2s}
+    .btn:hover{transform:translateY(-3px) scale(1.02)}
+    .btn.pink{background:linear-gradient(135deg,var(--pink),#ff69a2);color:#fff}
+    .btn.blue{background:#fff;color:#1857ca;border:2px solid rgba(37,135,255,.45)}
+    .btn.yellow{background:linear-gradient(135deg,var(--yellow),#ffb71b);color:#20223f}
+    .btn.dark{background:#1f2452;color:#fff}
 
-    .mascot{
-      position:relative;display:grid;place-items:center;min-height:420px
-    }
-    .mascot-ring{
-      position:absolute;width:390px;height:390px;border-radius:50%;
-      background:conic-gradient(var(--pink),var(--yellow),var(--cyan),var(--purple),var(--pink));
-      filter:drop-shadow(0 26px 32px rgba(72,54,146,.24))
-    }
-    .mascot-ring:after{content:"";position:absolute;inset:20px;background:rgba(255,255,255,.62);border-radius:50%}
-    .mascot img{position:relative;z-index:2;width:min(100%,430px);filter:drop-shadow(0 28px 24px rgba(55,39,87,.28));border-radius:30px}
-    .spark{position:absolute;font-size:2rem;animation:float 3.5s ease-in-out infinite}
-    .s1{left:4%;top:10%;color:var(--pink)} .s2{right:5%;top:14%;color:var(--purple);animation-delay:-1s}
-    .s3{right:12%;bottom:8%;color:var(--yellow);animation-delay:-2s}.s4{left:8%;bottom:13%;color:var(--cyan);animation-delay:-.5s}
-    @keyframes float{50%{transform:translateY(-14px) rotate(8deg)}}
+    .mascot{position:relative;display:grid;place-items:center;min-height:420px}
+    .ring{position:absolute;width:390px;height:390px;border-radius:50%;background:conic-gradient(var(--pink),var(--yellow),var(--cyan),var(--purple),var(--pink));filter:drop-shadow(0 30px 35px rgba(68,51,142,.22))}
+    .ring:after{content:"";position:absolute;inset:20px;background:rgba(255,255,255,.62);border-radius:50%}
+    .mascot img{position:relative;z-index:3;width:min(100%,430px);border-radius:32px;filter:drop-shadow(0 28px 24px rgba(53,42,96,.25))}
+    .float{position:absolute;font-size:2rem;animation:float 3.3s ease-in-out infinite;z-index:4}
+    .f1{left:3%;top:7%;color:var(--pink)} .f2{right:5%;top:10%;color:var(--purple);animation-delay:-1s}
+    .f3{left:7%;bottom:9%;color:var(--cyan);animation-delay:-.6s}.f4{right:10%;bottom:5%;color:var(--yellow);animation-delay:-2s}
+    @keyframes float{50%{transform:translateY(-14px) rotate(9deg)}}
 
-    .featured{
-      padding:18px;background:rgba(255,255,255,.88);border-radius:28px;border:1px solid rgba(255,255,255,.9);box-shadow:0 22px 55px rgba(47,47,100,.18)
+    .feature{
+      padding:18px;border-radius:28px;background:rgba(255,255,255,.9);
+      border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow)
     }
-    .featured-label{display:inline-block;background:var(--pink);color:#fff;padding:8px 12px;border-radius:999px;font-size:.72rem;font-weight:950}
-    .cap-visual{height:230px;margin:16px 0;border-radius:22px;background:linear-gradient(145deg,#fff2bd,#fff,#eef7ff);display:grid;place-items:center;font-size:7rem}
-    .featured h3{margin:0 0 4px;font-size:1.25rem}.featured p{margin:0;color:var(--muted)}.price{color:var(--red);font-size:1.8rem;font-weight:1000}
-    .buy{margin-top:12px;width:100%;border:0;border-radius:15px;padding:13px;background:linear-gradient(135deg,var(--yellow),#ffbc17);font-weight:950}
+    .label{display:inline-block;background:var(--pink);color:#fff;padding:8px 12px;border-radius:999px;font-size:.7rem;font-weight:1000}
+    .product-art{height:220px;border-radius:22px;margin:15px 0;background:linear-gradient(145deg,#fff6c3,#fff,#eaf6ff);display:grid;place-items:center;font-size:7rem}
+    .feature h3{margin:0;font-size:1.3rem}.feature p{margin:4px 0;color:var(--muted)}.price{color:var(--red);font-size:1.8rem;font-weight:1000}
 
-    .category-grid{margin-top:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+    .section{padding:76px 0}
+    .section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:25px}
+    .section-head h2{margin:0;font-size:clamp(2.1rem,5vw,4.4rem);line-height:.95;letter-spacing:-.055em}
+    .section-head p{max-width:520px;color:var(--muted)}
+
+    .category-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
     .cat{
-      min-height:210px;padding:22px;border-radius:24px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.95);box-shadow:0 15px 34px rgba(51,55,112,.12)
+      min-height:205px;padding:21px;border-radius:24px;position:relative;overflow:hidden;
+      box-shadow:0 16px 36px rgba(53,59,124,.12);border:1px solid rgba(255,255,255,.95)
     }
-    .cat h3{margin:0 0 10px;font-size:1.08rem}.cat p{font-size:.8rem;line-height:1.55;max-width:155px}.cat .big{position:absolute;right:8px;bottom:8px;font-size:5rem;filter:drop-shadow(0 12px 12px rgba(47,48,100,.18))}
-    .cat:nth-child(1){background:linear-gradient(145deg,#e7f5ff,#c7e9ff)}
-    .cat:nth-child(2){background:linear-gradient(145deg,#fff0f5,#ffd9e6)}
-    .cat:nth-child(3){background:linear-gradient(145deg,#fff9cf,#ffe9a4)}
-    .cat:nth-child(4){background:linear-gradient(145deg,#f5ecff,#dfceff)}
-    .cat:nth-child(5){background:linear-gradient(145deg,#e9fffb,#c9f6ee)}
-    .cat:nth-child(6){background:linear-gradient(145deg,#fff0f3,#ffd5df)}
+    .cat h3{margin:0 0 9px}.cat p{font-size:.8rem;max-width:150px;line-height:1.55}.cat .art{position:absolute;right:8px;bottom:7px;font-size:5rem;filter:drop-shadow(0 12px 14px rgba(55,57,110,.2))}
+    .cat:nth-child(1){background:linear-gradient(145deg,#e6f5ff,#c8ebff)}
+    .cat:nth-child(2){background:linear-gradient(145deg,#fff0f5,#ffd6e5)}
+    .cat:nth-child(3){background:linear-gradient(145deg,#fff9ce,#ffe7a0)}
+    .cat:nth-child(4){background:linear-gradient(145deg,#f4edff,#decdff)}
+    .cat:nth-child(5){background:linear-gradient(145deg,#e9fffb,#c8f5ed)}
+    .cat:nth-child(6){background:linear-gradient(145deg,#fff0f3,#ffd4df)}
 
-    .promo-grid{margin-top:14px;display:grid;grid-template-columns:1.2fr .78fr 1fr;gap:14px}
-    .promo{min-height:190px;border-radius:26px;padding:26px;position:relative;overflow:hidden;color:#172045;box-shadow:var(--shadow)}
-    .promo h3{font-size:1.55rem;margin:6px 0 10px;max-width:290px;line-height:1.05}.promo p{max-width:320px}
-    .promo.yellow{background:linear-gradient(135deg,#ffe83b,#ffbe29)}
-    .promo.blue{background:linear-gradient(135deg,#118bff,#185cd3);color:#fff}
-    .promo.pink{background:linear-gradient(135deg,#ffd8e8,#ff8fc0)}
-    .promo .art{position:absolute;right:18px;bottom:6px;font-size:7.5rem;filter:drop-shadow(0 18px 16px rgba(29,31,86,.23))}
-    .small-btn{border:0;border-radius:999px;padding:11px 16px;background:var(--pink);color:#fff;font-weight:900}.blue .small-btn{background:#113da9}
+    .posts{display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:15px}
+    .post{min-height:290px;padding:24px;border-radius:26px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+    .post h3{font-size:1.45rem;max-width:270px;margin:5px 0 8px;line-height:1.08}.post p{max-width:300px;font-size:.88rem}
+    .post .art{position:absolute;right:18px;bottom:5px;font-size:7rem}
+    .post.p1{background:linear-gradient(135deg,#ffe52e,#ffb629)}
+    .post.p2{background:linear-gradient(135deg,#118bff,#1d58cc);color:#fff}
+    .post.p3{background:linear-gradient(135deg,#ffd7e6,#ff91c1)}
 
-    .benefits{margin:14px 0 28px;padding:16px 24px;background:rgba(255,255,255,.93);border-radius:24px;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-    .benefit{display:flex;align-items:center;gap:12px;border-right:1px solid var(--line);padding-right:12px}.benefit:last-child{border-right:0}
-    .benefit b{display:block;font-size:.8rem}.benefit span{font-size:.72rem;color:var(--muted)}.benefit .ico{font-size:1.8rem}
+    .shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+    .product{background:rgba(255,255,255,.91);border-radius:24px;padding:16px;border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow)}
+    .product .visual{height:190px;border-radius:20px;display:grid;place-items:center;font-size:6rem;background:linear-gradient(145deg,#f4f9ff,#fff0f7,#fff5c4)}
+    .product h3{margin:14px 0 4px}.product p{font-size:.82rem;color:var(--muted);min-height:42px}
+    .product-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+    .add{border:0;border-radius:14px;padding:10px 13px;background:linear-gradient(135deg,var(--yellow),var(--orange));font-weight:950}
 
-    .cart-panel{position:fixed;right:20px;top:110px;width:min(380px,calc(100vw - 40px));background:white;border-radius:26px;box-shadow:0 30px 80px rgba(28,30,75,.25);padding:22px;z-index:100;transform:translateX(120%);transition:.3s}
-    .cart-panel.open{transform:translateX(0)}.cart-head{display:flex;justify-content:space-between;align-items:center}.cart-items{display:grid;gap:10px;margin:18px 0}.cart-item{display:flex;justify-content:space-between;background:#f7f8ff;padding:12px;border-radius:14px}.cart-total{font-weight:1000;font-size:1.2rem}
+    .community-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:18px}
+    .community-card,.comments-card{background:rgba(255,255,255,.9);border-radius:28px;padding:28px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.95)}
+    .community-card{background:linear-gradient(135deg,#ffd9e9,#fff2bd,#dff8ff)}
+    .community-card h3{font-size:2rem;margin:6px 0}.reactions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .reaction{border:0;border-radius:999px;background:#fff;padding:10px 14px;box-shadow:0 8px 20px rgba(54,57,117,.12)}
+    .comment-form{display:grid;gap:10px}
+    .comment-form input,.comment-form textarea{
+      width:100%;border:1px solid var(--border);border-radius:16px;background:#fff;padding:13px;outline:none
+    }
+    .comment-form textarea{min-height:95px;resize:vertical}
+    .comments-list{display:grid;gap:12px;margin-top:18px;max-height:390px;overflow:auto}
+    .comment{background:#f7f8ff;border:1px solid var(--border);border-radius:17px;padding:14px}
+    .comment-head{display:flex;justify-content:space-between;gap:10px}.comment small{color:var(--muted)}.comment p{margin:8px 0 0}
+
+    .games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .game{
+      min-height:410px;padding:25px;border-radius:28px;box-shadow:var(--shadow);
+      position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.95)
+    }
+    .game h3{font-size:1.8rem;margin:5px 0}.game p{max-width:390px}
+    .game.trivia{background:linear-gradient(145deg,#fff4c2,#ffe244)}
+    .game.mystery{background:linear-gradient(145deg,#dff4ff,#43b9ff);color:#16244f}
+    .game.rush{background:linear-gradient(145deg,#ffd8e8,#ff76b4)}
+    .game-screen{margin-top:20px;background:rgba(255,255,255,.82);border-radius:20px;padding:18px;min-height:205px}
+    .answers{display:grid;gap:8px;margin-top:13px}.answer{border:0;border-radius:13px;padding:11px;background:#fff;box-shadow:0 7px 17px rgba(49,52,110,.1);font-weight:800;text-align:left}
+    .answer.correct{background:#bdf5d7}.answer.wrong{background:#ffd0d6}
+    .mystery-box{font-size:8rem;text-align:center;transition:.3s}.mystery-box.opened{transform:scale(1.08) rotate(4deg)}
+    .rush-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rush-cell{aspect-ratio:1;border:0;border-radius:15px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.55)}
+    .scoreline{display:flex;justify-content:space-between;gap:10px;font-weight:950;margin-bottom:12px}
+
+    .benefits{padding:16px 22px;margin:0 0 28px;background:rgba(255,255,255,.94);border-radius:24px;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+    .benefit{display:flex;gap:11px;align-items:center;border-right:1px solid var(--border)}.benefit:last-child{border-right:0}.benefit i{font-size:1.7rem;font-style:normal}.benefit b{font-size:.78rem;display:block}.benefit span{font-size:.7rem;color:var(--muted)}
+
+    .cart{
+      position:fixed;right:18px;top:110px;z-index:110;
+      width:min(390px,calc(100vw - 36px));padding:22px;background:#fff;border-radius:26px;
+      box-shadow:0 32px 90px rgba(35,39,93,.28);transform:translateX(120%);transition:.3s
+    }
+    .cart.open{transform:translateX(0)}.cart-head{display:flex;justify-content:space-between;align-items:center}.cart-items{display:grid;gap:10px;margin:17px 0}.cart-item{display:flex;justify-content:space-between;gap:10px;background:#f6f7ff;border-radius:14px;padding:12px}.cart-total{font-size:1.2rem;font-weight:1000}
+    .toast{position:fixed;left:50%;bottom:24px;z-index:150;transform:translate(-50%,30px);opacity:0;background:#1d2454;color:#fff;padding:13px 18px;border-radius:14px;transition:.25s}.toast.show{transform:translate(-50%,0);opacity:1}
 
     @media(max-width:1180px){
       .nav{grid-template-columns:1fr auto}.navlinks{display:none}
-      .hero-grid{grid-template-columns:1fr 1fr}.featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;align-items:center}.cap-visual{height:190px}
-      .category-grid{grid-template-columns:repeat(3,1fr)}.promo-grid{grid-template-columns:1fr}.benefits{grid-template-columns:repeat(2,1fr)}
+      .hero-grid{grid-template-columns:1fr 1fr}.feature{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;align-items:center}
+      .category-grid{grid-template-columns:repeat(3,1fr)}
+      .posts{grid-template-columns:1fr}.shop-grid{grid-template-columns:repeat(2,1fr)}
+      .games-grid{grid-template-columns:1fr}.community-grid{grid-template-columns:1fr}
+      .benefits{grid-template-columns:repeat(2,1fr)}
     }
     @media(max-width:760px){
-      .topbar{padding:8px 0}.nav{min-height:68px;padding:8px 10px}.brand img{width:46px;height:46px}.tagline{display:none}.brand-title{font-size:1.1rem}.round{width:44px;height:44px}
-      .hero-grid{grid-template-columns:1fr;padding:32px 20px}.hero-copy{text-align:center}.hero-copy p{margin:auto}.hero-buttons{justify-content:center}.mascot{min-height:330px}.mascot-ring{width:300px;height:300px}.featured{display:block}
-      .category-grid{grid-template-columns:1fr 1fr}.cat{min-height:190px}.promo-grid{grid-template-columns:1fr}.benefits{grid-template-columns:1fr}.benefit{border-right:0;border-bottom:1px solid var(--line);padding-bottom:10px}
+      .header{padding:7px 0}.nav{min-height:66px;padding:8px 10px}.brand img{width:45px;height:45px}.brand-line{display:none}.brand-name{font-size:1rem}.icon-btn{width:43px;height:43px}
+      .hero-grid{grid-template-columns:1fr;padding:30px 20px}.hero-copy{text-align:center}.hero-copy p{margin:auto}.buttons{justify-content:center}.mascot{min-height:330px}.ring{width:300px;height:300px}.feature{display:block}
+      .section-head{display:block}.category-grid{grid-template-columns:1fr 1fr}.shop-grid{grid-template-columns:1fr}
+      .benefits{grid-template-columns:1fr}.benefit{border-right:0;border-bottom:1px solid var(--border);padding-bottom:10px}
     }
     @media(max-width:480px){
-      .actions .round:first-child{display:none}.hero-copy h1{font-size:3.35rem}.category-grid{grid-template-columns:1fr}.cat{min-height:170px}.brand-title{font-size:.95rem}
+      .actions .icon-btn:first-child{display:none}.hero-copy h1{font-size:3.3rem}.category-grid{grid-template-columns:1fr}.brand-name{font-size:.9rem}
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
+  <header class="header">
     <div class="wrap nav">
       <a class="brand" href="#inicio">
-        <img src="flowgorila-logo.jpeg" alt="Flowgorila">
+        <img src="flowgorila-logo.jpeg" alt="FlowGorila">
         <div>
-          <div class="brand-title"><span>FLOW</span><span>GORILA</span></div>
-          <div class="tagline">PLAY · COLLECT · CREATE</div>
+          <div class="brand-name"><b>FLOW</b><b>GORILA</b></div>
+          <div class="brand-line">PLAY · COLLECT · CREATE</div>
         </div>
       </a>
 
       <nav class="navlinks">
-        <a class="active" href="#inicio"><span class="nav-icon">⌂</span>INICIO</a>
-        <a href="#juegos"><span class="nav-icon">🎮</span>JUEGOS</a>
-        <a href="#publicaciones"><span class="nav-icon">▤</span>PUBLICACIONES</a>
-        <a href="#tienda"><span class="nav-icon">🛍️</span>TIENDA</a>
-        <a href="#coleccion"><span class="nav-icon">★</span>COLECCIÓN</a>
-        <a href="#sobre"><span class="nav-icon">🦍</span>SOBRE MÍ</a>
+        <a class="active" href="#inicio"><span>⌂</span>INICIO</a>
+        <a href="#contenido"><span>📰</span>CONTENIDO</a>
+        <a href="#tienda"><span>🛍️</span>TIENDA</a>
+        <a href="#comunidad"><span>💬</span>COMUNIDAD</a>
+        <a href="#juegos"><span>🎮</span>MINIJUEGOS</a>
+        <a href="#sobre"><span>⭐</span>SOBRE MÍ</a>
       </nav>
 
       <div class="actions">
-        <button class="round" aria-label="Buscar">⌕</button>
-        <button class="round" id="cart-button" aria-label="Carrito">🛒<span class="badge" id="cart-count">0</span></button>
+        <button class="icon-btn" aria-label="Buscar">⌕</button>
+        <button class="icon-btn" id="cart-button" aria-label="Carrito">🛒<span class="badge" id="cart-count">0</span></button>
       </div>
     </div>
   </header>
 
   <main class="wrap">
     <section class="hero" id="inicio">
-      <div class="paint"></div>
-      <span class="spark s1">✦</span><span class="spark s2">◆</span><span class="spark s3">⚡</span><span class="spark s4">★</span>
-
       <div class="hero-grid">
         <div class="hero-copy">
-          <strong>BIENVENIDO A MI</strong>
-          <h1><span class="rainbow">UNIVERSO</span> FLOWGORILA</h1>
-          <p>Un espacio donde los videojuegos, las cartas, las colecciones, la creatividad y los productos cobran vida con tu apoyo.</p>
-          <div class="hero-buttons">
-            <a class="cta pink" href="#tienda">🚀 EXPLORAR TIENDA</a>
-            <a class="cta blue" href="#publicaciones">⚡ VER PUBLICACIONES</a>
+          <b>TODO LO QUE ME GUSTA</b>
+          <h1><span class="rainbow">EN UN SOLO</span> LUGAR</h1>
+          <p>Videojuegos, publicaciones, productos, colecciones, opiniones y minijuegos. Una página bonita, viva y entretenida para descubrir algo nuevo cada vez que entres.</p>
+          <div class="buttons">
+            <a class="btn pink" href="#contenido">✨ EXPLORAR CONTENIDO</a>
+            <a class="btn blue" href="#juegos">🎮 JUGAR AHORA</a>
           </div>
         </div>
 
         <div class="mascot">
-          <div class="mascot-ring"></div>
-          <img src="flowgorila-logo.jpeg" alt="Mascota Flowgorila">
+          <div class="ring"></div>
+          <span class="float f1">✦</span><span class="float f2">◆</span><span class="float f3">★</span><span class="float f4">⚡</span>
+          <img src="flowgorila-logo.jpeg" alt="Logo FlowGorila">
         </div>
 
-        <article class="featured">
-          <span class="featured-label">🔥 PRODUCTO DESTACADO</span>
-          <div class="cap-visual">🧢</div>
-          <h3>Gorra Flowgorila</h3>
-          <p>Edición Premium</p>
+        <article class="feature">
+          <span class="label">🔥 DESTACADO</span>
+          <div class="product-art">🧢</div>
+          <h3>Gorra FlowGorila</h3>
+          <p>Edición de muestra</p>
           <div class="price">19,99 €</div>
-          <button class="buy add-product" data-name="Gorra Flowgorila" data-price="19.99">VER PRODUCTO</button>
+          <button class="btn yellow add-product" data-name="Gorra FlowGorila" data-price="19.99">AÑADIR AL CARRITO</button>
         </article>
       </div>
     </section>
 
-    <section class="category-grid" id="juegos">
-      <article class="cat"><h3 style="color:#145fe0">🎮 JUEGOS</h3><p>Descubre juegos épicos, recomendaciones, guías y momentos inolvidables.</p><span class="big">🎮</span></article>
-      <article class="cat" id="publicaciones"><h3 style="color:#ff2f7d">✎ PUBLICACIONES</h3><p>Mis últimas noticias, opiniones, compras, proyectos y más.</p><span class="big">📝</span></article>
-      <article class="cat" id="tienda"><h3 style="color:#f5a400">🛍️ TIENDA</h3><p>Productos exclusivos, drops y artículos de Flowgorila.</p><span class="big">🛍️</span></article>
-      <article class="cat" id="coleccion"><h3 style="color:#6730dc">★ COLECCIÓN</h3><p>Cartas, figuras, consolas y piezas que forman parte de mi historia.</p><span class="big">🎴</span></article>
-      <article class="cat" id="sobre"><h3 style="color:#0f9aa5">🦍 SOBRE MÍ</h3><p>Conoce mi historia, mis pasiones y lo que hay detrás del proyecto.</p><span class="big">🦍</span></article>
-      <article class="cat"><h3 style="color:#ef2961">👥 COMUNIDAD</h3><p>Únete a la comunidad Flowgorila y forma parte del clan.</p><span class="big">👥</span></article>
+    <section class="section" id="contenido">
+      <div class="section-head">
+        <div><b>DESCUBRE LA PÁGINA</b><h2>Siempre hay algo nuevo.</h2></div>
+        <p>Entra para mirar publicaciones, descubrir productos, dejar tu opinión, participar con la comunidad o jugar una partida rápida.</p>
+      </div>
+
+      <div class="category-grid">
+        <article class="cat"><h3 style="color:#145fe0">🎮 JUEGOS</h3><p>Recomendaciones, novedades y momentos inolvidables.</p><span class="art">🎮</span></article>
+        <article class="cat"><h3 style="color:#ff2f7d">✎ PUBLICACIONES</h3><p>Noticias, opiniones, compras, proyectos y más.</p><span class="art">📝</span></article>
+        <article class="cat"><h3 style="color:#e59a00">🛍️ TIENDA</h3><p>Productos, drops y artículos seleccionados.</p><span class="art">🛍️</span></article>
+        <article class="cat"><h3 style="color:#6730dc">★ COLECCIÓN</h3><p>Cartas, figuras, consolas y objetos favoritos.</p><span class="art">🎴</span></article>
+        <article class="cat"><h3 style="color:#0e9ca8">💬 OPINIONES</h3><p>Habla, comenta y comparte lo que piensas.</p><span class="art">💬</span></article>
+        <article class="cat"><h3 style="color:#ef2961">👥 COMUNIDAD</h3><p>Participa, reacciona y forma parte de la conversación.</p><span class="art">👥</span></article>
+      </div>
     </section>
 
-    <section class="promo-grid">
-      <article class="promo yellow">
-        <small>COLECCIÓN DESTACADA</small>
-        <h3>Cartas legendarias que marcan historia</h3>
-        <p>Diseños originales, criaturas y piezas especiales para mi vitrina.</p>
-        <button class="small-btn">VER COLECCIÓN</button>
-        <span class="art">🎴</span>
-      </article>
+    <section class="section">
+      <div class="section-head">
+        <div><b>ÚLTIMAS NOVEDADES</b><h2>Contenido para explorar.</h2></div>
+        <p>Estas tarjetas son ejemplos. Después podrás cambiar los textos, fotografías y temas por los tuyos.</p>
+      </div>
 
-      <article class="promo blue">
-        <small>NUEVO DROP</small>
-        <h3>Caja Misteriosa Flowgorila</h3>
-        <p>Productos exclusivos, ediciones limitadas y muchas sorpresas.</p>
-        <button class="small-btn add-product" data-name="Caja Misteriosa" data-price="29.99">IR A LA TIENDA</button>
-        <span class="art">🎁</span>
-      </article>
+      <div class="posts">
+        <article class="post p1">
+          <small>COLECCIÓN DESTACADA</small><h3>Cartas y objetos que merecen una vitrina</h3><p>Una selección personal de piezas curiosas y especiales.</p><button class="btn pink">LEER PUBLICACIÓN</button><span class="art">🎴</span>
+        </article>
+        <article class="post p2">
+          <small>NUEVA PUBLICACIÓN</small><h3>Los videojuegos a los que siempre vuelvo</h3><p>Historias, recuerdos y recomendaciones.</p><button class="btn dark">DESCUBRIR</button><span class="art">🕹️</span>
+        </article>
+        <article class="post p3">
+          <small>ENCUESTA</small><h3>¿Qué contenido quieres ver después?</h3><p>Participa y ayuda a decidir la próxima publicación.</p><button class="btn pink">VOTAR</button><span class="art">📊</span>
+        </article>
+      </div>
+    </section>
 
-      <article class="promo pink">
-        <small>ÚNETE A LA COMUNIDAD</small>
-        <h3>Forma parte del universo Flowgorila</h3>
-        <p>Conecta, comparte tus colecciones, participa en sorteos y mucho más.</p>
-        <button class="small-btn">ENTRAR A LA COMUNIDAD</button>
-        <span class="art">🦍</span>
-      </article>
+    <section class="section" id="tienda">
+      <div class="section-head">
+        <div><b>TIENDA</b><h2>Productos destacados.</h2></div>
+        <p>El carrito funciona como demostración. Para cobrar de verdad habrá que conectar un sistema de pagos más adelante.</p>
+      </div>
+
+      <div class="shop-grid">
+        <article class="product">
+          <div class="visual">👕</div><h3>Camiseta FlowGorila</h3><p>Producto de muestra con diseño colorido.</p>
+          <div class="product-foot"><b>24,99 €</b><button class="add add-product" data-name="Camiseta FlowGorila" data-price="24.99">Añadir</button></div>
+        </article>
+        <article class="product">
+          <div class="visual">🧢</div><h3>Gorra FlowGorila</h3><p>Accesorio de muestra para la futura tienda.</p>
+          <div class="product-foot"><b>19,99 €</b><button class="add add-product" data-name="Gorra FlowGorila" data-price="19.99">Añadir</button></div>
+        </article>
+        <article class="product">
+          <div class="visual">☕</div><h3>Taza Gamer</h3><p>Una taza divertida para acompañar tus partidas.</p>
+          <div class="product-foot"><b>11,99 €</b><button class="add add-product" data-name="Taza Gamer" data-price="11.99">Añadir</button></div>
+        </article>
+        <article class="product">
+          <div class="visual">✨</div><h3>Pack de pegatinas</h3><p>Pegatinas originales y coleccionables.</p>
+          <div class="product-foot"><b>9,99 €</b><button class="add add-product" data-name="Pack de pegatinas" data-price="9.99">Añadir</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="comunidad">
+      <div class="section-head">
+        <div><b>COMUNIDAD</b><h2>Habla, comenta y participa.</h2></div>
+        <p>Esta primera versión guarda los comentarios únicamente en el navegador de cada persona. Para que todos vean los mismos comentarios necesitaremos conectar una base de datos.</p>
+      </div>
+
+      <div class="community-grid">
+        <article class="community-card">
+          <b>LA COMUNIDAD HABLA</b>
+          <h3>Tu opinión también forma parte de la página.</h3>
+          <p>Reacciona, comparte ideas, recomienda juegos, comenta productos y participa en las conversaciones.</p>
+          <div class="reactions">
+            <button class="reaction" data-reaction="❤️">❤️ <span>12</span></button>
+            <button class="reaction" data-reaction="🔥">🔥 <span>8</span></button>
+            <button class="reaction" data-reaction="🎮">🎮 <span>15</span></button>
+            <button class="reaction" data-reaction="⭐">⭐ <span>7</span></button>
+          </div>
+        </article>
+
+        <article class="comments-card">
+          <h3>Comentarios</h3>
+          <form class="comment-form" id="comment-form">
+            <input id="comment-name" maxlength="30" placeholder="Tu nombre" required>
+            <textarea id="comment-text" maxlength="300" placeholder="Escribe tu opinión o comentario..." required></textarea>
+            <button class="btn pink" type="submit">PUBLICAR COMENTARIO</button>
+          </form>
+          <div class="comments-list" id="comments-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="juegos">
+      <div class="section-head">
+        <div><b>ZONA PLAY</b><h2>Tres minijuegos para volver cada día.</h2></div>
+        <p>Juega partidas rápidas, supera tu récord y comparte la puntuación. Los resultados se guardan en este navegador.</p>
+      </div>
+
+      <div class="games-grid">
+        <article class="game trivia">
+          <b>🧠 MINIJUEGO 1</b><h3>Flow Trivia</h3><p>Responde preguntas de videojuegos, cine, tecnología y cultura general.</p>
+          <div class="game-screen">
+            <div class="scoreline"><span id="trivia-score">Puntos: 0</span><span id="trivia-count">Pregunta 1/5</span></div>
+            <h4 id="trivia-question">Pulsa comenzar para jugar.</h4>
+            <div class="answers" id="trivia-answers"></div>
+            <button class="btn yellow" id="trivia-start">COMENZAR</button>
+          </div>
+        </article>
+
+        <article class="game mystery">
+          <b>🎁 MINIJUEGO 2</b><h3>Caja Misteriosa</h3><p>Abre la caja del día y descubre una recompensa virtual sorpresa.</p>
+          <div class="game-screen">
+            <div class="mystery-box" id="mystery-box">🎁</div>
+            <p id="mystery-result" style="text-align:center;font-weight:900">¿Qué habrá dentro?</p>
+            <button class="btn blue" id="mystery-open" style="width:100%">ABRIR CAJA</button>
+          </div>
+        </article>
+
+        <article class="game rush">
+          <b>⚡ MINIJUEGO 3</b><h3>Color Rush</h3><p>Pulsa el cuadro correcto antes de que cambie. Tienes veinte segundos.</p>
+          <div class="game-screen">
+            <div class="scoreline"><span id="rush-score">Puntos: 0</span><span id="rush-time">Tiempo: 20</span></div>
+            <p id="rush-instruction"><b>Pulsa comenzar.</b></p>
+            <div class="rush-board" id="rush-board"></div>
+            <button class="btn pink" id="rush-start" style="width:100%;margin-top:12px">COMENZAR</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="sobre">
+      <div class="community-card">
+        <b>SOBRE LA PÁGINA</b>
+        <h3>FlowGorila es el nombre. La página y su contenido son los protagonistas.</h3>
+        <p>Este proyecto está pensado para crecer poco a poco: primero una web preciosa y entretenida; después usuarios reales, comentarios compartidos, perfiles, favoritos, rankings, pagos y nuevas funciones.</p>
+      </div>
     </section>
 
     <section class="benefits">
-      <div class="benefit"><span class="ico">🚚</span><div><b>ENVÍOS RÁPIDOS</b><span>A toda España</span></div></div>
-      <div class="benefit"><span class="ico">🛡️</span><div><b>PAGO SEGURO</b><span>100% protegido</span></div></div>
-      <div class="benefit"><span class="ico">💎</span><div><b>PRODUCTOS EXCLUSIVOS</b><span>Ediciones limitadas</span></div></div>
-      <div class="benefit"><span class="ico">💗</span><div><b>HECHO CON PASIÓN</b><span>Para la comunidad</span></div></div>
-      <div class="benefit"><span class="ico">📱</span><div><b>SÍGUEME</b><span>Redes sociales</span></div></div>
+      <div class="benefit"><i>🚚</i><div><b>ENVÍOS RÁPIDOS</b><span>A toda España</span></div></div>
+      <div class="benefit"><i>🛡️</i><div><b>PAGO SEGURO</b><span>Se conectará después</span></div></div>
+      <div class="benefit"><i>💎</i><div><b>CONTENIDO EXCLUSIVO</b><span>Publicaciones y productos</span></div></div>
+      <div class="benefit"><i>🎮</i><div><b>MINIJUEGOS</b><span>Para volver cada día</span></div></div>
+      <div class="benefit"><i>💬</i><div><b>COMUNIDAD</b><span>Opiniones y comentarios</span></div></div>
     </section>
   </main>
 
-  <aside class="cart-panel" id="cart-panel">
-    <div class="cart-head"><h2>Tu carrito</h2><button class="round" id="close-cart">✕</button></div>
-    <div class="cart-items" id="cart-items"><p>No has añadido productos todavía.</p></div>
+  <aside class="cart" id="cart">
+    <div class="cart-head"><h2>Tu carrito</h2><button class="icon-btn" id="close-cart">✕</button></div>
+    <div class="cart-items" id="cart-items"><p>No has añadido productos.</p></div>
     <div class="cart-total">Total: <span id="cart-total">0,00 €</span></div>
   </aside>
 
+  <div class="toast" id="toast"></div>
+
   <script>
+    "use strict";
+
+    const toast = document.getElementById("toast");
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(()=>toast.classList.remove("show"),2200);
+    }
+
+    // CARRITO
     const cart = [];
-    const panel = document.getElementById('cart-panel');
-    const items = document.getElementById('cart-items');
-    const totalEl = document.getElementById('cart-total');
-    const countEl = document.getElementById('cart-count');
+    const cartPanel = document.getElementById("cart");
+    const cartItems = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+    const cartCount = document.getElementById("cart-count");
 
-    document.getElementById('cart-button').addEventListener('click',()=>panel.classList.add('open'));
-    document.getElementById('close-cart').addEventListener('click',()=>panel.classList.remove('open'));
+    document.getElementById("cart-button").onclick=()=>cartPanel.classList.add("open");
+    document.getElementById("close-cart").onclick=()=>cartPanel.classList.remove("open");
 
-    document.querySelectorAll('.add-product').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        cart.push({name:btn.dataset.name,price:Number(btn.dataset.price)});
+    document.querySelectorAll(".add-product").forEach(button=>{
+      button.addEventListener("click",()=>{
+        cart.push({name:button.dataset.name,price:Number(button.dataset.price)});
         renderCart();
-        panel.classList.add('open');
+        showToast("Producto añadido al carrito");
       });
     });
 
     function renderCart(){
-      countEl.textContent = cart.length;
+      cartCount.textContent=cart.length;
       if(!cart.length){
-        items.innerHTML = '<p>No has añadido productos todavía.</p>';
-        totalEl.textContent='0,00 €';
+        cartItems.innerHTML="<p>No has añadido productos.</p>";
+        cartTotal.textContent="0,00 €";
         return;
       }
-      items.innerHTML = cart.map((p,i)=>`
+      cartItems.innerHTML=cart.map((item,index)=>`
         <div class="cart-item">
-          <span>${p.name}</span>
-          <button onclick="removeItem(${i})">✕</button>
-        </div>`).join('');
-      const total = cart.reduce((s,p)=>s+p.price,0);
-      totalEl.textContent = total.toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+          <span>${item.name}</span>
+          <button onclick="removeCartItem(${index})">✕</button>
+        </div>`).join("");
+      const total=cart.reduce((sum,item)=>sum+item.price,0);
+      cartTotal.textContent=total.toLocaleString("es-ES",{style:"currency",currency:"EUR"});
     }
-    window.removeItem = i => { cart.splice(i,1); renderCart(); };
+    window.removeCartItem=index=>{cart.splice(index,1);renderCart();};
 
-    document.querySelectorAll('.navlinks a').forEach(link=>{
-      link.addEventListener('click',()=>{
-        document.querySelectorAll('.navlinks a').forEach(a=>a.classList.remove('active'));
-        link.classList.add('active');
+    // COMENTARIOS LOCALES
+    const commentForm=document.getElementById("comment-form");
+    const commentsList=document.getElementById("comments-list");
+    let comments=JSON.parse(localStorage.getItem("flowgorila_comments")||"[]");
+
+    function renderComments(){
+      if(!comments.length){
+        commentsList.innerHTML='<p style="color:#66708f">Todavía no hay comentarios en este navegador.</p>';
+        return;
+      }
+      commentsList.innerHTML=comments.slice().reverse().map(comment=>`
+        <article class="comment">
+          <div class="comment-head"><b>${escapeHtml(comment.name)}</b><small>${comment.date}</small></div>
+          <p>${escapeHtml(comment.text)}</p>
+        </article>`).join("");
+    }
+    function escapeHtml(value){
+      return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[char]));
+    }
+    commentForm.addEventListener("submit",event=>{
+      event.preventDefault();
+      const name=document.getElementById("comment-name").value.trim();
+      const text=document.getElementById("comment-text").value.trim();
+      if(!name||!text)return;
+      comments.push({name,text,date:new Date().toLocaleString("es-ES")});
+      localStorage.setItem("flowgorila_comments",JSON.stringify(comments));
+      commentForm.reset();
+      renderComments();
+      showToast("Comentario guardado en este navegador");
+    });
+    renderComments();
+
+    document.querySelectorAll(".reaction").forEach(button=>{
+      button.addEventListener("click",()=>{
+        const count=button.querySelector("span");
+        count.textContent=Number(count.textContent)+1;
       });
     });
+
+    // TRIVIA
+    const triviaQuestions=[
+      {q:"¿Qué compañía creó la consola PlayStation?",a:["Nintendo","Sony","Sega","Atari"],c:1},
+      {q:"¿Cuál es el planeta más grande del sistema solar?",a:["Marte","Júpiter","Venus","Mercurio"],c:1},
+      {q:"¿Qué significa CPU?",a:["Unidad Central de Procesamiento","Control Principal Universal","Programa Central Único","Código Personal de Usuario"],c:0},
+      {q:"¿Cuántos lados tiene un hexágono?",a:["5","6","7","8"],c:1},
+      {q:"¿Cuál de estos es un género de videojuego?",a:["RPG","PDF","USB","GPS"],c:0},
+      {q:"¿Qué océano es el más grande?",a:["Atlántico","Índico","Pacífico","Ártico"],c:2},
+      {q:"¿Qué color resulta al mezclar azul y amarillo?",a:["Rojo","Verde","Morado","Naranja"],c:1}
+    ];
+    let triviaIndex=0,triviaScore=0,triviaSet=[];
+    const triviaQuestion=document.getElementById("trivia-question");
+    const triviaAnswers=document.getElementById("trivia-answers");
+    const triviaScoreEl=document.getElementById("trivia-score");
+    const triviaCount=document.getElementById("trivia-count");
+    const triviaStart=document.getElementById("trivia-start");
+
+    triviaStart.onclick=()=>{
+      triviaSet=[...triviaQuestions].sort(()=>Math.random()-.5).slice(0,5);
+      triviaIndex=0;triviaScore=0;triviaStart.style.display="none";showTrivia();
+    };
+    function showTrivia(){
+      if(triviaIndex>=triviaSet.length){
+        triviaQuestion.textContent=`¡Partida terminada! Has conseguido ${triviaScore} puntos.`;
+        triviaAnswers.innerHTML="";
+        triviaStart.textContent="JUGAR OTRA VEZ";
+        triviaStart.style.display="inline-block";
+        localStorage.setItem("flowgorila_trivia_best",Math.max(triviaScore,Number(localStorage.getItem("flowgorila_trivia_best")||0)));
+        return;
+      }
+      const current=triviaSet[triviaIndex];
+      triviaQuestion.textContent=current.q;
+      triviaCount.textContent=`Pregunta ${triviaIndex+1}/5`;
+      triviaScoreEl.textContent=`Puntos: ${triviaScore}`;
+      triviaAnswers.innerHTML=current.a.map((answer,index)=>`<button class="answer" data-index="${index}">${answer}</button>`).join("");
+      triviaAnswers.querySelectorAll(".answer").forEach(button=>{
+        button.onclick=()=>{
+          const selected=Number(button.dataset.index);
+          triviaAnswers.querySelectorAll(".answer").forEach((item,index)=>{
+            item.disabled=true;
+            if(index===current.c)item.classList.add("correct");
+          });
+          if(selected===current.c){triviaScore+=10;showToast("¡Respuesta correcta!");}
+          else button.classList.add("wrong");
+          triviaScoreEl.textContent=`Puntos: ${triviaScore}`;
+          setTimeout(()=>{triviaIndex++;showTrivia();},900);
+        };
+      });
+    }
+
+    // CAJA MISTERIOSA
+    const rewards=["⭐ Insignia Estrella","💎 50 monedas virtuales","🎨 Fondo de perfil pastel","🔥 Título: Jugador en racha","🎁 Premio sorpresa virtual","👑 Marco dorado de perfil"];
+    const mysteryBox=document.getElementById("mystery-box");
+    const mysteryResult=document.getElementById("mystery-result");
+    document.getElementById("mystery-open").onclick=()=>{
+      mysteryBox.classList.remove("opened");
+      mysteryBox.textContent="📦";
+      mysteryResult.textContent="Abriendo...";
+      setTimeout(()=>{
+        const reward=rewards[Math.floor(Math.random()*rewards.length)];
+        mysteryBox.textContent="🎉";
+        mysteryBox.classList.add("opened");
+        mysteryResult.textContent=`Has conseguido: ${reward}`;
+        showToast("¡Caja abierta!");
+      },800);
+    };
+
+    // COLOR RUSH
+    const colors=[
+      {name:"ROJO",value:"#ff4036"},{name:"AZUL",value:"#2587ff"},{name:"AMARILLO",value:"#ffd52e"},
+      {name:"VERDE",value:"#20bf7b"},{name:"ROSA",value:"#ff2f7d"},{name:"MORADO",value:"#7c45ff"}
+    ];
+    const rushBoard=document.getElementById("rush-board");
+    const rushScoreEl=document.getElementById("rush-score");
+    const rushTimeEl=document.getElementById("rush-time");
+    const rushInstruction=document.getElementById("rush-instruction");
+    const rushStart=document.getElementById("rush-start");
+    let rushScore=0,rushTime=20,rushTarget=null,rushTimer=null,rushActive=false;
+
+    rushStart.onclick=startRush;
+    function startRush(){
+      rushScore=0;rushTime=20;rushActive=true;rushStart.disabled=true;
+      rushScoreEl.textContent="Puntos: 0";rushTimeEl.textContent="Tiempo: 20";
+      nextRushRound();
+      clearInterval(rushTimer);
+      rushTimer=setInterval(()=>{
+        rushTime--;rushTimeEl.textContent=`Tiempo: ${rushTime}`;
+        if(rushTime<=0){
+          clearInterval(rushTimer);rushActive=false;rushStart.disabled=false;
+          rushInstruction.innerHTML=`<b>Fin. Has conseguido ${rushScore} puntos.</b>`;
+          rushBoard.innerHTML="";
+          localStorage.setItem("flowgorila_rush_best",Math.max(rushScore,Number(localStorage.getItem("flowgorila_rush_best")||0)));
+        }
+      },1000);
+    }
+    function nextRushRound(){
+      if(!rushActive)return;
+      const shuffled=[...colors].sort(()=>Math.random()-.5);
+      rushTarget=shuffled[Math.floor(Math.random()*shuffled.length)];
+      rushInstruction.innerHTML=`Pulsa el color: <b>${rushTarget.name}</b>`;
+      rushBoard.innerHTML=shuffled.slice(0,6).map(color=>`<button class="rush-cell" style="background:${color.value}" data-name="${color.name}" aria-label="${color.name}"></button>`).join("");
+      rushBoard.querySelectorAll(".rush-cell").forEach(cell=>{
+        cell.onclick=()=>{
+          if(cell.dataset.name===rushTarget.name){rushScore++;rushScoreEl.textContent=`Puntos: ${rushScore}`;nextRushRound();}
+          else{rushScore=Math.max(0,rushScore-1);rushScoreEl.textContent=`Puntos: ${rushScore}`;}
+        };
+      });
+    }
   </script>
 </body>
 </html>
