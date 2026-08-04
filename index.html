@@ -1,162 +1,192 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fff7fb">
-<title>FlowGorila Gamer</title>
-<style>
-:root{
-  --ink:#18204d;--muted:#65708f;--panel:rgba(255,255,255,.90);
-  --pink:#ff347e;--red:#ff4138;--yellow:#ffd62d;--orange:#ff9d20;
-  --blue:#2789ff;--cyan:#21d7e8;--purple:#7d48ff;--green:#1fbf7b;
-  --shadow:0 22px 60px rgba(64,72,140,.17);--line:rgba(40,48,112,.12)
-}
-body[data-theme="arcade"]{--ink:#fff;--muted:#c8cbef;--panel:rgba(27,29,70,.92);background:radial-gradient(circle at 10% 5%,rgba(255,52,126,.35),transparent 25%),radial-gradient(circle at 90% 5%,rgba(39,137,255,.35),transparent 25%),#0f1024}
-body[data-theme="retro"]{--ink:#26331f;--muted:#536448;--panel:rgba(239,246,203,.94);background:linear-gradient(135deg,#dbe6b7,#f0f4ce)}
-body[data-theme="neon"]{--ink:#fff;--muted:#c5c9eb;--panel:rgba(24,27,62,.90);background:radial-gradient(circle at 12% 8%,rgba(33,215,232,.27),transparent 28%),radial-gradient(circle at 88% 10%,rgba(255,52,126,.27),transparent 28%),#101225}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 4% 3%,rgba(255,52,126,.18),transparent 23%),radial-gradient(circle at 96% 5%,rgba(39,137,255,.18),transparent 25%),linear-gradient(135deg,#fff,#fff7fb 45%,#f2fbff 72%,#fff9e6);overflow-x:hidden;transition:.35s}
-a{text-decoration:none;color:inherit}button,input,textarea,select{font:inherit}button{cursor:pointer}img{display:block;max-width:100%}.hidden{display:none!important}
-.scanlines{pointer-events:none;position:fixed;inset:0;z-index:200;opacity:.04;background:repeating-linear-gradient(to bottom,transparent 0 3px,#000 4px)}
-.pixels{position:fixed;inset:0;z-index:-1;overflow:hidden}.pixel{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall linear infinite;opacity:.48}@keyframes fall{from{transform:translateY(-40px) rotate(0)}to{transform:translateY(110vh) rotate(360deg)}}
-.topbar{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:260px 1fr auto;align-items:center;gap:16px;padding:11px max(14px,3vw);background:rgba(255,255,255,.84);backdrop-filter:blur(18px);box-shadow:0 8px 25px rgba(48,55,120,.09)}
-body[data-theme="arcade"] .topbar,body[data-theme="neon"] .topbar{background:rgba(15,16,36,.84)}
-.brand{display:flex;align-items:center;gap:10px}.brand img{width:52px;height:52px;border-radius:16px;object-fit:cover}.brand strong{font-size:1.45rem;letter-spacing:-.05em}.brand strong span{color:var(--pink)}.brand small{display:block;font-size:.62rem;font-weight:900;letter-spacing:.18em;color:var(--pink)}
-nav{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}nav a{padding:9px 11px;border-radius:13px;font-size:.74rem;font-weight:900}nav a:hover{background:var(--panel);box-shadow:0 8px 22px rgba(49,56,119,.12)}
-.top-actions{display:flex;gap:7px}.icon-btn{position:relative;width:45px;height:45px;border:0;border-radius:14px;background:var(--panel);box-shadow:0 9px 22px rgba(45,51,112,.14)}.icon-btn b{position:absolute;top:-5px;right:-5px;background:var(--pink);color:#fff;border-radius:99px;padding:3px 6px;font-size:.65rem}
-main{width:min(calc(100% - 28px),1480px);margin:auto}.section{padding:68px 0;scroll-margin-top:90px}
-.hero{margin-top:16px;min-height:535px;display:grid;grid-template-columns:1fr 1.08fr .72fr;align-items:center;gap:26px;padding:40px;border-radius:36px;background:radial-gradient(circle at 53% 40%,rgba(255,214,45,.82),transparent 19%),radial-gradient(circle at 70% 16%,rgba(255,52,126,.55),transparent 27%),radial-gradient(circle at 94% 23%,rgba(39,137,255,.45),transparent 28%),linear-gradient(120deg,#fff 0 29%,#ffe8f3 46%,#def8ff 72%,#fff4bd);box-shadow:var(--shadow);overflow:hidden;position:relative}
-.hero:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 30deg,transparent,var(--pink),transparent,var(--blue),transparent,var(--yellow),transparent);opacity:.11;animation:spin 18s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.hero>*{position:relative;z-index:2}
-.eyebrow{font-size:.72rem;font-weight:1000;letter-spacing:.15em;color:var(--pink)}h1{font-size:clamp(3.5rem,7vw,6.7rem);line-height:.84;letter-spacing:-.075em;margin:9px 0 19px}h1 span{display:block;color:transparent;background:linear-gradient(90deg,var(--pink),var(--red),var(--orange),var(--yellow),var(--blue),var(--purple));background-clip:text;-webkit-background-clip:text}
-.hero-copy p{font-size:1.05rem;line-height:1.65;max-width:520px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:17px;padding:13px 20px;font-weight:950;transition:.2s}.btn:hover{transform:translateY(-2px) scale(1.02)}.btn.primary{background:linear-gradient(135deg,var(--pink),#ff68a1);color:#fff}.btn.secondary{background:var(--panel);color:var(--blue);border:2px solid rgba(39,137,255,.35)}.btn.yellow{background:linear-gradient(135deg,var(--yellow),var(--orange))}.btn.dark{background:#202653;color:#fff}
-.hero-art{position:relative;min-height:400px;display:grid;place-items:center}.hero-art .blob{position:absolute;width:360px;height:360px;border-radius:50%;background:conic-gradient(var(--pink),var(--yellow),var(--cyan),var(--purple),var(--pink));filter:drop-shadow(0 25px 30px rgba(55,46,118,.24));animation:pulse 3s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.04)}}.hero-art .blob:after{content:"";position:absolute;inset:19px;border-radius:50%;background:rgba(255,255,255,.65)}.hero-art img{position:relative;width:min(100%,410px);border-radius:30px;filter:drop-shadow(0 25px 22px rgba(52,43,94,.22))}
-.daily-card{padding:18px;border-radius:26px;background:var(--panel);box-shadow:var(--shadow)}.daily-card>span{display:inline-block;padding:7px 10px;border-radius:99px;background:var(--pink);color:#fff;font-size:.67rem;font-weight:1000}.daily-icon{height:170px;display:grid;place-items:center;font-size:6rem;background:linear-gradient(145deg,#fff4bd,#fff,#eaf7ff);border-radius:19px;margin:14px 0}
-.hud{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}.hud article{padding:14px;border-radius:18px;background:var(--panel);box-shadow:var(--shadow)}.hud b{display:block;font-size:1.3rem}.hud span{font-size:.7rem;color:var(--muted)}
-.theme-bar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.theme-bar button{border:0;border-radius:99px;padding:10px 14px;background:var(--panel);box-shadow:0 8px 20px rgba(54,60,122,.11)}
-.category-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}.category{min-height:140px;padding:18px;border-radius:22px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow);font-size:2rem}.category b{font-size:.95rem;margin-top:7px}.category small{font-size:.7rem;color:var(--muted)}.c1{background:#dff3ff}.c2{background:#fff2ad}.c3{background:#ffdce9}.c4{background:#e8dcff}.c5{background:#dff8ef}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:22px}.section-head h2{font-size:clamp(2.1rem,5vw,4.3rem);line-height:.95;letter-spacing:-.055em;margin:5px 0}.section-head p{max-width:520px;color:var(--muted)}
-.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow);transition:.25s}.card:hover{transform:translateY(-7px) rotate(.3deg)}.visual{min-height:210px;display:grid;place-items:center;font-size:6rem;background:linear-gradient(145deg,#e5f5ff,#ffe5f0,#fff2b5)}.body{padding:19px}.body p{color:var(--muted);font-size:.86rem}.foot{display:flex;justify-content:space-between;gap:9px;align-items:center;margin-top:12px}.mini{border:0;border-radius:12px;padding:9px 11px;background:var(--panel);box-shadow:0 7px 18px rgba(54,60,123,.1)}
-.games-grid{display:grid;grid-template-columns:1.35fr .825fr .825fr;gap:14px}.game{padding:22px;border-radius:27px;box-shadow:var(--shadow)}.game>span{font-size:2.7rem}.game h3{font-size:1.6rem;margin:4px 0}.game-box{min-height:310px;padding:15px;border-radius:18px;background:rgba(255,255,255,.84);color:#18204d}.trivia{background:linear-gradient(145deg,#fff4bd,#ffe13d)}.dino{background:linear-gradient(145deg,#dff7e8,#7fd49b)}.rush{background:linear-gradient(145deg,#ffdbe9,#ff7fba)}
-.trivia-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.trivia-toolbar select,.trivia-toolbar button{border:0;border-radius:11px;padding:9px;background:#fff}.timer{height:10px;border-radius:99px;background:#e8e9f1;overflow:hidden;margin:10px 0}.timer i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));width:100%;transition:width .1s linear}
-.answer-list{display:grid;gap:7px}.answer-list button{border:0;border-radius:12px;padding:10px;background:#fff;text-align:left}.correct{background:#bdf4d6!important}.wrong{background:#ffd0d6!important}.rush-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rush-grid button{aspect-ratio:1;border:0;border-radius:13px}
-canvas{width:100%;height:auto;border-radius:15px;background:linear-gradient(#dff4ff 0 72%,#7fca6d 72%);display:block;touch-action:none}.game-controls{display:flex;gap:8px;justify-content:center;margin-top:9px}.game-controls button{width:62px;height:46px;border:0;border-radius:12px;background:#fff;font-weight:900}
-.community{display:grid;grid-template-columns:.85fr 1.15fr;gap:16px}.panel{padding:25px;border-radius:27px;background:var(--panel);box-shadow:var(--shadow)}.community .panel:first-child{background:linear-gradient(135deg,#ffddeb,#fff1b9,#dff8ff)}.reactions{display:flex;gap:8px;flex-wrap:wrap}.reactions button{border:0;border-radius:99px;padding:10px 14px;background:#fff}.comment-form{display:grid;gap:8px}.comment-form input,.comment-form textarea{border:1px solid var(--line);border-radius:14px;padding:11px}.comment{padding:12px;border-radius:14px;background:rgba(245,247,255,.9);margin-top:9px}
-.profile{display:grid;grid-template-columns:300px 1fr;gap:16px}.avatar{width:120px;height:120px;border-radius:30px;display:grid;place-items:center;margin:auto;background:linear-gradient(135deg,var(--yellow),var(--pink),var(--purple));font-size:4rem}.xpbar{height:14px;border-radius:99px;background:#e7e9f4;overflow:hidden}.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--blue));width:0}.missions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.mission{padding:13px;border-radius:15px;background:rgba(245,247,255,.9)}
-.drawer{position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(420px,92vw);padding:22px;background:var(--panel);box-shadow:-20px 0 60px rgba(30,35,90,.22);transform:translateX(110%);transition:.3s;overflow:auto}.drawer.open{transform:translateX(0)}.overlay{position:fixed;inset:0;z-index:80;background:rgba(20,23,58,.38)}.row{display:flex;justify-content:space-between;gap:9px;padding:11px;border-radius:13px;background:rgba(245,247,255,.9);margin:7px 0}.toast{position:fixed;left:50%;bottom:22px;z-index:120;transform:translate(-50%,30px);opacity:0;background:#1c2453;color:#fff;padding:12px 17px;border-radius:13px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
-footer{padding:40px;text-align:center}
-@media(max-width:1100px){.topbar{grid-template-columns:1fr auto}.topbar nav{display:none}.hero{grid-template-columns:1fr 1fr}.daily-card{grid-column:1/-1}.category-strip{grid-template-columns:repeat(3,1fr)}.posts-grid{grid-template-columns:repeat(2,1fr)}.games-grid{grid-template-columns:1fr 1fr}.trivia{grid-column:1/-1}.community,.profile{grid-template-columns:1fr}}
-@media(max-width:700px){main{width:min(calc(100% - 18px),1480px)}.hero{grid-template-columns:1fr;padding:26px 17px}.hero-copy{text-align:center}.actions{justify-content:center}.hero-art{min-height:320px}.hero-art .blob{width:280px;height:280px}.hud{grid-template-columns:1fr 1fr}.category-strip{grid-template-columns:1fr 1fr}.section-head{display:block}.posts-grid,.games-grid{grid-template-columns:1fr}.trivia{grid-column:auto}.missions{grid-template-columns:1fr}}
-@media(max-width:430px){.brand small{display:none}.brand strong{font-size:1rem}.brand img{width:42px;height:42px}.icon-btn{width:40px;height:40px}.category-strip{grid-template-columns:1fr}h1{font-size:3.2rem}}
-.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.feature-card{background:var(--panel);border-radius:26px;overflow:hidden;box-shadow:var(--shadow);transition:.25s}.feature-card:hover{transform:translateY(-6px)}.feature-card img{width:100%;height:300px;object-fit:contain;padding:20px;background:linear-gradient(145deg,#edf8ff,#fff1f7,#fff8c8)}.feature-copy{padding:20px}.feature-copy h3{margin:5px 0}.feature-copy p{color:var(--muted);line-height:1.55}.tag{display:inline-flex;padding:6px 10px;border-radius:99px;background:rgba(39,137,255,.12);color:var(--blue);font-size:.7rem;font-weight:950}.legal-note{margin-top:14px;padding:13px 16px;border:1px solid var(--line);border-radius:15px;color:var(--muted);font-size:.78rem}.console-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.console-card{position:relative;overflow:hidden;min-height:300px;border-radius:28px;padding:20px;background:linear-gradient(145deg,#dff8ff,#fff,#ffe3f0);box-shadow:var(--shadow)}.console-card img{width:100%;height:190px;object-fit:contain}.console-card h3{margin:5px 0}.news-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:15px}.news-card{display:flex;flex-direction:column;min-height:300px;border-radius:27px;padding:24px;color:#fff;background:linear-gradient(145deg,#e60012,#8c0010);box-shadow:var(--shadow)}.news-card:nth-child(2){background:linear-gradient(145deg,#168cc9,#263f9d)}.news-card:nth-child(3){background:linear-gradient(145deg,#7043c6,#d63d9b)}.news-card time{font-size:.75rem;font-weight:900;opacity:.85}.news-card h3{font-size:1.55rem;margin:13px 0}.news-card p{line-height:1.55;opacity:.92}.news-card .btn{margin-top:auto;align-self:flex-start;background:#fff;color:#18204d}.verified{display:flex;align-items:center;gap:8px;margin-top:14px;color:var(--muted);font-size:.76rem}.game-badges{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 16px}.game-badges span{font-size:.68rem;font-weight:900;padding:6px 9px;border-radius:99px;background:rgba(255,255,255,.72)}
-@media(max-width:1000px){.feature-grid,.console-grid{grid-template-columns:repeat(2,1fr)}.news-grid{grid-template-columns:1fr 1fr}.news-card:first-child{grid-column:1/-1}}
-@media(max-width:650px){.feature-grid,.console-grid,.news-grid{grid-template-columns:1fr}.news-card:first-child{grid-column:auto}.feature-card img{height:260px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#11111f">
+  <meta name="description" content="FlowGorila: juegos rápidos, retos diarios, comunidad y progreso gamer.">
+  <meta property="og:title" content="FlowGorila">
+  <meta property="og:description" content="Juega, completa retos y sube de nivel en FlowGorila.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="flowgorila-logo.jpeg">
+  <title>FlowGorila · Juega, compite y sube de nivel</title>
+  <link rel="icon" href="flowgorila-logo.jpeg">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
 </head>
-<body data-theme="pastel">
-<div class="scanlines"></div><div id="pixels" class="pixels"></div>
-<header class="topbar">
-<a class="brand" href="#inicio"><img src="flowgorila-logo.jpeg" alt="FlowGorila"><div><strong><span>FLOW</span>GORILA</strong><small>PLAY · LEARN · CREATE</small></div></a>
-<nav><a href="#inicio">Inicio</a><a href="#cartas">Cartas</a><a href="#consolas">Consolas</a><a href="#juegos">Juegos</a><a href="#noticias">Switch 2</a></nav>
-<div class="top-actions"><button id="sound-btn" class="icon-btn">🔊</button><button id="notif-btn" class="icon-btn">🔔<b id="notif-count">0</b></button><button id="cart-btn" class="icon-btn">🛒<b id="cart-count">0</b></button></div>
-</header>
-<main>
-<section id="inicio" class="hero section">
-<div class="hero-copy"><span class="eyebrow">RETRO · ARCADE · COLOR</span><h1><span>JUEGA, APRENDE</span> Y COMPITE</h1><p>Una página gamer centrada en tres juegos de calidad. Flow Trivia es el protagonista.</p><div class="actions"><a class="btn primary" href="#juegos">Jugar Flow Trivia</a><a class="btn secondary" href="#contenido">Explorar contenido</a></div></div>
-<div class="hero-art"><div class="blob"></div><img src="flowgorila-logo.jpeg" alt="FlowGorila"></div>
-<aside class="daily-card"><span>RETO DIARIO</span><div class="daily-icon">🧠</div><h3>Consigue una racha de 5</h3><p>Juega a Flow Trivia y gana XP.</p><button class="btn yellow" id="daily-btn">Ir al Trivial</button></aside>
-</section>
+<body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
+  <div class="ambient" aria-hidden="true"></div>
 
-<section class="hud"><article><b id="level">1</b><span>Nivel</span></article><article><b id="xp">0 XP</b><span>Experiencia</span></article><article><b id="coins">0</b><span>Monedas</span></article><article><b id="diamonds">0</b><span>Diamantes</span></article><article><b id="best">0</b><span>Récord</span></article></section>
-<div class="theme-bar"><b>Tema:</b><button data-theme="pastel">🌈 Pastel</button><button data-theme="arcade">👾 Arcade</button><button data-theme="retro">🟩 Retro portátil</button><button data-theme="neon">💡 Neón</button></div>
+  <header class="site-header" id="inicio">
+    <a class="brand" href="#inicio" aria-label="FlowGorila, volver al inicio">
+      <img src="flowgorila-logo.jpeg" alt="Logo de FlowGorila" width="56" height="56">
+      <span><strong>FLOW<span>GORILA</span></strong><small>PLAY · CREATE · LEVEL UP</small></span>
+    </a>
 
-<section class="category-strip"><a class="category c1" href="#contenido">📰<b>Contenido</b><small>Publicaciones</small></a><a class="category c2" href="#tienda">🛍️<b>Tienda</b><small>Productos</small></a><a class="category c3" href="#comunidad">💬<b>Opiniones</b><small>Comentarios</small></a><a class="category c4" href="#juegos">🎮<b>Juegos</b><small>3 juegos</small></a><a class="category c5" href="#perfil">🏆<b>Progreso</b><small>XP y logros</small></a></section>
+    <button class="icon-button menu-button" id="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">☰</button>
 
-<section id="contenido" class="section"><header class="section-head"><div><span class="eyebrow">CONTENIDO</span><h2>Explora y guarda</h2></div><p>Tarjetas con reacciones, efectos y favoritos.</p></header><div id="posts" class="posts-grid"></div></section>
-<section id="cartas" class="section"><header class="section-head"><div><span class="eyebrow">COLECCIÓN DESTACADA</span><h2>Cartas que marcan época</h2></div><p>Tres arquetipos inspirados en algunas de las cartas Pokémon ex más buscadas: electricidad, fuego y poder psíquico.</p></header><div class="feature-grid"><article class="feature-card"><img src="assets/card-electric.svg" alt="Ilustración editorial original de una carta eléctrica coleccionable" loading="lazy"><div class="feature-copy"><span class="tag">ELÉCTRICO · EX</span><h3>La energía del icono amarillo</h3><p>Velocidad, ataques de alto voltaje y una presencia que siempre destaca en cualquier colección.</p></div></article><article class="feature-card"><img src="assets/card-fire.svg" alt="Ilustración editorial original de una carta de fuego coleccionable" loading="lazy"><div class="feature-copy"><span class="tag">FUEGO · EX</span><h3>El favorito de fuego</h3><p>Las cartas de grandes dragones de fuego combinan nostalgia, arte espectacular y potencia competitiva.</p></div></article><article class="feature-card"><img src="assets/card-psychic.svg" alt="Ilustración editorial original de una carta psíquica coleccionable" loading="lazy"><div class="feature-copy"><span class="tag">PSÍQUICO · EX</span><h3>Poder psíquico moderno</h3><p>Diseños brillantes y habilidades versátiles convierten este arquetipo en una pieza de vitrina.</p></div></article></div><p class="legal-note">Ilustraciones editoriales originales de FlowGorila. Pokémon y sus personajes pertenecen a sus respectivos titulares; esta página no usa escaneos ni arte oficial de cartas.</p></section>
-<section id="consolas" class="section"><header class="section-head"><div><span class="eyebrow">HARDWARE</span><h2>Tres formas de jugar</h2></div><p>Una mirada visual a la evolución de las consolas, desde el bolsillo hasta el salón.</p></header><div class="console-grid"><article class="console-card"><img src="assets/console-handheld.svg" alt="Ilustración original de una consola portátil contemporánea" loading="lazy"><span class="tag">HÍBRIDA</span><h3>Juega donde quieras</h3><p>Pantalla grande, controles separables y modos portátil o sobremesa.</p></article><article class="console-card"><img src="assets/console-retro.svg" alt="Ilustración original de una consola portátil retro" loading="lazy"><span cl…11735 tokens truncated…car una velocidad rápida?",a:["Allegro", "Largo", "Adagio", "Grave"],r:0},
-{c:"musica",d:"facil",q:"¿Qué palabra suele indicar una velocidad lenta?",a:["Adagio", "Presto", "Allegro", "Vivace"],r:0},
-{c:"musica",d:"media",q:"¿Cuántas cuerdas tiene normalmente un violín?",a:["4", "5", "6", "8"],r:0},
-{c:"musica",d:"facil",q:"¿Cuántas teclas tiene normalmente un piano moderno?",a:["72", "61", "100", "88"],r:3},
-{c:"musica",d:"media",q:"¿Qué voz masculina es la más aguda?",a:["Bajo", "Barítono", "Contralto", "Tenor"],r:3},
-{c:"musica",d:"facil",q:"¿Qué voz masculina es la más grave?",a:["Soprano", "Bajo", "Mezzosoprano", "Tenor"],r:1},
-{c:"musica",d:"media",q:"¿Qué voz femenina suele ser la más aguda?",a:["Barítono", "Soprano", "Bajo", "Contralto"],r:1},
-{c:"musica",d:"facil",q:"¿Qué símbolo musical indica silencio?",a:["Clave", "Pausa", "Compás", "Nota"],r:1},
-{c:"musica",d:"media",q:"¿Qué clave se usa comúnmente para notas agudas?",a:["Clave de fa", "Clave de sol", "Clave de percusión", "Clave de do"],r:1},
-{c:"musica",d:"facil",q:"¿Qué clave se usa comúnmente para notas graves?",a:["Clave de ritmo", "Clave de do", "Clave de fa", "Clave de sol"],r:2},
-{c:"musica",d:"media",q:"¿Qué género musical nació en Jamaica?",a:["Reggae", "Ópera", "Tango", "Flamenco"],r:0},
-{c:"musica",d:"facil",q:"¿Qué género musical está asociado a Nueva Orleans?",a:["Samba", "Bolero", "Jazz", "Fado"],r:2},
-{c:"musica",d:"media",q:"¿Qué género musical tradicional portugués es melancólico?",a:["Salsa", "Country", "Fado", "Reggae"],r:2},
-{c:"musica",d:"facil",q:"¿Qué género musical y baile nació en República Dominicana?",a:["Flamenco", "Polca", "Merengue", "Vals"],r:2},
-{c:"cine",d:"facil",q:"¿Qué persona interpreta personajes en una película?",a:["Director de fotografía", "Actor o actriz", "Montador", "Guionista"],r:1},
-{c:"cine",d:"media",q:"¿Qué profesional controla la cámara y la iluminación visual?",a:["Actor", "Compositor", "Doblador", "Director de fotografía"],r:3},
-{c:"cine",d:"facil",q:"¿Qué profesional une y ordena las escenas grabadas?",a:["Montador", "Actor", "Productor", "Maquillador"],r:0},
-{c:"cine",d:"media",q:"¿Qué género suele incluir naves espaciales y futuros imaginarios?",a:["Comedia romántica", "Documental", "Biografía", "Ciencia ficción"],r:3},
-{c:"cine",d:"facil",q:"¿Qué género busca hacer reír?",a:["Comedia", "Terror", "Drama", "Suspense"],r:0},
-{c:"cine",d:"media",q:"¿Qué género cuenta hechos reales con enfoque informativo?",a:["Fantasía", "Musical", "Documental", "Western"],r:2},
-{c:"cine",d:"facil",q:"¿Qué palabra describe una película que continúa otra?",a:["Ensayo", "Prólogo", "Secuela", "Tráiler"],r:2},
-{c:"cine",d:"media",q:"¿Qué es un tráiler?",a:["La película completa", "Un avance promocional", "Un decorado", "Un premio"],r:1},
-{c:"cine",d:"facil",q:"¿Qué es el doblaje?",a:["Sustituir voces por otras en otro idioma", "Diseñar vestuario", "Grabar escenas exteriores", "Añadir subtítulos"],r:0},
-{c:"cine",d:"media",q:"¿Qué es un cameo?",a:["Un error de montaje", "Una banda sonora", "Una escena eliminada", "Una aparición breve de alguien conocido"],r:3},
-{c:"cine",d:"facil",q:"¿Qué premio principal del cine español se llama?",a:["Óscar", "Grammy", "Goya", "Emmy"],r:2},
-{c:"cine",d:"media",q:"¿Qué festival de cine se celebra en Cannes?",a:["Berlinale", "Festival de Venecia", "Sundance", "Festival de Cannes"],r:3},
-{c:"cine",d:"facil",q:"¿Qué profesional crea música original para una película?",a:["Productor", "Montador", "Director artístico", "Compositor"],r:3},
-{c:"cine",d:"media",q:"¿Qué elemento escrito muestra diálogos traducidos en pantalla?",a:["Carteles", "Efectos", "Subtítulos", "Créditos"],r:2},
-{c:"cine",d:"facil",q:"¿Qué parte de una película aparece normalmente al final con nombres del equipo?",a:["Cartel", "Prólogo", "Créditos", "Tráiler"],r:2},
-{c:"gaming",d:"facil",q:"¿Qué personaje azul corre a gran velocidad en videojuegos?",a:["Kirby", "Sonic", "Link", "Mario"],r:1},
-{c:"gaming",d:"media",q:"¿Qué criatura amarilla es mascota de Pokémon?",a:["Pikachu", "Charmander", "Eevee", "Meowth"],r:0},
-{c:"gaming",d:"facil",q:"¿En qué saga aparece Master Chief?",a:["Halo", "Zelda", "Final Fantasy", "Metroid"],r:0},
-{c:"gaming",d:"media",q:"¿Qué juego consiste en construir con bloques y sobrevivir?",a:["Tetris", "Pong", "Pac-Man", "Minecraft"],r:3},
-{c:"gaming",d:"facil",q:"¿Qué juego clásico usa piezas que caen y forman líneas?",a:["Tetris", "Pac-Man", "Asteroids", "Donkey Kong"],r:0},
-{c:"gaming",d:"media",q:"¿Qué personaje come puntos en un laberinto?",a:["Pac-Man", "Kirby", "Sonic", "Mario"],r:0},
-{c:"gaming",d:"facil",q:"¿Qué consola portátil clásica creó Nintendo?",a:["Atari 2600", "Dreamcast", "PSP", "Game Boy"],r:3},
-{c:"gaming",d:"media",q:"¿Qué empresa creó Sonic?",a:["Sony", "Microsoft", "Sega", "Valve"],r:2},
-{c:"gaming",d:"facil",q:"¿Qué empresa creó la saga The Legend of Zelda?",a:["Electronic Arts", "Rockstar", "Ubisoft", "Nintendo"],r:3},
-{c:"gaming",d:"media",q:"¿Qué género consiste en competir con vehículos?",a:["Carreras", "Cartas", "Ritmo", "Puzles"],r:0},
-{c:"gaming",d:"facil",q:"¿Qué género se centra en saltar entre plataformas?",a:["Simulación", "Plataformas", "Estrategia", "Deportes"],r:1},
-{c:"gaming",d:"media",q:"¿Qué género permite interpretar un personaje y mejorar estadísticas?",a:["RPG", "Puzzle", "Carreras", "Ritmo"],r:0},
-{c:"gaming",d:"facil",q:"¿Qué significa multijugador?",a:["Que usa dos pantallas", "Que no tiene sonido", "Que participan varios jugadores", "Que solo funciona sin internet"],r:2},
-{c:"gaming",d:"media",q:"¿Qué es un jefe final en un videojuego?",a:["Una moneda", "Un menú de opciones", "Un tutorial", "Un enemigo especialmente poderoso"],r:3},
-{c:"gaming",d:"facil",q:"¿Qué es un punto de guardado?",a:["Un enemigo", "Un mando", "Una tienda real", "Un lugar donde se registra el progreso"],r:3}
-]};
-const App={
-xp:S.get("fg5_xp",0),coins:S.get("fg5_coins",0),diamonds:S.get("fg5_diamonds",0),cart:S.get("fg5_cart",[]),notifs:S.get("fg5_notifs",[]),comments:S.get("fg5_comments",[]),ach:S.get("fg5_ach",[]),sound:true,
-init(){this.pixels();this.renderPosts();this.renderProducts();this.renderHUD();this.renderCart();this.renderNotifs();this.community();this.triviaHome();this.rushHome();this.dinoInit();this.bind();document.querySelector("#year").textContent=new Date().getFullYear()},
-bind(){document.querySelectorAll("[data-theme]").forEach(b=>b.onclick=()=>{document.body.dataset.theme=b.dataset.theme;S.set("fg5_theme",b.dataset.theme)});document.body.dataset.theme=S.get("fg5_theme","pastel");document.querySelector("#cart-btn").onclick=()=>this.open("cart");document.querySelector("#notif-btn").onclick=()=>this.open("notifications");document.querySelector("#close-cart").onclick=()=>this.close();document.querySelector("#close-notif").onclick=()=>this.close();document.querySelector("#overlay").onclick=()=>this.close();document.querySelector("#sound-btn").onclick=()=>{this.sound=!this.sound;document.querySelector("#sound-btn").textContent=this.sound?"🔊":"🔇"};document.querySelector("#daily-btn").onclick=()=>document.querySelector("#juegos").scrollIntoView();document.querySelector("#daily-box").onclick=()=>this.openDailyBox()},
-pixels(){const p=document.querySelector("#pixels"),cs=["#ff347e","#ffd62d","#2789ff","#21d7e8","#7d48ff"];for(let i=0;i<24;i++){const e=document.createElement("i");e.className="pixel";e.style.left=Math.random()*100+"%";e.style.background=cs[i%cs.length];e.style.animationDuration=8+Math.random()*12+"s";e.style.animationDelay=-Math.random()*10+"s";p.appendChild(e)}},
-renderPosts(){document.querySelector("#posts").innerHTML=A.posts.map((p,i)=>`<article class="card"><div class="visual">${p[0]}</div><div class="body"><small>${p[2].toUpperCase()}</small><h3>${p[1]}</h3><p>Contenido de demostración para tu futura publicación.</p><div class="foot"><button class="mini" onclick="App.addXP(2)">❤️ Me gusta</button><button class="mini" onclick="App.notify('Guardado en favoritos')">☆ Guardar</button></div></div></article>`).join("")},
-renderProducts(){document.querySelector("#products").innerHTML=A.products.map((p,i)=>`<article class="card"><div class="visual">${p[0]}</div><div class="body"><h3>${p[1]}</h3><p>Producto de muestra.</p><div class="foot"><b>${p[2].toLocaleString("es-ES",{style:"currency",currency:"EUR"})}</b><button class="mini" onclick="App.addCart(${i})">Añadir</button></div></div></article>`).join("")},
-addCart(i){this.cart.push(A.products[i]);S.set("fg5_cart",this.cart);this.renderCart();this.notify("Producto añadido")},
-renderCart(){document.querySelector("#cart-count").textContent=this.cart.length;document.querySelector("#cart-items").innerHTML=this.cart.length?this.cart.map((p,i)=>`<div class="row"><span>${p[0]} ${p[1]}</span><button onclick="App.removeCart(${i})">✕</button></div>`).join(""):"<p>Vacío</p>";document.querySelector("#cart-total").textContent=this.cart.reduce((s,p)=>s+p[2],0).toLocaleString("es-ES",{style:"currency",currency:"EUR"})},
-removeCart(i){this.cart.splice(i,1);S.set("fg5_cart",this.cart);this.renderCart()},
-notify(t){this.notifs.unshift({t,d:new Date().toLocaleString("es-ES")});S.set("fg5_notifs",this.notifs);this.renderNotifs();this.toast(t)},
-renderNotifs(){document.querySelector("#notif-count").textContent=this.notifs.length;document.querySelector("#notif-items").innerHTML=this.notifs.length?this.notifs.map(n=>`<div class="row"><span>${n.t}</span><small>${n.d}</small></div>`).join(""):"<p>Sin notificaciones</p>"},
-open(id){document.querySelector("#"+id).classList.add("open");document.querySelector("#overlay").classList.remove("hidden")},close(){document.querySelectorAll(".drawer").forEach(d=>d.classList.remove("open"));document.querySelector("#overlay").classList.add("hidden")},
-toast(t){const e=document.querySelector("#toast");e.textContent=t;e.classList.add("show");clearTimeout(this.tt);this.tt=setTimeout(()=>e.classList.remove("show"),1800)},
-addXP(n){this.xp+=n;this.coins+=Math.max(1,Math.floor(n/2));S.set("fg5_xp",this.xp);S.set("fg5_coins",this.coins);this.renderHUD()},
-renderHUD(){const l=Math.floor(this.xp/100)+1,prog=this.xp%100;document.querySelector("#level").textContent=l;document.querySelector("#xp").textContent=this.xp+" XP";document.querySelector("#coins").textContent=this.coins;document.querySelector("#diamonds").textContent=this.diamonds;document.querySelector("#best").textContent=S.get("fg5_best",0);document.querySelector("#best-streak").textContent=S.get("fg5_streak",0);document.querySelector("#xpfill").style.width=prog+"%";const ms=[["Juega Flow Trivia",S.get("fg5_trivia_games",0)>=1],["Consigue una racha de 5",S.get("fg5_streak",0)>=5],["Abre la caja diaria",S.get("fg5_box_day","")===new Date().toISOString().slice(0,10)]];document.querySelector("#missions").innerHTML=ms.map(m=>`<div class="mission">${m[1]?"✅":"⬜"} ${m[0]}</div>`).join("");document.querySelector("#achievements").innerHTML=this.ach.length?this.ach.map(a=>`<div class="mission">🏆 ${a}</div>`).join(""):"<p>Sin logros todavía.</p>"},
-gameDone(name,score){this.addXP(name==="Flow Trivia"?20:10);if(score>S.get("fg5_best",0))S.set("fg5_best",score);if(!this.ach.includes(name)){this.ach.push(name);S.set("fg5_ach",this.ach)}this.renderHUD()},
-openDailyBox(){const day=new Date().toISOString().slice(0,10);if(S.get("fg5_box_day","")===day){this.toast("Ya abriste la caja de hoy");return}const rewards=[1,1,2,2,3,5],r=rewards[Math.floor(Math.random()*rewards.length)];this.diamonds+=r;S.set("fg5_diamonds",this.diamonds);S.set("fg5_box_day",day);this.notify(`Caja diaria: +${r} diamantes`);this.renderHUD()},
-community(){this.reacts=S.get("fg5_reacts",{"❤️":12,"🔥":8,"🎮":15,"⭐":7});this.renderReacts();this.renderComments();document.querySelector("#comment-form").onsubmit=e=>{e.preventDefault();this.comments.push({n:document.querySelector("#comment-name").value,t:document.querySelector("#comment-text").value,d:new Date().toLocaleString("es-ES")});S.set("fg5_comments",this.comments);e.target.reset();this.renderComments();this.addXP(3)}},
-renderReacts(){document.querySelector("#reactions").innerHTML=Object.entries(this.reacts).map(([k,v])=>`<button onclick="App.react('${k}')">${k} ${v}</button>`).join("")},react(k){this.reacts[k]++;S.set("fg5_reacts",this.reacts);this.renderReacts()},
-esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))},renderComments(){document.querySelector("#comments").innerHTML=this.comments.length?this.comments.slice().reverse().map(c=>`<div class="comment"><b>${this.esc(c.n)}</b><small>${c.d}</small><p>${this.esc(c.t)}</p></div>`).join(""):"<p>Sin comentarios.</p>"},
-triviaHome(){document.querySelector("#trivia").innerHTML=`<div class="trivia-toolbar"><select id="trivia-category"><option value="all">Todas las categorías</option><option value="gaming">Gaming</option><option value="ciencia">Ciencia</option><option value="geografia">Geografía</option><option value="historia">Historia</option><option value="cine">Cine</option><option value="tecnologia">Tecnología</option><option value="cultura">Cultura</option><option value="animales">Animales</option><option value="deportes">Deportes</option><option value="musica">Música</option></select><select id="trivia-difficulty"><option value="all">Todas las dificultades</option><option value="facil">Fácil</option><option value="media">Media</option><option value="dificil">Difícil</option></select></div><p>10 preguntas, 15 segundos por pregunta y un comodín 50/50.</p><button class="btn yellow" onclick="App.startTrivia()">Comenzar Flow Trivia</button>`},
-startTrivia(){const cat=document.querySelector("#trivia-category")?.value||"all",dif=document.querySelector("#trivia-difficulty")?.value||"all";let pool=A.trivia.filter(q=>(cat==="all"||q.c===cat)&&(dif==="all"||q.d===dif));if(pool.length<5)pool=[...A.trivia];this.t=[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(10,pool.length));this.ti=0;this.ts=0;this.streak=0;this.used5050=false;S.set("fg5_trivia_games",S.get("fg5_trivia_games",0)+1);this.showTrivia()},
-showTrivia(){clearInterval(this.triviaTimer);const b=document.querySelector("#trivia");if(this.ti>=this.t.length){const max=this.t.length*10;b.innerHTML=`<h3>${this.ts}/${max} puntos</h3><p>Racha máxima: ${this.streak}</p><button class="btn yellow" onclick="App.triviaHome()">Volver al menú</button>`;S.set("fg5_streak",Math.max(S.get("fg5_streak",0),this.streak));this.gameDone("Flow Trivia",this.ts);return}const q=this.t[this.ti];this.time=15;b.innerHTML=`<div class="trivia-toolbar"><b>Pregunta ${this.ti+1}/${this.t.length}</b><span>Puntos: ${this.ts}</span><span>Racha: ${this.streak}</span><button id="fifty" ${this.used5050?"disabled":""}>50/50</button></div><div class="timer"><i id="timerbar"></i></div><h4>${q.q}</h4><div class="answer-list">${q.a.map((x,i)=>`<button data-a="${i}">${x}</button>`).join("")}</div>`;b.querySelector("#fifty").onclick=()=>this.use5050(q);b.querySelectorAll("[data-a]").forEach(x=>x.onclick=()=>this.answerTrivia(+x.dataset.a,q));this.triviaTimer=setInterval(()=>{this.time-=.1;const bar=document.querySelector("#timerbar");if(bar)bar.style.width=(this.time/15*100)+"%";if(this.time<=0){clearInterval(this.triviaTimer);this.streak=0;this.ti++;this.showTrivia()}},100)},
-use5050(q){if(this.used5050)return;this.used5050=true;const wrong=[0,1,2,3].filter(i=>i!==q.r).sort(()=>Math.random()-.5).slice(0,2);document.querySelectorAll("[data-a]").forEach(b=>{if(wrong.includes(+b.dataset.a)){b.disabled=true;b.style.opacity=.25}});document.querySelector("#fifty").disabled=true},
-answerTrivia(selected,q){clearInterval(this.triviaTimer);document.querySelectorAll("[data-a]").forEach((b,i)=>{b.disabled=true;if(i===q.r)b.classList.add("correct")});if(selected===q.r){this.streak++;this.ts+=10+Math.min(10,this.streak);if(this.streak===5)this.notify("¡Racha de 5 en Flow Trivia!")}else{this.streak=0;document.querySelector(`[data-a="${selected}"]`).classList.add("wrong")}setTimeout(()=>{this.ti++;this.showTrivia()},700)},
-rushHome(){document.querySelector("#rush").innerHTML=`<div class="trivia-toolbar"><select id="rush-difficulty"><option value="easy">Fácil</option><option value="normal" selected>Normal</option><option value="hard">Extremo</option></select></div><p>20 segundos. Los combos multiplican tus puntos.</p><button class="btn primary" onclick="App.startRush()">Comenzar</button>`},
-startRush(){const dif=document.querySelector("#rush-difficulty")?.value||"normal";this.rs=0;this.combo=0;this.rt=dif==="easy"?25:dif==="hard"?15:20;this.rushDelay=dif==="easy"?700:dif==="hard"?350:500;this.ra=true;this.drawRush();clearInterval(this.ri);this.ri=setInterval(()=>{this.rt--;const h=document.querySelector("#rstatus");if(h)h.textContent=`${this.rs} puntos · ${this.rt}s · Combo x${Math.max(1,this.combo)}`;if(this.rt<=0){clearInterval(this.ri);this.ra=false;document.querySelector("#rush").innerHTML=`<h3>${this.rs} puntos</h3><button class="btn primary" onclick="App.rushHome()">Volver</button>`;this.gameDone("Color Rush",this.rs)}},1000)},
-drawRush(){const c=[["ROJO","#ff4138"],["AZUL","#2789ff"],["AMARILLO","#ffd62d"],["VERDE","#1fbf7b"],["ROSA","#ff347e"],["MORADO","#7d48ff"]].sort(()=>Math.random()-.5);this.rtar=c[Math.floor(Math.random()*c.length)][0];document.querySelector("#rush").innerHTML=`<b id="rstatus">${this.rs} puntos · ${this.rt}s · Combo x${Math.max(1,this.combo)}</b><p>Pulsa ${this.rtar}</p><div class="rush-grid">${c.map(x=>`<button data-c="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div>`;document.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(!this.ra)return;if(b.dataset.c===this.rtar){this.combo++;this.rs+=Math.max(1,this.combo)}else{this.combo=0;this.rs=Math.max(0,this.rs-1)}this.drawRush()})},
-dinoInit(){this.dc=document.querySelector("#dino-canvas");this.dx=this.dc.getContext("2d");document.querySelector("#dino-start").onclick=()=>this.startDino();document.querySelector("#dino-jump").onpointerdown=()=>this.dinoJump();document.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="ArrowUp")this.dinoJump()});this.drawDinoStatic()},
-drawDinoStatic(){const x=this.dx;x.fillStyle="#dff4ff";x.fillRect(0,0,420,240);x.fillStyle="#79c867";x.fillRect(0,190,420,50);x.fillStyle="#18204d";x.font="20px sans-serif";x.fillText("Pulsa Empezar",140,110)},
-dinoJump(){if(this.dp&&this.dp.y>=155)this.dp.vy=-9.5},
-startDino(){this.dp={y:155,vy:0};this.obs=[{x:420,w:20,h:28},{x:650,w:28,h:18}];this.ds=0;this.speed=4;this.dr=true;this.day=true;cancelAnimationFrame(this.df);this.dinoLoop()},
-dinoLoop(){if(!this.dr)return;this.dp.vy+=.45;this.dp.y+=this.dp.vy;if(this.dp.y>155){this.dp.y=155;this.dp.vy=0}this.speed=Math.min(9,4+this.ds/8);this.obs.forEach(o=>o.x-=this.speed);if(this.obs[0].x<-40){this.obs.shift();this.obs.push({x:420+Math.random()*220,w:18+Math.random()*18,h:20+Math.random()*25});this.ds++;if(this.ds%10===0)this.day=!this.day}for(const o of this.obs){if(o.x<66&&o.x+o.w>35&&this.dp.y+30>190-o.h){this.dr=false;this.gameDone("Dino Dash",this.ds);this.dx.fillStyle="#18204d";this.dx.font="20px sans-serif";this.dx.fillText("Fin: "+this.ds+" puntos",135,105);return}}const x=this.dx;x.fillStyle=this.day?"#dff4ff":"#1b2348";x.fillRect(0,0,420,240);x.fillStyle=this.day?"#ffd62d":"#fff";x.beginPath();x.arc(360,45,18,0,Math.PI*2);x.fill();x.fillStyle="#79c867";x.fillRect(0,190,420,50);x.fillStyle="#7d48ff";x.fillRect(35,this.dp.y,28,35);x.fillStyle="#ff4138";this.obs.forEach(o=>x.fillRect(o.x,190-o.h,o.w,o.h));x.fillStyle=this.day?"#18204d":"#fff";x.font="14px sans-serif";x.fillText("Puntos: "+this.ds,10,20);x.fillText("Velocidad: "+this.speed.toFixed(1),300,20);this.df=requestAnimationFrame(()=>this.dinoLoop())}
-};
-document.addEventListener("DOMContentLoaded",()=>App.init());
-</script>
+    <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+      <a href="#novedades">Novedades</a>
+      <a href="#juegos">Juegos</a>
+      <a href="#tienda">Tienda</a>
+      <a href="#comunidad">Comunidad</a>
+      <a href="#perfil">Perfil</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-button" id="theme-button" type="button" aria-label="Cambiar tema">🌙</button>
+      <button class="icon-button" id="notification-button" type="button" aria-label="Abrir notificaciones">🔔<span class="badge" id="notification-count">0</span></button>
+      <button class="icon-button" id="cart-button" type="button" aria-label="Abrir carrito">🛒<span class="badge" id="cart-count">0</span></button>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">FLOWGORILA ARCADE</p>
+        <h1 id="hero-title">Juega. Compite. <span>Sube de nivel.</span></h1>
+        <p class="hero-text">Una experiencia gamer rápida y sin registros: tres minijuegos, recompensas diarias, tienda y progreso guardado en tu dispositivo.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#juegos">Jugar ahora</a>
+          <button class="button secondary" id="daily-reward-button" type="button">Abrir recompensa diaria</button>
+        </div>
+        <p class="save-note">✓ Tu progreso se guarda automáticamente en este navegador.</p>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="logo-orbit"><img src="flowgorila-logo.jpeg" alt="" width="420" height="420"></div>
+        <span class="floating-chip chip-one">+ XP</span>
+        <span class="floating-chip chip-two">RACHA</span>
+        <span class="floating-chip chip-three">GG!</span>
+      </div>
+    </section>
+
+    <section class="stats shell" aria-label="Progreso actual">
+      <article><span>Nivel</span><strong id="level-value">1</strong></article>
+      <article><span>Experiencia</span><strong id="xp-value">0 XP</strong></article>
+      <article><span>Monedas</span><strong id="coins-value">0</strong></article>
+      <article><span>Mejor puntuación</span><strong id="best-score-value">0</strong></article>
+      <article><span>Racha diaria</span><strong id="streak-value">0</strong></article>
+    </section>
+
+    <section class="section shell" id="novedades" aria-labelledby="news-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">ACTUALIZADO</p><h2 id="news-title">Todo listo para jugar</h2></div>
+        <p>La web funciona sin cuentas, instalaciones ni servicios externos.</p>
+      </div>
+      <div class="news-grid">
+        <article class="feature-card large"><span class="card-icon">🧠</span><p class="tag">JUEGO PRINCIPAL</p><h3>Flow Trivia renovado</h3><p>Preguntas de cultura, música, cine y videojuegos con dificultad seleccionable.</p><a class="text-link" href="#trivia-card">Entrar al trivial →</a></article>
+        <article class="feature-card"><span class="card-icon">🃏</span><p class="tag">MEMORIA</p><h3>Encuentra las parejas</h3><p>Completa el tablero con el menor número de movimientos.</p></article>
+        <article class="feature-card"><span class="card-icon">⚡</span><p class="tag">REFLEJOS</p><h3>Reto de reacción</h3><p>Espera la señal y pulsa lo más rápido posible.</p></article>
+      </div>
+    </section>
+
+    <section class="section shell" id="juegos" aria-labelledby="games-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">ARCADE</p><h2 id="games-title">Tres juegos completos</h2></div>
+        <p>Cada partida concede XP y monedas. Tus récords quedan guardados.</p>
+      </div>
+
+      <div class="games-grid">
+        <article class="game-card trivia-card" id="trivia-card">
+          <header><div><span class="game-icon">🧠</span><p class="tag">FLOW TRIVIA</p><h3>Demuestra lo que sabes</h3></div><span class="reward">+20 XP</span></header>
+          <div class="game-toolbar">
+            <label>Categoría<select id="trivia-category"><option value="todas">Todas</option><option value="cultura">Cultura</option><option value="gaming">Gaming</option><option value="cine">Cine</option><option value="musica">Música</option></select></label>
+            <label>Dificultad<select id="trivia-difficulty"><option value="todas">Todas</option><option value="facil">Fácil</option><option value="media">Media</option></select></label>
+          </div>
+          <div class="game-stage" id="trivia-stage" aria-live="polite">
+            <p class="game-placeholder">Pulsa comenzar para iniciar una ronda de 5 preguntas.</p>
+          </div>
+          <button class="button primary full" id="trivia-start" type="button">Comenzar partida</button>
+        </article>
+
+        <article class="game-card memory-card">
+          <header><div><span class="game-icon">🃏</span><p class="tag">MEMORIA</p><h3>Encuentra las parejas</h3></div><span class="reward">+15 XP</span></header>
+          <div class="memory-meta"><span>Movimientos: <strong id="memory-moves">0</strong></span><span>Parejas: <strong id="memory-pairs">0/6</strong></span></div>
+          <div class="memory-grid" id="memory-grid" aria-label="Tablero de memoria"></div>
+          <button class="button secondary full" id="memory-reset" type="button">Nueva partida</button>
+        </article>
+
+        <article class="game-card reaction-card">
+          <header><div><span class="game-icon">⚡</span><p class="tag">REACCIÓN</p><h3>¿Qué tan rápido eres?</h3></div><span class="reward">+10 XP</span></header>
+          <button class="reaction-zone waiting" id="reaction-zone" type="button">
+            <strong id="reaction-title">Pulsa para preparar</strong>
+            <span id="reaction-message">Después espera la señal verde.</span>
+          </button>
+          <p class="reaction-best">Mejor tiempo: <strong id="reaction-best">—</strong></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section shell" id="tienda" aria-labelledby="shop-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">TIENDA DEMO</p><h2 id="shop-title">Equipa tu perfil</h2></div>
+        <p>Carrito funcional de demostración. No realiza cobros ni solicita datos personales.</p>
+      </div>
+      <div class="products-grid" id="products-grid"></div>
+    </section>
+
+    <section class="section shell community-layout" id="comunidad" aria-labelledby="community-title">
+      <div class="community-intro">
+        <p class="eyebrow">COMUNIDAD LOCAL</p>
+        <h2 id="community-title">Deja tu mensaje</h2>
+        <p>Los comentarios se guardan únicamente en este dispositivo. No se publican en internet ni se envían a ningún servidor.</p>
+        <div class="reaction-row" aria-label="Reacciones rápidas">
+          <button type="button" data-reaction="🔥">🔥 <span>0</span></button>
+          <button type="button" data-reaction="💜">💜 <span>0</span></button>
+          <button type="button" data-reaction="🎮">🎮 <span>0</span></button>
+        </div>
+      </div>
+      <div class="community-panel">
+        <form id="comment-form">
+          <label for="comment-name">Nombre</label>
+          <input id="comment-name" name="name" maxlength="24" autocomplete="nickname" required placeholder="Tu nombre gamer">
+          <label for="comment-text">Mensaje</label>
+          <textarea id="comment-text" name="message" maxlength="220" rows="4" required placeholder="Escribe algo para tu comunidad..."></textarea>
+          <button class="button primary" type="submit">Publicar en este dispositivo</button>
+        </form>
+        <div class="comments" id="comments-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="perfil" aria-labelledby="profile-title">
+      <div class="profile-card">
+        <div class="profile-avatar" aria-hidden="true">🦍</div>
+        <div class="profile-main">
+          <p class="eyebrow">TU PERFIL</p>
+          <h2 id="profile-title">Jugador FlowGorila</h2>
+          <div class="progress-label"><span>Progreso al siguiente nivel</span><strong id="progress-label">0/100 XP</strong></div>
+          <div class="progress-track" role="progressbar" aria-label="Progreso al siguiente nivel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-fill"></span></div>
+          <h3>Misiones</h3>
+          <div class="missions" id="missions-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <a class="brand footer-brand" href="#inicio"><img src="flowgorila-logo.jpeg" alt="" width="44" height="44"><span><strong>FLOW<span>GORILA</span></strong></span></a>
+    <p>© <span id="current-year"></span> FlowGorila. Proyecto independiente.</p>
+    <button class="text-button" id="reset-progress" type="button">Restablecer progreso local</button>
+  </footer>
+
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true">
+    <div class="drawer-header"><h2 id="cart-title">Tu carrito</h2><button class="icon-button drawer-close" type="button" aria-label="Cerrar carrito">✕</button></div>
+    <div id="cart-items"></div>
+    <div class="cart-total"><span>Total de demostración</span><strong id="cart-total">0,00 €</strong></div>
+    <button class="button primary full" id="checkout-button" type="button">Finalizar demostración</button>
+  </aside>
+
+  <aside class="drawer" id="notification-drawer" aria-labelledby="notification-title" aria-hidden="true">
+    <div class="drawer-header"><h2 id="notification-title">Notificaciones</h2><button class="icon-button drawer-close" type="button" aria-label="Cerrar notificaciones">✕</button></div>
+    <div id="notification-items"></div>
+    <button class="button secondary full" id="clear-notifications" type="button">Borrar notificaciones</button>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">Activa JavaScript para utilizar los juegos y guardar tu progreso.</p></noscript>
 </body>
 </html>
-
