@@ -13,3 +13,11 @@
 .trivia-card{order:1}.platformer-card{order:2}
 @media(max-width:720px){.gbc-console{padding:9px;border-radius:17px}.gbc-screen-wrap{border-width:7px}.gbc-controls{padding:10px 6px 2px}.gbc-dpad{grid-template-columns:34px 34px 34px;grid-template-rows:34px 34px 34px}.gbc-ab button{width:44px;height:44px}.gbc-footer{display:grid}.gbc-footer span{text-align:center}.gbc-footer>div{display:grid;grid-template-columns:1fr 1fr}.gbc-footer .button{width:100%}.gbc-status span{font-size:.54rem}.gbc-team-panel{grid-template-columns:1fr}.gbc-party-list,.gbc-shop-grid{grid-template-columns:1fr}.missions{grid-template-columns:1fr}}
 @media(max-width:430px){.gbc-console{margin-inline:-4px}.gbc-logo strong{font-size:2rem}.gbc-logo span{font-size:10px}.gbc-battle-actions button{font-size:9px}.gbc-controls{padding-inline:0}.gbc-ab{gap:8px}}
+
+/* V5.2: selector de equipo táctil y cambio de Pokémon */
+.gbc-team-open{margin-top:3px;padding:6px 7px;border:2px solid #243a31;border-radius:5px;background:#f1d447;color:#203027;font:900 .52rem monospace;cursor:pointer;box-shadow:2px 2px 0 #243a31}.gbc-team-open:active{transform:translate(2px,2px);box-shadow:none}
+.gbc-team{padding:4px 2px}.gbc-mon{flex-basis:122px;text-align:left;cursor:pointer}.gbc-mon:hover{transform:translateY(-2px);background:#fff4aa}.gbc-mon.active{border-color:#2d914f;background:#d9f3bd;box-shadow:0 0 0 2px #7bcf7d}.gbc-mon:disabled{cursor:default;opacity:.82}.gbc-mon em{display:block;margin-top:4px;color:#2e7141;font:900 .48rem monospace;font-style:normal}
+.gbc-battle-actions{grid-template-columns:repeat(5,1fr)}.gbc-battle-actions button{min-height:42px;font-size:9px}
+.gbc-party-row.fainted{opacity:.58}.gbc-party-row button{min-width:74px;padding:7px}.gbc-party-row button:disabled{cursor:default;filter:grayscale(.55)}
+.gbc-party-picker{margin-top:6px;padding:9px;border:3px solid #26352e;background:#f3efcf;color:#1b3022;font-family:monospace}.gbc-party-picker>strong{display:block;margin-bottom:7px;font-size:.66rem}.gbc-party-picker .gbc-party-row{margin-top:5px}
+@media(max-width:720px){.gbc-battle-actions{grid-template-columns:repeat(2,1fr)}.gbc-battle-actions button:last-child{grid-column:1/-1}}
