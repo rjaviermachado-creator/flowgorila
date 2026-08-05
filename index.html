@@ -16,7 +16,9 @@
   <link rel="stylesheet" href="nintendo.css">
   <link rel="stylesheet" href="user-gallery.css">
   <link rel="stylesheet" href="arcade-v3.css">
+  <link rel="stylesheet" href="pokemon-gbc.css">
   <script defer src="app.js"></script>
+  <script defer src="pokemon-gbc.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido-principal">Saltar al contenido</a>
@@ -230,7 +232,7 @@
     </section>
 
     <section class="section shell" id="juegos" aria-labelledby="games-title">
-      <div class="section-heading reveal"><div><p class="eyebrow">⚡ FLOW ARCADE V3</p><h2 id="games-title">Cuatro juegos. <span>Más nivel.</span></h2></div><p>Trivial universal, memoria por dificultad, reacción a cinco rondas y un nuevo plataformas con Pikachu. Todo suma XP y monedas.</p></div>
+      <div class="section-heading reveal"><div><p class="eyebrow">⚡ FLOW ARCADE V4</p><h2 id="games-title">Tres juegos. <span>Más aventura.</span></h2></div><p>Universal Trivia, un RPG Pokémon inspirado en la era Game Boy Color y Pika Dash con 12 niveles. Todo suma XP y monedas.</p></div>
       <div class="games-grid">
         <article class="game-card trivia-card reveal tilt-card">
           <header><div><span class="game-icon">🌍</span><p class="tag">UNIVERSAL TRIVIA</p><h3>Más de 100.000 preguntas posibles</h3></div><span class="reward">+30 XP</span></header>
@@ -239,19 +241,18 @@
           <div class="game-stage" id="trivia-stage" aria-live="polite"><p class="game-placeholder"><strong>Universal Trivia</strong>El motor crea partidas nuevas cada vez. Pulsa comenzar para jugar 10 preguntas.</p></div>
           <button class="button primary full fx-button" id="trivia-start" type="button">Comenzar ronda de 10</button>
         </article>
-        <article class="game-card reveal tilt-card">
-          <header><div><span class="game-icon">🃏</span><p class="tag">MEMORIA PRO</p><h3>Encuentra las parejas</h3></div><span class="reward">+25 XP</span></header>
-          <div class="memory-toolbar"><label>Dificultad<select id="memory-difficulty"><option value="facil">Fácil · 4 parejas</option><option value="normal" selected>Normal · 6 parejas</option><option value="dificil">Difícil · 8 parejas</option></select></label></div>
-          <div class="memory-meta"><span>Mov: <strong id="memory-moves">0</strong></span><span>Parejas: <strong id="memory-pairs">0/6</strong></span><span>Tiempo: <strong id="memory-time">0.0 s</strong></span></div>
-          <div class="memory-grid" id="memory-grid" aria-label="Tablero de memoria"></div>
-          <p class="memory-record">Récord: <strong id="memory-best">—</strong></p>
-          <button class="button ghost full fx-button" id="memory-reset" type="button">Nueva partida</button>
-        </article>
-        <article class="game-card reveal tilt-card">
-          <header><div><span class="game-icon">⚡</span><p class="tag">REACCIÓN x5</p><h3>¿Qué tan rápido eres?</h3></div><span class="reward">+20 XP</span></header>
-          <div class="reaction-stats"><span>Ronda <strong id="reaction-round">0/5</strong></span><span>Media <strong id="reaction-average">—</strong></span></div>
-          <button class="reaction-zone waiting" id="reaction-zone" type="button"><strong id="reaction-title">Pulsa para preparar</strong><span id="reaction-message">Después espera la señal verde.</span></button>
-          <p class="reaction-best">Mejor tiempo: <strong id="reaction-best">—</strong></p>
+        <article class="game-card gbc-card reveal tilt-card">
+          <header><div><span class="game-icon">🎮⚡</span><p class="tag gbc-tag">POKÉMON · PIXEL QUEST</p><h3>Una aventura RPG estilo Game Boy Color</h3></div><span class="reward">+60 XP</span></header>
+          <div class="gbc-status"><span id="gbc-location">🌿 Ruta Verde</span><span>🔴 Pokéballs <strong id="gbc-balls">5</strong></span><span>⭐ Capturados <strong id="gbc-caught">0</strong></span></div>
+          <div class="gbc-console">
+            <div class="gbc-screen-wrap">
+              <canvas id="gbc-canvas" width="640" height="480" aria-label="Pokémon Pixel Quest"></canvas>
+              <div class="gbc-start-screen" id="gbc-start-screen"><div class="gbc-logo"><small>FLOWGORILA PRESENTA</small><strong>POKÉMON</strong><span>PIXEL QUEST</span></div><p>Explora · combate · captura</p><button id="gbc-start" type="button">▶ NUEVA / CONTINUAR PARTIDA</button></div>
+            </div>
+            <div class="gbc-battle-actions" id="gbc-battle-actions" hidden><button data-gbc-action="attack" type="button">⚡ IMPACTRUENO</button><button data-gbc-action="ball" type="button">🔴 POKÉBALL</button><button data-gbc-action="potion" type="button">🧪 POCIÓN</button><button data-gbc-action="run" type="button">↩ HUIR</button></div>
+            <div class="gbc-controls"><div class="gbc-dpad"><i></i><button data-gbc-dir="up" type="button">▲</button><i></i><button data-gbc-dir="left" type="button">◀</button><i class="center"></i><button data-gbc-dir="right" type="button">▶</button><i></i><button data-gbc-dir="down" type="button">▼</button><i></i></div><div class="gbc-ab"><button class="gbc-b" id="gbc-b" type="button">B</button><button class="gbc-a" id="gbc-a" type="button">A</button></div></div>
+          </div>
+          <div class="gbc-footer"><span>PC: flechas / WASD · Z/Enter = A · X/Esc = B · guardado automático</span><button class="button ghost fx-button" id="gbc-save" type="button">💾 Guardar</button></div>
         </article>
         <article class="game-card platformer-card reveal tilt-card">
           <header><div><span class="game-icon">⚡🐭</span><p class="tag pika-tag">PIKA DASH · 12 NIVELES</p><h3>Pikachu en una aventura de plataformas</h3></div><span class="reward">XP por nivel</span></header>

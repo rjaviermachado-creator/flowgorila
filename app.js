@@ -17,7 +17,7 @@ const state = {
   cart: Array.isArray(storage.get("cart", [])) ? storage.get("cart", []) : [],
   comments: Array.isArray(storage.get("comments", [])) ? storage.get("comments", []) : [],
   reactions: { "🔥": 0, "💜": 0, "🎮": 0, ...storage.get("reactions", {}) },
-  completed: { trivia: false, memory: false, reaction: false, platformer: false, ...storage.get("completed", {}) },
+  completed: { trivia: false, pokemonGbc: false, platformer: false, ...storage.get("completed", {}) },
   theme: storage.get("theme", "dark"),
   sound: storage.get("sound", true) !== false
 };
@@ -53,14 +53,12 @@ const triviaFacts = {
 
 const elements = {};
 let triviaRound = [], triviaIndex = 0, triviaScore = 0, triviaCombo = 0, triviaTimer = null, triviaTimeLeft = 15;
-let memoryFirst = null, memoryLock = false, memoryMoves = 0, memoryPairs = 0, memoryPairTarget = 6, memoryStartedAt = 0, memoryInterval = null;
-let reactionStatus = "idle", reactionTimer = null, reactionStart = 0, reactionResults = [];
 let platformerRunning = false, platformerFrame = null, platformerKeys = {left:false,right:false,jump:false};
 let audioContext = null;
 let lastFocusedElement = null;
 
 function cacheElements() {
-  ["menu-button","main-nav","sound-button","theme-button","cart-button","cart-count","daily-reward-button","level-value","xp-value","coins-value","best-score-value","streak-value","trivia-category","trivia-difficulty","trivia-stage","trivia-start","memory-difficulty","memory-moves","memory-pairs","memory-time","memory-best","memory-grid","memory-reset","reaction-zone","reaction-title","reaction-message","reaction-best","reaction-round","reaction-average","platformer-canvas","platformer-overlay","platformer-start","platformer-left","platformer-right","platformer-jump","platformer-power","platformer-level-select","platformer-power-status","products-grid","comment-form","comments-list","progress-label","progress-fill","missions-list","current-year","reset-progress","overlay","cart-drawer","cart-items","cart-total","checkout-button","toast","sound-hint","cursor-glow","fx-canvas"].forEach((id) => { elements[id.replaceAll("-", "_")] = document.getElementById(id); });
+  ["menu-button","main-nav","sound-button","theme-button","cart-button","cart-count","daily-reward-button","level-value","xp-value","coins-value","best-score-value","streak-value","trivia-category","trivia-difficulty","trivia-stage","trivia-start","platformer-canvas","platformer-overlay","platformer-start","platformer-left","platformer-right","platformer-jump","platformer-power","platformer-level-select","platformer-power-status","products-grid","comment-form","comments-list","progress-label","progress-fill","missions-list","current-year","reset-progress","overlay","cart-drawer","cart-items","cart-total","checkout-button","toast","sound-hint","cursor-glow","fx-canvas"].forEach((id) => { elements[id.replaceAll("-", "_")] = document.getElementById(id); });
   elements.progress_track = document.querySelector(".progress-track");
 }
 
@@ -117,7 +115,7 @@ function renderProgress() {
   const level=Math.floor(state.xp/100)+1, within=state.xp%100;
   elements.level_value.textContent=String(level); elements.xp_value.textContent=`${state.xp} XP`; elements.coins_value.textContent=String(state.coins); elements.best_score_value.textContent=String(state.bestScore); elements.streak_value.textContent=`${state.streak} día${state.streak===1?"":"s"}`;
   elements.progress_label.textContent=`${within}/100 XP`; elements.progress_fill.style.width=`${within}%`; elements.progress_track.setAttribute("aria-valuenow",String(within));
-  const missions=[{label:"Completa Universal Trivia",done:state.completed.trivia},{label:"Resuelve Memoria Pro",done:state.completed.memory},{label:"Supera Reacción x5",done:state.completed.reaction},{label:"Completa Pika Dash",done:state.completed.platformer}];
+  const missions=[{label:"Completa Universal Trivia",done:state.completed.trivia},{label:"Domina Pokémon Pixel Quest",done:state.completed.pokemonGbc},{label:"Completa Pika Dash",done:state.completed.platformer}];
   elements.missions_list.replaceChildren(...missions.map((item)=>{const node=document.createElement("div");node.className=`mission${item.done?" done":""}`;node.textContent=`${item.done?"✓":"○"} ${item.label}`;return node;}));
 }
 
@@ -223,47 +221,6 @@ function finishTrivia(){
   clearInterval(triviaTimer);state.bestScore=Math.max(state.bestScore,triviaScore);state.completed.trivia=true;storage.set("bestScore",state.bestScore);storage.set("completed",state.completed);
   const rank=triviaScore===10?"PERFECTO 🏆":triviaScore>=8?"EXPERTO 🌟":triviaScore>=6?"MUY BIEN ⚡":"SIGUE ENTRENANDO 🎯";
   elements.trivia_stage.innerHTML=`<div class="game-placeholder"><strong>${rank}</strong><p>${triviaScore} de 10 correctas · banco potencial ${TRIVIA_BANK_SIZE.toLocaleString("es-ES")}+</p></div>`;elements.trivia_start.disabled=false;elements.trivia_start.textContent="Jugar otra ronda de 10";award(30,Math.max(10,triviaScore*4),"Universal Trivia completado");
-}
-
-function memoryDifficultyConfig(){
-  const value=elements.memory_difficulty?.value||"normal";
-  if(value==="facil")return {value,pairs:4,xp:12,coins:8};
-  if(value==="dificil")return {value,pairs:8,xp:30,coins:18};
-  return {value:"normal",pairs:6,xp:20,coins:12};
-}
-
-function updateMemoryBestLabel(){const cfg=memoryDifficultyConfig(),best=storage.get(`memoryBest_${cfg.value}`,null);elements.memory_best.textContent=best===null?"—":`${Number(best).toFixed(1)} s`;}
-
-function startMemoryClock(){
-  if(memoryStartedAt)return;memoryStartedAt=performance.now();clearInterval(memoryInterval);memoryInterval=setInterval(()=>{elements.memory_time.textContent=`${((performance.now()-memoryStartedAt)/1000).toFixed(1)} s`;},100);
-}
-
-function setupMemory(){
-  clearInterval(memoryInterval);const cfg=memoryDifficultyConfig(),icons=["⚡","🔥","🎮","🦍","👾","🏆","💎","🌟"].slice(0,cfg.pairs),deck=shuffle([...icons,...icons]);memoryPairTarget=cfg.pairs;memoryFirst=null;memoryLock=false;memoryMoves=0;memoryPairs=0;memoryStartedAt=0;elements.memory_moves.textContent="0";elements.memory_pairs.textContent=`0/${memoryPairTarget}`;elements.memory_time.textContent="0.0 s";elements.memory_grid.dataset.size=String(cfg.pairs);updateMemoryBestLabel();
-  elements.memory_grid.replaceChildren(...deck.map((icon,index)=>{const b=document.createElement("button");b.type="button";b.className="memory-tile";b.dataset.icon=icon;b.dataset.id=String(index);b.setAttribute("aria-label","Carta oculta");b.textContent=icon;return b;}));
-}
-
-function selectMemory(tile){
-  if(memoryLock||tile.classList.contains("matched")||tile===memoryFirst)return;startMemoryClock();tile.classList.add("revealed");sfx("flip");
-  if(!memoryFirst){memoryFirst=tile;return;}memoryMoves++;elements.memory_moves.textContent=String(memoryMoves);const second=tile;
-  if(memoryFirst.dataset.icon===second.dataset.icon){memoryFirst.classList.add("matched");second.classList.add("matched");memoryFirst=null;memoryPairs++;elements.memory_pairs.textContent=`${memoryPairs}/${memoryPairTarget}`;sfx("success");if(memoryPairs===memoryPairTarget){clearInterval(memoryInterval);const cfg=memoryDifficultyConfig(),seconds=(performance.now()-memoryStartedAt)/1000,best=storage.get(`memoryBest_${cfg.value}`,null);elements.memory_time.textContent=`${seconds.toFixed(1)} s`;if(best===null||seconds<Number(best))storage.set(`memoryBest_${cfg.value}`,seconds);updateMemoryBestLabel();state.completed.memory=true;storage.set("completed",state.completed);award(cfg.xp,Math.max(cfg.coins,cfg.coins+memoryPairTarget*2-memoryMoves),"Memoria Pro completada");}return;}
-  memoryLock=true;const first=memoryFirst;sfx("wrong");setTimeout(()=>{first.classList.remove("revealed");second.classList.remove("revealed");memoryFirst=null;memoryLock=false;},600);
-}
-
-function beginReactionRound(){
-  reactionStatus="waiting";elements.reaction_round.textContent=`${reactionResults.length+1}/5`;elements.reaction_zone.className="reaction-zone ready";elements.reaction_title.textContent="Espera…";elements.reaction_message.textContent="No pulses hasta que se ponga verde.";
-  reactionTimer=setTimeout(()=>{reactionStatus="go";reactionStart=performance.now();elements.reaction_zone.className="reaction-zone go";elements.reaction_title.textContent="¡AHORA!";elements.reaction_message.textContent="¡Pulsa!";sfx("go");},1300+Math.random()*2600);
-}
-
-function handleReaction(){
-  if(reactionStatus==="idle"||reactionStatus==="complete"){reactionResults=[];elements.reaction_average.textContent="—";beginReactionRound();return;}
-  if(reactionStatus==="between"){beginReactionRound();return;}
-  if(reactionStatus==="waiting"){clearTimeout(reactionTimer);reactionStatus="between";elements.reaction_zone.className="reaction-zone waiting";elements.reaction_title.textContent="¡Demasiado pronto!";elements.reaction_message.textContent="Pulsa para repetir esta ronda.";sfx("wrong");return;}
-  if(reactionStatus==="go"){
-    const result=Math.round(performance.now()-reactionStart),saved=storage.get("reactionBest",null),best=saved===null?result:Math.min(saved,result);storage.set("reactionBest",best);elements.reaction_best.textContent=`${best} ms`;reactionResults.push(result);const average=Math.round(reactionResults.reduce((a,b)=>a+b,0)/reactionResults.length);elements.reaction_average.textContent=`${average} ms`;elements.reaction_round.textContent=`${reactionResults.length}/5`;elements.reaction_zone.className="reaction-zone waiting";sfx(result<300?"success":"click");
-    if(reactionResults.length>=5){reactionStatus="complete";elements.reaction_title.textContent=`Media: ${average} ms`;elements.reaction_message.textContent=average<250?"⚡ Reflejos legendarios · pulsa para otra serie":"Serie completada · pulsa para repetir";state.completed.reaction=true;storage.set("completed",state.completed);award(20,average<300?18:10,"Reacción x5 completada");}
-    else{reactionStatus="between";elements.reaction_title.textContent=`${result} ms`;elements.reaction_message.textContent=`Ronda ${reactionResults.length}/5 lista · pulsa para la siguiente`;}
-  }
 }
 
 const PIKA_LEVEL_COUNT=12;
@@ -435,10 +392,10 @@ function bindEvents(){
   elements.menu_button.addEventListener("click",()=>{const open=elements.main_nav.classList.toggle("open");elements.menu_button.textContent=open?"✕":"☰";elements.menu_button.setAttribute("aria-expanded",String(open));});
   elements.main_nav.addEventListener("click",()=>{elements.main_nav.classList.remove("open");elements.menu_button.textContent="☰";elements.menu_button.setAttribute("aria-expanded","false");});
   elements.sound_button.addEventListener("click",()=>setSound(!state.sound));elements.theme_button.addEventListener("click",()=>setTheme(state.theme==="dark"?"light":"dark"));elements.daily_reward_button.addEventListener("click",claimDailyReward);elements.cart_button.addEventListener("click",openCart);elements.overlay.addEventListener("click",closeCart);document.querySelector(".drawer-close").addEventListener("click",closeCart);document.addEventListener("keydown",(e)=>{if(e.key==="Escape")closeCart();});
-  elements.trivia_start.addEventListener("click",startTrivia);elements.trivia_stage.addEventListener("click",(e)=>{const b=e.target.closest("[data-answer-index]");if(b)answerTrivia(Number(b.dataset.answerIndex));});elements.memory_grid.addEventListener("click",(e)=>{const b=e.target.closest(".memory-tile");if(b)selectMemory(b);});elements.memory_reset.addEventListener("click",()=>{setupMemory();sfx("go");});elements.memory_difficulty.addEventListener("change",()=>{setupMemory();sfx("click");});elements.reaction_zone.addEventListener("click",handleReaction);elements.platformer_start.addEventListener("click",startPlatformer);bindPlatformerControls();
+  elements.trivia_start.addEventListener("click",startTrivia);elements.trivia_stage.addEventListener("click",(e)=>{const b=e.target.closest("[data-answer-index]");if(b)answerTrivia(Number(b.dataset.answerIndex));});elements.platformer_start.addEventListener("click",startPlatformer);bindPlatformerControls();
   elements.products_grid.addEventListener("click",(e)=>{const b=e.target.closest("[data-product-id]");if(b)addToCart(b.dataset.productId);});elements.cart_items.addEventListener("click",(e)=>{const b=e.target.closest("[data-cart-index]");if(b)removeFromCart(Number(b.dataset.cartIndex));});elements.checkout_button.addEventListener("click",()=>showToast("Tienda demo: no se realiza ningún cobro"));
   elements.comment_form.addEventListener("submit",submitComment);document.querySelectorAll("[data-reaction]").forEach((b)=>b.addEventListener("click",()=>addReaction(b)));elements.reset_progress.addEventListener("click",resetProgress);
 }
 
-function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupMemory();setupPlatformerLevels();resetPlatformer();loadRobloxGameThumbnails();const best=storage.get("reactionBest",null);elements.reaction_best.textContent=best===null?"—":`${best} ms`;elements.reaction_round.textContent="0/5";elements.reaction_average.textContent="—";elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
+function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupPlatformerLevels();resetPlatformer();loadRobloxGameThumbnails();elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
 document.addEventListener("DOMContentLoaded",init);
