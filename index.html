@@ -254,14 +254,15 @@
           <p class="reaction-best">Mejor tiempo: <strong id="reaction-best">—</strong></p>
         </article>
         <article class="game-card platformer-card reveal tilt-card">
-          <header><div><span class="game-icon">⚡🐭</span><p class="tag pika-tag">PIKA DASH</p><h3>Pikachu en una aventura de plataformas</h3></div><span class="reward">+35 XP</span></header>
-          <div class="platformer-info"><span>⚡ Pikachu</span><span>🪙 Recoge monedas</span><span>🚩 Llega a la Poké-meta</span></div>
+          <header><div><span class="game-icon">⚡🐭</span><p class="tag pika-tag">PIKA DASH · 12 NIVELES</p><h3>Pikachu en una aventura de plataformas</h3></div><span class="reward">XP por nivel</span></header>
+          <div class="platformer-info"><span>🏁 12 niveles progresivos</span><span>🔴⚪ Pokéball = escudo</span><span>🌸 Flor de loto = Lotus Thunder</span><span>🪙 Recoge monedas</span></div>
+          <div class="platformer-levelbar"><label for="platformer-level-select">Nivel <select id="platformer-level-select" aria-label="Seleccionar nivel de Pika Dash"></select></label><span id="platformer-power-status">⚡ Modo normal</span></div>
           <div class="platformer-shell">
             <canvas id="platformer-canvas" width="960" height="420" aria-label="Juego de plataformas Pika Dash"></canvas>
-            <div class="platformer-overlay" id="platformer-overlay"><strong>PIKA DASH</strong><span>Corre, salta y llega a la meta</span></div>
+            <div class="platformer-overlay" id="platformer-overlay"><strong>PIKA DASH</strong><span>12 niveles · Pokéballs · Flor de loto · Lotus Thunder</span></div>
           </div>
-          <div class="platformer-controls" aria-label="Controles táctiles"><button id="platformer-left" type="button" aria-label="Mover a la izquierda">◀</button><button id="platformer-right" type="button" aria-label="Mover a la derecha">▶</button><button class="jump" id="platformer-jump" type="button" aria-label="Saltar">⚡ SALTAR</button></div>
-          <div class="platformer-footer"><span>Teclado: ← → / A D · Espacio para saltar</span><button class="button primary fx-button" id="platformer-start" type="button">Jugar Pika Dash</button></div>
+          <div class="platformer-controls" aria-label="Controles táctiles"><button id="platformer-left" type="button" aria-label="Mover a la izquierda">◀</button><button id="platformer-right" type="button" aria-label="Mover a la derecha">▶</button><button class="jump" id="platformer-jump" type="button" aria-label="Saltar">⚡ SALTAR</button><button class="power" id="platformer-power" type="button" aria-label="Usar Lotus Thunder">🌸 PODER</button></div>
+          <div class="platformer-footer"><span>PC: ← → / A D · Espacio salta · X / E dispara Lotus Thunder</span><button class="button primary fx-button" id="platformer-start" type="button">Jugar nivel 1</button></div>
         </article>
       </div>
     </section>

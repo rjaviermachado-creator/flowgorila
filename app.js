@@ -60,7 +60,7 @@ let audioContext = null;
 let lastFocusedElement = null;
 
 function cacheElements() {
-  ["menu-button","main-nav","sound-button","theme-button","cart-button","cart-count","daily-reward-button","level-value","xp-value","coins-value","best-score-value","streak-value","trivia-category","trivia-difficulty","trivia-stage","trivia-start","memory-difficulty","memory-moves","memory-pairs","memory-time","memory-best","memory-grid","memory-reset","reaction-zone","reaction-title","reaction-message","reaction-best","reaction-round","reaction-average","platformer-canvas","platformer-overlay","platformer-start","platformer-left","platformer-right","platformer-jump","products-grid","comment-form","comments-list","progress-label","progress-fill","missions-list","current-year","reset-progress","overlay","cart-drawer","cart-items","cart-total","checkout-button","toast","sound-hint","cursor-glow","fx-canvas"].forEach((id) => { elements[id.replaceAll("-", "_")] = document.getElementById(id); });
+  ["menu-button","main-nav","sound-button","theme-button","cart-button","cart-count","daily-reward-button","level-value","xp-value","coins-value","best-score-value","streak-value","trivia-category","trivia-difficulty","trivia-stage","trivia-start","memory-difficulty","memory-moves","memory-pairs","memory-time","memory-best","memory-grid","memory-reset","reaction-zone","reaction-title","reaction-message","reaction-best","reaction-round","reaction-average","platformer-canvas","platformer-overlay","platformer-start","platformer-left","platformer-right","platformer-jump","platformer-power","platformer-level-select","platformer-power-status","products-grid","comment-form","comments-list","progress-label","progress-fill","missions-list","current-year","reset-progress","overlay","cart-drawer","cart-items","cart-total","checkout-button","toast","sound-hint","cursor-glow","fx-canvas"].forEach((id) => { elements[id.replaceAll("-", "_")] = document.getElementById(id); });
   elements.progress_track = document.querySelector(".progress-track");
 }
 
@@ -266,61 +266,111 @@ function handleReaction(){
   }
 }
 
-const platformer={x:70,y:280,vx:0,vy:0,w:40,h:48,onGround:false,coins:0,hearts:3,camera:0,levelWidth:3180,lastTime:0};
-const platformerPlatforms=[
-  {x:0,y:360,w:520,h:70},{x:620,y:360,w:500,h:70},{x:1210,y:360,w:420,h:70},{x:1740,y:360,w:550,h:70},{x:2390,y:360,w:790,h:70},
-  {x:260,y:278,w:145,h:22},{x:730,y:260,w:130,h:22},{x:960,y:205,w:125,h:22},{x:1320,y:275,w:150,h:22},{x:1510,y:218,w:105,h:22},{x:1850,y:270,w:145,h:22},{x:2100,y:205,w:125,h:22},{x:2500,y:270,w:150,h:22},{x:2760,y:220,w:145,h:22}
-];
-const platformerCoinTemplate=[[180,315],[310,235],[380,235],[690,315],[765,218],[825,218],[1000,165],[1260,315],[1360,235],[1430,235],[1545,178],[1795,315],[1885,230],[1950,230],[2140,165],[2440,315],[2540,230],[2620,230],[2800,180],[2880,180],[3000,315]];
-const platformerEnemyTemplate=[{x:430,min:410,max:495},{x:890,min:870,max:1080},{x:1450,min:1240,max:1580},{x:2040,min:1770,max:2240},{x:2670,min:2430,max:3060}];
-let platformerCoins=[],platformerEnemies=[];
+const PIKA_LEVEL_COUNT=12;
+const platformer={level:1,x:70,y:280,vx:0,vy:0,w:40,h:48,onGround:false,coins:0,hearts:3,camera:0,levelWidth:2800,goalX:2700,lastTime:0,facing:1,superMode:false,lotus:false,invulnerableUntil:0,lastShot:0};
+let platformerPlatforms=[],platformerCoins=[],platformerEnemies=[],platformerPowerups=[],platformerProjectiles=[];
+
+function seededPikaRandom(seed){let value=seed>>>0;return()=>{value=(value*1664525+1013904223)>>>0;return value/4294967296;};}
+
+function refreshPlatformerLevels(selected=platformer.level){
+  const unlocked=Math.max(1,Math.min(PIKA_LEVEL_COUNT,Number(storage.get("pikaUnlocked",1))||1));
+  if(!elements.platformer_level_select.options.length){for(let level=1;level<=PIKA_LEVEL_COUNT;level++){const option=document.createElement("option");option.value=String(level);elements.platformer_level_select.append(option);}}
+  [...elements.platformer_level_select.options].forEach((option)=>{const level=Number(option.value),locked=level>unlocked;option.disabled=locked;option.textContent=`Nivel ${level}${locked?" 🔒":""}`;});
+  elements.platformer_level_select.value=String(Math.min(unlocked,Math.max(1,selected)));
+}
+
+function setupPlatformerLevels(){
+  const unlocked=Math.max(1,Math.min(PIKA_LEVEL_COUNT,Number(storage.get("pikaUnlocked",1))||1)),selected=Math.min(unlocked,Math.max(1,Number(storage.get("pikaSelected",1))||1));platformer.level=selected;refreshPlatformerLevels(selected);
+}
+
+function buildPlatformerLevel(level){
+  const random=seededPikaRandom(2026+level*7919),targetWidth=2450+(level-1)*320;let x=0,segment=0;
+  platformerPlatforms=[];platformerCoins=[];platformerEnemies=[];platformerPowerups=[];platformerProjectiles=[];
+  while(x<targetWidth){
+    const segmentWidth=Math.max(300,420+Math.floor(random()*160)-level*5),ground={x,y:360,w:segmentWidth,h:70};platformerPlatforms.push(ground);
+    for(let coinX=x+120;coinX<x+segmentWidth-70;coinX+=115+Math.floor(random()*35))platformerCoins.push({x:coinX,y:322,taken:false});
+    if(segment>0&&random()<Math.min(.25+level*.045,.82)){
+      const min=x+55,max=x+segmentWidth-70,start=min+random()*Math.max(20,max-min);platformerEnemies.push({x:start,min,max,y:326,vx:(.9+level*.065+random()*.4)*(random()>.5?1:-1),dead:false});
+      if(level>=8&&segmentWidth>390&&random()<.38){const start2=min+random()*Math.max(20,max-min);platformerEnemies.push({x:start2,min,max,y:326,vx:(1.05+level*.07)*(random()>.5?1:-1),dead:false});}
+    }
+    if(segment>0&&random()<.82){const floatW=105+Math.floor(random()*75),floatX=x+85+random()*Math.max(30,segmentWidth-floatW-150),floatY=205+Math.floor(random()*85);platformerPlatforms.push({x:floatX,y:floatY,w:floatW,h:20});platformerCoins.push({x:floatX+floatW*.35,y:floatY-28,taken:false},{x:floatX+floatW*.7,y:floatY-28,taken:false});}
+    if(segment===1||segment>2&&random()<.08)platformerPowerups.push({x:x+Math.min(150,segmentWidth*.45),y:323,type:"pokeball",taken:false});
+    if(level>=2&&(segment===2||segment>3&&random()<.07))platformerPowerups.push({x:x+Math.min(185,segmentWidth*.55),y:318,type:"lotus",taken:false});
+    if(x+segmentWidth>=targetWidth){x+=segmentWidth;break;}
+    const gap=Math.min(152,72+Math.floor(random()*(34+level*4)));x+=segmentWidth+gap;segment++;
+  }
+  platformer.levelWidth=x;platformer.goalX=x-82;
+}
+
+function updatePlatformerPowerStatus(){
+  if(!elements.platformer_power_status)return;elements.platformer_power_status.textContent=platformer.lotus?"🌸 LOTUS THUNDER ACTIVO":platformer.superMode?"🔴⚪ Pokéball · escudo activo":"⚡ Modo normal";elements.platformer_power?.classList.toggle("active",platformer.lotus);
+}
 
 function resetPlatformer(){
-  if(platformerFrame)cancelAnimationFrame(platformerFrame);platformerFrame=null;platformerRunning=false;platformer.x=70;platformer.y=280;platformer.vx=0;platformer.vy=0;platformer.onGround=false;platformer.coins=0;platformer.hearts=3;platformer.camera=0;platformerKeys={left:false,right:false,jump:false};platformerCoins=platformerCoinTemplate.map(([x,y])=>({x,y,taken:false}));platformerEnemies=platformerEnemyTemplate.map(e=>({...e,y:326,vx:1.15,dead:false}));drawPlatformer();
+  if(platformerFrame)cancelAnimationFrame(platformerFrame);platformerFrame=null;platformerRunning=false;platformer.x=70;platformer.y=280;platformer.vx=0;platformer.vy=0;platformer.onGround=false;platformer.coins=0;platformer.hearts=3;platformer.camera=0;platformer.facing=1;platformer.superMode=false;platformer.lotus=false;platformer.invulnerableUntil=0;platformer.lastShot=0;platformerKeys={left:false,right:false,jump:false};buildPlatformerLevel(platformer.level);updatePlatformerPowerStatus();if(elements.platformer_overlay){elements.platformer_overlay.classList.remove("hidden");elements.platformer_overlay.innerHTML=`<strong>NIVEL ${platformer.level}</strong><span>Dificultad ${platformer.level}/12 · recoge Pokéballs y flores de loto</span>`;}if(elements.platformer_start)elements.platformer_start.textContent=`Jugar nivel ${platformer.level}`;drawPlatformer();
 }
 
 function startPlatformer(){
-  resetPlatformer();platformerRunning=true;platformer.lastTime=performance.now();elements.platformer_overlay.classList.add("hidden");elements.platformer_start.textContent="Reiniciar Pika Dash";sfx("go");platformerFrame=requestAnimationFrame(platformerLoop);
+  const selected=Math.max(1,Math.min(PIKA_LEVEL_COUNT,Number(elements.platformer_level_select.value)||1));platformer.level=selected;storage.set("pikaSelected",selected);resetPlatformer();platformerRunning=true;platformer.lastTime=performance.now();elements.platformer_overlay.classList.add("hidden");elements.platformer_start.textContent=`Reiniciar nivel ${platformer.level}`;sfx("go");platformerFrame=requestAnimationFrame(platformerLoop);
 }
 
 function platformerRespawn(){
-  const checkpoints=[70,650,1240,1770,2420],index=platformer.x>2400?4:platformer.x>1730?3:platformer.x>1200?2:platformer.x>610?1:0;platformer.x=checkpoints[index];platformer.y=275;platformer.vx=0;platformer.vy=0;
+  const ground=platformerPlatforms.filter((p)=>p.y===360&&p.x<=platformer.x).sort((a,b)=>b.x-a.x)[0];platformer.x=Math.max(25,(ground?.x||0)+35);platformer.y=280;platformer.vx=0;platformer.vy=0;platformer.camera=Math.max(0,platformer.x-250);
 }
 
-function hitPlatformerPlayer(){
-  platformer.hearts--;sfx("wrong");if(platformer.hearts<=0){platformerRunning=false;elements.platformer_overlay.classList.remove("hidden");elements.platformer_overlay.innerHTML="<strong>GAME OVER</strong><span>Pulsa Jugar para intentarlo otra vez</span>";elements.platformer_start.textContent="Reintentar Pika Dash";drawPlatformer();return;}platformerRespawn();
+function hitPlatformerPlayer(forceRespawn=false){
+  const now=performance.now();if(now<platformer.invulnerableUntil)return;
+  if(platformer.lotus||platformer.superMode){if(platformer.lotus)platformer.lotus=false;else platformer.superMode=false;platformer.invulnerableUntil=now+1150;updatePlatformerPowerStatus();sfx("wrong");if(forceRespawn)platformerRespawn();else{platformer.vy=-6;platformer.vx=-platformer.facing*4;}return;}
+  platformer.hearts--;sfx("wrong");if(platformer.hearts<=0){platformerRunning=false;elements.platformer_overlay.classList.remove("hidden");elements.platformer_overlay.innerHTML=`<strong>GAME OVER</strong><span>Nivel ${platformer.level} · vuelve a intentarlo</span>`;elements.platformer_start.textContent=`Reintentar nivel ${platformer.level}`;drawPlatformer();return;}platformerRespawn();
+}
+
+function collectPlatformerPowerup(powerup){
+  powerup.taken=true;if(powerup.type==="pokeball"){platformer.superMode=true;sfx("success");showToast("🔴⚪ Pokéball: escudo activado");}else{platformer.superMode=true;platformer.lotus=true;sfx("go");showToast("🌸 Flor de loto: ¡Lotus Thunder activado!");}updatePlatformerPowerStatus();
+}
+
+function shootLotus(){
+  if(!platformerRunning||!platformer.lotus)return;const now=performance.now();if(now-platformer.lastShot<320)return;platformer.lastShot=now;platformerProjectiles.push({x:platformer.x+platformer.w/2+platformer.facing*18,y:platformer.y+22,vx:platformer.facing*11,life:85});tone(940,.07,"sawtooth",.025);
 }
 
 function winPlatformer(){
-  if(!platformerRunning)return;platformerRunning=false;state.completed.platformer=true;storage.set("completed",state.completed);elements.platformer_overlay.classList.remove("hidden");elements.platformer_overlay.innerHTML=`<strong>¡META! ⚡</strong><span>${platformer.coins} monedas recogidas · Pikachu llegó a salvo</span>`;elements.platformer_start.textContent="Jugar otra vez";award(35,Math.max(12,platformer.coins),"Pika Dash completado");
+  if(!platformerRunning)return;platformerRunning=false;const level=platformer.level,next=Math.min(PIKA_LEVEL_COUNT,level+1),unlocked=Math.max(Number(storage.get("pikaUnlocked",1))||1,next);storage.set("pikaUnlocked",unlocked);refreshPlatformerLevels(level<PIKA_LEVEL_COUNT?next:level);elements.platformer_overlay.classList.remove("hidden");
+  if(level===PIKA_LEVEL_COUNT){state.completed.platformer=true;storage.set("completed",state.completed);elements.platformer_overlay.innerHTML=`<strong>¡12/12! ⚡</strong><span>PIKA DASH COMPLETADO · ${platformer.coins} monedas en el nivel final</span>`;elements.platformer_start.textContent="Repetir nivel 12";renderProgress();}
+  else{elements.platformer_overlay.innerHTML=`<strong>¡NIVEL ${level} SUPERADO!</strong><span>${platformer.coins} monedas · nivel ${next} desbloqueado</span>`;elements.platformer_start.textContent=`Jugar nivel ${next}`;storage.set("pikaSelected",next);}
+  award(12+level*3,Math.max(8,platformer.coins)+level,`Pika Dash · nivel ${level} superado`);sfx("success");
 }
 
 function updatePlatformer(dt){
-  const step=Math.min(1.55,dt/16.6667),acc=.78*step,maxSpeed=6.4;
-  if(platformerKeys.left)platformer.vx=Math.max(-maxSpeed,platformer.vx-acc);else if(platformerKeys.right)platformer.vx=Math.min(maxSpeed,platformer.vx+acc);else platformer.vx*=Math.pow(.78,step);
+  const step=Math.min(1.55,dt/16.6667),acc=(.76+platformer.level*.012)*step,maxSpeed=6.05+platformer.level*.055;
+  if(platformerKeys.left){platformer.vx=Math.max(-maxSpeed,platformer.vx-acc);platformer.facing=-1;}else if(platformerKeys.right){platformer.vx=Math.min(maxSpeed,platformer.vx+acc);platformer.facing=1;}else platformer.vx*=Math.pow(.78,step);
   if(platformerKeys.jump&&platformer.onGround){platformer.vy=-12.8;platformer.onGround=false;tone(720,.06,"square",.018);}platformerKeys.jump=false;
   const previousBottom=platformer.y+platformer.h;platformer.vy+=.72*step;platformer.vy=Math.min(15,platformer.vy);platformer.x+=platformer.vx*step;platformer.y+=platformer.vy*step;platformer.x=Math.max(0,Math.min(platformer.levelWidth-platformer.w,platformer.x));platformer.onGround=false;
   for(const p of platformerPlatforms){const overlaps=platformer.x+platformer.w>p.x&&platformer.x<p.x+p.w;if(overlaps&&platformer.vy>=0&&previousBottom<=p.y+7&&platformer.y+platformer.h>=p.y){platformer.y=p.y-platformer.h;platformer.vy=0;platformer.onGround=true;break;}}
-  if(platformer.y>490){hitPlatformerPlayer();if(!platformerRunning)return;}
+  if(platformer.y>490){hitPlatformerPlayer(true);if(!platformerRunning)return;}
   for(const coin of platformerCoins){if(coin.taken)continue;const dx=platformer.x+platformer.w/2-coin.x,dy=platformer.y+platformer.h/2-coin.y;if(dx*dx+dy*dy<34*34){coin.taken=true;platformer.coins++;sfx("coin");}}
-  for(const enemy of platformerEnemies){if(enemy.dead)continue;enemy.x+=enemy.vx*step;if(enemy.x<enemy.min||enemy.x>enemy.max){enemy.vx*=-1;enemy.x=Math.max(enemy.min,Math.min(enemy.max,enemy.x));}const hit=platformer.x+platformer.w>enemy.x&&platformer.x<enemy.x+34&&platformer.y+platformer.h>enemy.y&&platformer.y<enemy.y+34;if(hit){if(platformer.vy>1&&platformer.y+platformer.h<enemy.y+20){enemy.dead=true;platformer.vy=-8;sfx("success");}else{hitPlatformerPlayer();if(!platformerRunning)return;break;}}}
-  if(platformer.x>3040)winPlatformer();platformer.camera=Math.max(0,Math.min(platformer.levelWidth-960,platformer.x-250));
+  for(const powerup of platformerPowerups){if(powerup.taken)continue;const dx=platformer.x+platformer.w/2-powerup.x,dy=platformer.y+platformer.h/2-powerup.y;if(dx*dx+dy*dy<38*38)collectPlatformerPowerup(powerup);}
+  for(const enemy of platformerEnemies){if(enemy.dead)continue;enemy.x+=enemy.vx*step;if(enemy.x<enemy.min||enemy.x>enemy.max){enemy.vx*=-1;enemy.x=Math.max(enemy.min,Math.min(enemy.max,enemy.x));}const hit=platformer.x+platformer.w>enemy.x&&platformer.x<enemy.x+34&&platformer.y+platformer.h>enemy.y&&platformer.y<enemy.y+34;if(hit){if(platformer.vy>1&&platformer.y+platformer.h<enemy.y+20){enemy.dead=true;platformer.vy=-8;sfx("success");}else{hitPlatformerPlayer(false);if(!platformerRunning)return;}}}
+  for(const shot of platformerProjectiles){shot.x+=shot.vx*step;shot.life-=step;for(const enemy of platformerEnemies){if(enemy.dead)continue;if(Math.abs(shot.x-(enemy.x+17))<27&&Math.abs(shot.y-(enemy.y+17))<25){enemy.dead=true;shot.life=0;platformer.coins+=2;sfx("success");break;}}}platformerProjectiles=platformerProjectiles.filter((shot)=>shot.life>0&&shot.x>0&&shot.x<platformer.levelWidth);
+  if(platformer.x+platformer.w>platformer.goalX)winPlatformer();platformer.camera=Math.max(0,Math.min(Math.max(0,platformer.levelWidth-960),platformer.x-250));
 }
 
 function drawPlatformer(){
-  const canvas=elements.platformer_canvas;if(!canvas)return;const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height,camera=platformer.camera||0;const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,"#64c7ff");sky.addColorStop(.7,"#b7edff");sky.addColorStop(1,"#e9fbff");ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+  const canvas=elements.platformer_canvas;if(!canvas)return;const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height,camera=platformer.camera||0;const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,`hsl(${202+platformer.level*2} 92% 67%)`);sky.addColorStop(.7,"#b7edff");sky.addColorStop(1,"#e9fbff");ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
   ctx.globalAlpha=.65;ctx.fillStyle="#fff";for(let i=0;i<8;i++){const x=((i*330-camera*.16)%1300+1300)%1300-80,y=45+(i%3)*48;ctx.beginPath();ctx.ellipse(x,y,58,20,0,0,Math.PI*2);ctx.ellipse(x+42,y+4,46,16,0,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;
   ctx.fillStyle="#7ecb73";ctx.beginPath();ctx.moveTo(0,330);for(let x=0;x<=w;x+=120){const world=x+camera;ctx.lineTo(x,275-Math.sin(world*.004)*42-Math.sin(world*.012)*18);}ctx.lineTo(w,360);ctx.lineTo(0,360);ctx.fill();
   for(const p of platformerPlatforms){const x=p.x-camera;if(x+p.w<0||x>w)continue;ctx.fillStyle="#62412a";ctx.fillRect(x,p.y,p.w,p.h);ctx.fillStyle="#54b948";ctx.fillRect(x,p.y,p.w,9);ctx.fillStyle="#8bd45a";for(let gx=0;gx<p.w;gx+=28)ctx.fillRect(x+gx,p.y-3,15,4);}
   for(const coin of platformerCoins){if(coin.taken)continue;const x=coin.x-camera;if(x<-20||x>w+20)continue;ctx.fillStyle="#ffd92f";ctx.beginPath();ctx.arc(x,coin.y,10,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#f49b12";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#fff4a6";ctx.fillRect(x-2,coin.y-6,4,12);}
+  for(const powerup of platformerPowerups){if(powerup.taken)continue;const x=powerup.x-camera;if(x<-30||x>w+30)continue;if(powerup.type==="pokeball"){ctx.fillStyle="#f2384f";ctx.beginPath();ctx.arc(x,powerup.y,15,Math.PI,0);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(x,powerup.y,15,0,Math.PI);ctx.fill();ctx.strokeStyle="#252a33";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-15,powerup.y);ctx.lineTo(x+15,powerup.y);ctx.stroke();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(x,powerup.y,5,0,Math.PI*2);ctx.fill();ctx.stroke();}else{ctx.fillStyle="#ff6dc7";for(let petal=0;petal<6;petal++){const angle=petal*Math.PI/3;ctx.beginPath();ctx.ellipse(x+Math.cos(angle)*10,powerup.y+Math.sin(angle)*10,8,5,angle,0,Math.PI*2);ctx.fill();}ctx.fillStyle="#ffe45c";ctx.beginPath();ctx.arc(x,powerup.y,7,0,Math.PI*2);ctx.fill();}}
   for(const enemy of platformerEnemies){if(enemy.dead)continue;const x=enemy.x-camera;if(x<-40||x>w+40)continue;ctx.fillStyle="#7136a8";ctx.beginPath();ctx.roundRect(x,enemy.y,34,34,10);ctx.fill();ctx.fillStyle="#fff";ctx.fillRect(x+7,enemy.y+9,6,7);ctx.fillRect(x+22,enemy.y+9,6,7);ctx.fillStyle="#151018";ctx.fillRect(x+9,enemy.y+11,3,4);ctx.fillRect(x+24,enemy.y+11,3,4);}
-  const goalX=3070-camera;ctx.fillStyle="#e6edf1";ctx.fillRect(goalX,155,7,205);ctx.fillStyle="#ff2d4f";ctx.beginPath();ctx.arc(goalX+4,166,25,Math.PI,0);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(goalX+4,166,25,0,Math.PI);ctx.fill();ctx.fillStyle="#1f2430";ctx.beginPath();ctx.arc(goalX+4,166,7,0,Math.PI*2);ctx.fill();
-  drawPikachu(ctx,platformer.x-camera,platformer.y,platformer.vx<-.1);
-  ctx.fillStyle="rgba(8,12,20,.78)";ctx.fillRect(14,14,265,40);ctx.fillStyle="#fff";ctx.font="700 17px Arial";ctx.fillText(`⚡ PIKACHU   🪙 ${platformer.coins}   ❤ ${platformer.hearts}`,28,40);ctx.fillStyle="rgba(8,12,20,.7)";ctx.fillRect(w-205,16,190,24);ctx.fillStyle="#fff";ctx.font="700 11px Arial";ctx.fillText(`META ${Math.max(0,Math.round((3070-platformer.x)/10))} m`,w-188,32);
+  for(const shot of platformerProjectiles){const x=shot.x-camera;if(x<-20||x>w+20)continue;ctx.fillStyle="#ff72d1";ctx.shadowColor="#fff066";ctx.shadowBlur=15;ctx.beginPath();ctx.arc(x,shot.y,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle="#fff45e";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-13,shot.y+9);ctx.lineTo(x-3,shot.y-6);ctx.lineTo(x+4,shot.y+2);ctx.lineTo(x+14,shot.y-10);ctx.stroke();}
+  const goalX=platformer.goalX-camera;ctx.fillStyle="#e6edf1";ctx.fillRect(goalX,155,7,205);ctx.fillStyle="#ff2d4f";ctx.beginPath();ctx.arc(goalX+4,166,25,Math.PI,0);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(goalX+4,166,25,0,Math.PI);ctx.fill();ctx.fillStyle="#1f2430";ctx.beginPath();ctx.arc(goalX+4,166,7,0,Math.PI*2);ctx.fill();
+  if(!(performance.now()<platformer.invulnerableUntil&&Math.floor(performance.now()/90)%2))drawPikachu(ctx,platformer.x-camera,platformer.y,platformer.facing<0);
+  ctx.fillStyle="rgba(8,12,20,.8)";ctx.fillRect(14,14,350,42);ctx.fillStyle="#fff";ctx.font="700 16px Arial";ctx.fillText(`⚡ NIVEL ${platformer.level}/12   🪙 ${platformer.coins}   ❤ ${platformer.hearts}`,28,40);ctx.fillStyle="rgba(8,12,20,.72)";ctx.fillRect(w-205,16,190,26);ctx.fillStyle="#fff";ctx.font="700 11px Arial";ctx.fillText(`META ${Math.max(0,Math.round((platformer.goalX-platformer.x)/10))} m`,w-188,33);
+  if(platformer.lotus){ctx.fillStyle="rgba(255,77,193,.88)";ctx.fillRect(14,64,190,27);ctx.fillStyle="#fff";ctx.font="800 11px Arial";ctx.fillText("🌸 LOTUS THUNDER · X / E",25,82);}
 }
 
 function drawPikachu(ctx,x,y,flip){
   ctx.save();ctx.translate(x+(flip?platformer.w:0),y);ctx.scale(flip?-1:1,1);ctx.fillStyle="#f7d532";ctx.strokeStyle="#5b4612";ctx.lineWidth=2;
+  if(platformer.superMode){ctx.save();ctx.globalAlpha=.4;ctx.fillStyle=platformer.lotus?"#ff68cc":"#fff06a";ctx.beginPath();ctx.ellipse(20,24,28,34,0,0,Math.PI*2);ctx.fill();ctx.restore();}
   ctx.beginPath();ctx.moveTo(9,13);ctx.lineTo(5,-18);ctx.lineTo(18,8);ctx.moveTo(31,9);ctx.lineTo(38,-19);ctx.lineTo(35,15);ctx.fill();ctx.stroke();ctx.fillStyle="#27231d";ctx.beginPath();ctx.moveTo(5,-18);ctx.lineTo(9,-5);ctx.lineTo(14,2);ctx.fill();ctx.beginPath();ctx.moveTo(38,-19);ctx.lineTo(37,-4);ctx.lineTo(34,3);ctx.fill();ctx.fillStyle="#f7d532";ctx.beginPath();ctx.roundRect(4,7,34,29,12);ctx.fill();ctx.stroke();ctx.beginPath();ctx.roundRect(9,29,27,18,8);ctx.fill();ctx.stroke();ctx.fillStyle="#1e1d1a";ctx.beginPath();ctx.arc(14,18,2.6,0,Math.PI*2);ctx.arc(29,18,2.6,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ef3e3e";ctx.beginPath();ctx.arc(10,25,4,0,Math.PI*2);ctx.arc(33,25,4,0,Math.PI*2);ctx.fill();ctx.fillStyle="#f7d532";ctx.beginPath();ctx.moveTo(5,31);ctx.lineTo(-9,25);ctx.lineTo(-3,37);ctx.lineTo(-15,44);ctx.lineTo(4,45);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
 }
 
@@ -332,8 +382,10 @@ function setPlatformerControl(key,value){platformerKeys[key]=value;}
 
 function bindPlatformerControls(){
   const touchMap=[[elements.platformer_left,"left"],[elements.platformer_right,"right"],[elements.platformer_jump,"jump"]];touchMap.forEach(([button,key])=>{button.addEventListener("pointerdown",e=>{e.preventDefault();setPlatformerControl(key,true)});if(key!=="jump")["pointerup","pointercancel","pointerleave"].forEach(event=>button.addEventListener(event,()=>setPlatformerControl(key,false)));});
-  addEventListener("keydown",e=>{if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement?.tagName))return;const key=e.key.toLowerCase();if(["arrowleft","a","arrowright","d","arrowup","w"," "].includes(key)&&platformerRunning)e.preventDefault();if(key==="arrowleft"||key==="a")platformerKeys.left=true;if(key==="arrowright"||key==="d")platformerKeys.right=true;if(key==="arrowup"||key==="w"||key===" ")platformerKeys.jump=true;});
+  elements.platformer_power.addEventListener("pointerdown",e=>{e.preventDefault();shootLotus();});
+  addEventListener("keydown",e=>{if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement?.tagName))return;const key=e.key.toLowerCase();if(["arrowleft","a","arrowright","d","arrowup","w"," ","x","e"].includes(key)&&platformerRunning)e.preventDefault();if(key==="arrowleft"||key==="a")platformerKeys.left=true;if(key==="arrowright"||key==="d")platformerKeys.right=true;if(key==="arrowup"||key==="w"||key===" ")platformerKeys.jump=true;if(key==="x"||key==="e")shootLotus();});
   addEventListener("keyup",e=>{const key=e.key.toLowerCase();if(key==="arrowleft"||key==="a")platformerKeys.left=false;if(key==="arrowright"||key==="d")platformerKeys.right=false;});
+  elements.platformer_level_select.addEventListener("change",()=>{platformer.level=Math.max(1,Math.min(PIKA_LEVEL_COUNT,Number(elements.platformer_level_select.value)||1));storage.set("pikaSelected",platformer.level);resetPlatformer();sfx("click");});
 }
 
 function renderComments() {
@@ -388,5 +440,5 @@ function bindEvents(){
   elements.comment_form.addEventListener("submit",submitComment);document.querySelectorAll("[data-reaction]").forEach((b)=>b.addEventListener("click",()=>addReaction(b)));elements.reset_progress.addEventListener("click",resetProgress);
 }
 
-function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupMemory();resetPlatformer();loadRobloxGameThumbnails();const best=storage.get("reactionBest",null);elements.reaction_best.textContent=best===null?"—":`${best} ms`;elements.reaction_round.textContent="0/5";elements.reaction_average.textContent="—";elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
+function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupMemory();setupPlatformerLevels();resetPlatformer();loadRobloxGameThumbnails();const best=storage.get("reactionBest",null);elements.reaction_best.textContent=best===null?"—":`${best} ms`;elements.reaction_round.textContent="0/5";elements.reaction_average.textContent="—";elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
 document.addEventListener("DOMContentLoaded",init);
