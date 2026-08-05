@@ -243,7 +243,7 @@
         </article>
         <article class="game-card gbc-card reveal tilt-card">
           <header><div><span class="game-icon">🎮⚡</span><p class="tag gbc-tag">JUEGO PRINCIPAL · MMORPG 16-BIT</p><h3>Pokémon Pixel Quest: Fragmentos del Prisma</h3></div><span class="reward">MUNDO ABIERTO</span></header>
-          <div class="gbc-status"><span id="gbc-location">🌿 Ruta Verde</span><span>⚡ Pikachu Nv.<strong id="gbc-level">5</strong></span><span>✨ EXP <strong id="gbc-exp">0/58</strong></span><span>🔴 Pokéballs <strong id="gbc-balls">5</strong></span><span>⭐ Capturados <strong id="gbc-caught">0</strong></span><span>💾 Mundo persistente</span></div>
+          <div class="gbc-status"><span id="gbc-location">🌿 Ruta Verde</span><span>⚔️ Activo <strong id="gbc-active-name">Pikachu Nv.5</strong></span><span>✨ EXP <strong id="gbc-exp">0/58</strong></span><span>🔴 Pokéballs <strong id="gbc-balls">5</strong></span><span>🧪 Pociones <strong id="gbc-potions">3</strong></span><span>🪙 <strong id="gbc-money">0</strong></span><span>⭐ Capturados <strong id="gbc-caught">0</strong></span></div>
           <div class="gbc-storybar"><span>📜 HISTORIA</span><strong id="gbc-quest">Habla con el Profesor Pixel en Ciudad Pixel.</strong></div>
           <div class="gbc-team-panel"><div><span>🎒 EQUIPO Y CAPTURAS</span><small>Ganan EXP contigo · evolucionan al subir de nivel</small></div><div class="gbc-team" id="gbc-team"><span class="gbc-team-empty">Captura tu primer Pokémon en la hierba alta.</span></div></div>
           <div class="gbc-console">
@@ -251,10 +251,13 @@
               <canvas id="gbc-canvas" width="640" height="480" aria-label="Pokémon Pixel Quest"></canvas>
               <div class="gbc-start-screen" id="gbc-start-screen"><div class="gbc-logo"><small>FLOWGORILA PRESENTA</small><strong>POKÉMON</strong><span>PIXEL QUEST</span></div><p>Fragmentos del Prisma · mundo abierto · historia · captura</p><button id="gbc-start" type="button">▶ ENTRAR AL MUNDO</button></div>
             </div>
-            <div class="gbc-battle-actions" id="gbc-battle-actions" hidden><button data-gbc-action="attack" type="button">⚡ IMPACTRUENO</button><button data-gbc-action="ball" type="button">🔴 POKÉBALL</button><button data-gbc-action="potion" type="button">🧪 POCIÓN</button><button data-gbc-action="run" type="button">↩ HUIR</button></div>
+            <div class="gbc-menu" id="gbc-inventory" hidden><div class="gbc-menu-head"><strong>🎒 INVENTARIO</strong><button data-gbc-close="inventory" type="button">✕</button></div><div id="gbc-inventory-content"></div></div>
+            <div class="gbc-menu" id="gbc-shop" hidden><div class="gbc-menu-head"><strong>🏪 TIENDA</strong><button data-gbc-close="shop" type="button">✕</button></div><p>Compra suministros para continuar tu aventura.</p><div class="gbc-shop-grid"><button data-gbc-buy="ball" type="button">🔴 Pokéball <b>8 🪙</b></button><button data-gbc-buy="potion" type="button">🧪 Poción <b>12 🪙</b></button><button data-gbc-buy="pack" type="button">🎒 Pack x5 Pokéballs <b>35 🪙</b></button></div></div>
+            <div class="gbc-battle-actions" id="gbc-battle-actions" hidden><button data-gbc-action="attack" type="button">⚔️ ATAQUES</button><button data-gbc-action="ball" type="button">🔴 POKÉBALL</button><button data-gbc-action="potion" type="button">🧪 POCIÓN</button><button data-gbc-action="run" type="button">↩ HUIR</button></div>
+            <div class="gbc-move-actions" id="gbc-move-actions" hidden></div>
             <div class="gbc-controls"><div class="gbc-dpad"><i></i><button data-gbc-dir="up" type="button">▲</button><i></i><button data-gbc-dir="left" type="button">◀</button><i class="center"></i><button data-gbc-dir="right" type="button">▶</button><i></i><button data-gbc-dir="down" type="button">▼</button><i></i></div><div class="gbc-ab"><button class="gbc-b" id="gbc-b" type="button">B</button><button class="gbc-a" id="gbc-a" type="button">A</button></div></div>
           </div>
-          <div class="gbc-footer"><span>PC: flechas / WASD · Z/Enter = A · X/Esc = B · guardado automático</span><button class="button ghost fx-button" id="gbc-save" type="button">💾 Guardar</button></div>
+          <div class="gbc-footer"><span>PC: flechas / WASD · Z/Enter = A · X/Esc = B · guardado automático</span><div><button class="button ghost fx-button" id="gbc-inventory-button" type="button">🎒 Inventario</button><button class="button ghost fx-button" id="gbc-save" type="button">💾 Guardar</button></div></div>
         </article>
         <article class="game-card platformer-card reveal tilt-card">
           <header><div><span class="game-icon">⚡🐭</span><p class="tag pika-tag">PIKA DASH · 12 NIVELES</p><h3>Pikachu en una aventura de plataformas</h3></div><span class="reward">XP por nivel</span></header>
