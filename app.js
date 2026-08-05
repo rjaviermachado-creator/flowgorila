@@ -184,6 +184,21 @@ function addReaction(button){const key=button.dataset.reaction;if(!(key in state
 
 function setTheme(theme){state.theme=theme==="light"?"light":"dark";document.documentElement.dataset.theme=state.theme;elements.theme_button.textContent=state.theme==="dark"?"☀️":"🌙";elements.theme_button.setAttribute("aria-label",state.theme==="dark"?"Activar tema claro":"Activar tema oscuro");storage.set("theme",state.theme);}
 
+async function loadRobloxGameThumbnails(){
+  const cards=[...document.querySelectorAll(".experience-card[data-place-id]")];
+  if(!cards.length)return;
+  const ids=cards.map((card)=>card.dataset.placeId).join(",");
+  try{
+    const response=await fetch(`https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${ids}&returnPolicy=PlaceHolder&size=512x512&format=Png&isCircular=false`);
+    if(!response.ok)return;
+    const payload=await response.json();
+    const images=new Map((payload.data||[]).filter((item)=>item.imageUrl).map((item)=>[String(item.targetId),item.imageUrl]));
+    cards.forEach((card)=>{const image=card.querySelector("img");const url=images.get(card.dataset.placeId);if(image&&url)image.src=url;});
+  }catch{
+    // La miniatura HTML de Roblox permanece como respaldo si la API no responde.
+  }
+}
+
 function resetProgress(){if(!confirm("¿Quieres borrar el progreso, comentarios y carrito guardados en este navegador?"))return;storage.clear();location.reload();}
 
 const particles=[];
@@ -210,5 +225,5 @@ function bindEvents(){
   elements.comment_form.addEventListener("submit",submitComment);document.querySelectorAll("[data-reaction]").forEach((b)=>b.addEventListener("click",()=>addReaction(b)));elements.reset_progress.addEventListener("click",resetProgress);
 }
 
-function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupMemory();const best=storage.get("reactionBest",null);elements.reaction_best.textContent=best===null?"—":`${best} ms`;elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
+function init(){cacheElements();updateVisitStreak();setTheme(state.theme);setSound(state.sound,false);renderProducts();renderCart();renderComments();renderReactions();renderProgress();setupMemory();loadRobloxGameThumbnails();const best=storage.get("reactionBest",null);elements.reaction_best.textContent=best===null?"—":`${best} ms`;elements.current_year.textContent=String(new Date().getFullYear());bindEvents();setupVisualEffects();setTimeout(()=>{elements.sound_hint.classList.add("show");setTimeout(()=>elements.sound_hint.classList.remove("show"),3500);},900);}
 document.addEventListener("DOMContentLoaded",init);
