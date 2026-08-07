@@ -1,0 +1,40 @@
+name: Integrar RBD
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-rbd-section.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-rbd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Añadir sección RBD sin tocar los juegos
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          css='  <link rel="stylesheet" href="rbd.css?v=1.0">\n'
+          if 'href="rbd.css' not in s:
+              s=s.replace('  <link rel="stylesheet" href="pokemon-gbc.css?v=5.2.0">', css+'  <link rel="stylesheet" href="pokemon-gbc.css?v=5.2.0">')
+          if 'href="#rbd"' not in s:
+              s=s.replace('      <a href="#galeria">Galería</a>', '      <a href="#galeria">Galería</a>\n      <a href="#rbd">RBD</a>')
+          section='''\n    <section class="rbd-section" id="rbd" aria-labelledby="rbd-title">\n      <div class="rbd-shell">\n        <div class="rbd-head reveal">\n          <div><p class="rbd-kicker">♥ RBD // GENERACIÓN REBELDE</p><h2 id="rbd-title">Una época que <span>no se olvida.</span></h2></div>\n          <p>Un rincón para recordar Rebelde y RBD: estética, discos, personajes, conciertos y fotos. Esta sección crece con las imágenes que vayas enviando.</p>\n        </div>\n        <div class="rbd-hero reveal">\n          <div class="rbd-cover"><img src="assets/gallery/rbd-rebelde-cover.svg" alt="Rebelde, edición Brasil, con el elenco principal" loading="lazy"></div>\n          <div class="rbd-copy"><span>2004 · REBELDE · RBD</span><h3>Del Elite Way School a los escenarios.</h3><p>Rebelde convirtió a sus protagonistas en un fenómeno musical y RBD llevó esa energía mucho más allá de la serie. Aquí puedes reunir imágenes, recuerdos y momentos de esa etapa.</p></div>\n        </div>\n        <div class="rbd-memory-grid">\n          <article class="rbd-memory red reveal"><small>REBELDE</small><h4>Elite Way School</h4><p>Uniformes, amistades, rivalidades y la estética que definió a toda una generación.</p></article>\n          <article class="rbd-memory reveal"><small>RBD</small><h4>La banda</h4><p>Un espacio dedicado a sus seis integrantes y a la etapa musical nacida de la serie.</p></article>\n          <article class="rbd-memory dark reveal"><small>DISCOGRAFÍA</small><h4>Álbumes y eras</h4><p>Rebelde, Nuestro Amor, Celestial y más etapas para ir ampliando con portadas y recuerdos.</p></article>\n          <article class="rbd-memory reveal"><small>FANS</small><h4>Tu colección</h4><p>Podremos añadir revistas, pósters, entradas, discos, fotos y cualquier recuerdo que quieras guardar.</p></article>\n        </div>\n        <div class="rbd-photo-strip">\n          <figure class="rbd-photo reveal"><img src="assets/gallery/rbd-rebelde-cover.svg" alt="Foto del elenco de Rebelde" loading="lazy"><figcaption>REBELDE · ELENCO PRINCIPAL</figcaption></figure>\n          <figure class="rbd-photo reveal"><img src="assets/gallery/rbd-rebelde-cover.svg" alt="Detalle del elenco de Rebelde" loading="lazy"><figcaption>ESTILO · ELITE WAY</figcaption></figure>\n          <figure class="rbd-photo reveal"><img src="assets/gallery/rbd-rebelde-cover.svg" alt="Detalle de personajes de Rebelde" loading="lazy"><figcaption>MEMORIAS · RBD</figcaption></figure>\n        </div>\n        <p class="rbd-note">Galería de fans. La imagen de esta sección fue aportada por el usuario. FlowGorila es un proyecto independiente y no está afiliado con los titulares de Rebelde o RBD.</p>\n      </div>\n    </section>\n'''
+          marker='    <section class="section shell nintendo-section" id="nintendo"'
+          if 'id="rbd"' not in s and marker in s:
+              s=s.replace(marker, section+'\n'+marker)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Publicar cambios
+        run: |
+          git config user.name "FlowGorila Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Añadir apartado RBD con galería"
+          git push
