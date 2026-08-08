@@ -1,0 +1,69 @@
+/* FlowGorila visual upgrade · enlaces con imagen y fallbacks locales */
+
+/* Enlaces de noticias: pasan de texto simple a mini tarjeta visual */
+.news-copy a,
+.play-roblox,
+.roblox-spotlight-copy a[target="_blank"]{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:46px;
+  margin-top:10px;
+  padding:8px 14px 8px 8px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  background:rgba(255,255,255,.07);
+  font-weight:900;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.news-copy a:hover,
+.play-roblox:hover,
+.roblox-spotlight-copy a[target="_blank"]:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.11)}
+.news-copy a:before,
+.play-roblox:before,
+.roblox-spotlight-copy a[target="_blank"]:before{
+  content:"";
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  background:center/cover no-repeat url("assets/gallery/roblox-experiences-wall.jpg"),linear-gradient(135deg,#2c90ff,#8a55ff);
+  box-shadow:0 8px 20px rgba(0,0,0,.28);
+}
+
+/* Cada enlace de Nintendo conserva una imagen aunque falle el CDN externo */
+.nintendo-art{
+  background:center/cover no-repeat url("assets/gallery/nintendo-switch-2-promo.jpg"),linear-gradient(135deg,#e60012,#76000a);
+}
+.nintendo-art img{min-height:190px;background:transparent}
+
+/* Tarjetas de Roblox: respaldo visual local mientras carga o si falla el thumbnail */
+.experience-image{
+  background:center/cover no-repeat url("assets/gallery/roblox-experiences-collage.jpg"),linear-gradient(135deg,#111827,#273449);
+}
+.experience-image img{min-height:190px;background:transparent}
+
+/* La galería nunca muestra un hueco blanco si una imagen tarda */
+.flow-image-card,
+.roblox-media-card{
+  background:center/cover no-repeat url("flowgorila-logo.jpeg"),#11131f;
+}
+.flow-image-card img,
+.roblox-media-card img{min-height:220px;background:transparent}
+
+/* Enlaces externos generales con aspecto más claro y reconocible */
+a[target="_blank"]:not(.experience-image):not(.nintendo-card>a):not(.flow-image-card a){text-decoration:none}
+a[target="_blank"]:focus-visible{outline:3px solid #25d8ff;outline-offset:3px}
+
+/* RBD: portada y fotografías con respaldo para evitar huecos */
+.rbd-cover,.rbd-photo{background:center/cover no-repeat url("assets/gallery/rbd-rebelde-brasil.jpg"),linear-gradient(135deg,#c7251d,#171717)}
+.rbd-cover img,.rbd-photo img{min-height:100%;background:transparent}
+
+/* Mejora móvil: las miniaturas no aprietan el texto */
+@media(max-width:580px){
+  .news-copy a,.play-roblox,.roblox-spotlight-copy a[target="_blank"]{width:100%;justify-content:flex-start}
+  .news-copy a:before,.play-roblox:before,.roblox-spotlight-copy a[target="_blank"]:before{flex-basis:38px;width:38px;height:38px}
+  .nintendo-art img,.experience-image img{min-height:160px}
+}
