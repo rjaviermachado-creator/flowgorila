@@ -1,0 +1,58 @@
+/* FlowGorila V6 · capa final de estabilidad, perfiles y rendimiento */
+
+html.fg-auth-locked, html.fg-auth-locked body{overflow:hidden!important}
+.fg-auth-gate{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:18px;background:#05060c;color:#f7f8ff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.fg-auth-backdrop{position:absolute;inset:0;background:radial-gradient(circle at 18% 20%,rgba(255,45,120,.24),transparent 34%),radial-gradient(circle at 88% 78%,rgba(0,229,255,.18),transparent 38%),linear-gradient(135deg,#05060c,#0c0d1b 50%,#15091c)}
+.fg-auth-backdrop:after{content:"";position:absolute;inset:0;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(#000,transparent 92%)}
+.fg-auth-card{position:relative;width:min(520px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:30px;border:1px solid rgba(255,255,255,.14);border-radius:28px;background:rgba(13,14,29,.92);backdrop-filter:blur(24px) saturate(145%);box-shadow:0 32px 100px rgba(0,0,0,.58)}
+.fg-auth-brand{display:flex;align-items:center;gap:15px}.fg-auth-brand img{width:66px;height:66px;object-fit:cover;border-radius:19px;border:1px solid rgba(255,255,255,.15);box-shadow:0 0 28px rgba(255,45,120,.24)}
+.fg-auth-brand small{display:block;margin-bottom:4px;color:#ff75aa;font-size:.62rem;font-weight:1000;letter-spacing:.13em}.fg-auth-brand strong{display:block;font-size:clamp(1.65rem,6vw,2.45rem);line-height:1;letter-spacing:-.055em}
+.fg-auth-copy{margin:20px 0;color:#a7abc2;line-height:1.65;font-size:.9rem}.fg-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:5px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:#090a14}.fg-auth-tabs button{min-height:43px;border:0;border-radius:11px;background:transparent;color:#8f93aa;font-weight:900;cursor:pointer}.fg-auth-tabs button.active{background:linear-gradient(135deg,#ff2d78,#8a55ff);color:#fff;box-shadow:0 10px 24px rgba(138,85,255,.2)}
+.fg-auth-form{display:grid;gap:13px;margin-top:18px}.fg-auth-form[hidden]{display:none}.fg-auth-form label{display:grid;gap:7px;color:#d6d8e6;font-size:.75rem;font-weight:850}.fg-auth-form input{width:100%;min-height:49px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:13px;outline:0;background:#080914;color:#fff}.fg-auth-form input:focus{border-color:#00e5ff;box-shadow:0 0 0 3px rgba(0,229,255,.12)}
+.fg-auth-submit{min-height:50px;margin-top:3px;border:0;border-radius:14px;background:linear-gradient(135deg,#ff2d78,#8a55ff);color:#fff;font-weight:1000;cursor:pointer;box-shadow:0 14px 32px rgba(255,45,120,.2)}.fg-auth-message{min-height:22px;margin-top:13px;color:#a7abc2;font-size:.78rem}.fg-auth-message.error{color:#ff7289}.fg-auth-message.success{color:#7cf4bc}.fg-auth-foot{margin:11px 0 0;color:#71758d;font-size:.67rem;line-height:1.5}
+
+.fg-user-chip{display:inline-flex;align-items:center;gap:7px;max-width:170px;height:43px;padding:0 12px;border:1px solid var(--line);border-radius:13px;background:var(--panel);color:var(--text);cursor:pointer}.fg-user-chip span{color:var(--green);text-shadow:0 0 12px var(--green)}.fg-user-chip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.72rem}
+.fg-profile-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.fg-profile-note{flex:1 1 100%;margin:0 0 3px;color:var(--muted);font-size:.75rem}.fg-danger-button{min-height:47px;padding:11px 16px;border:1px solid rgba(255,70,102,.35);border-radius:14px;background:rgba(255,70,102,.08);color:#ff6b83;font-weight:900;cursor:pointer}
+
+/* Imágenes externas con fondo local debajo: si la remota falla, nunca queda un hueco vacío. */
+.rbd-photo:nth-child(1){background-image:url("https://upload.wikimedia.org/wikipedia/commons/2/2e/RBD_in_Brazil_001.jpg"),url("assets/gallery/rbd-rebelde-cover.svg")!important;background-position:center!important;background-size:cover!important}
+.rbd-photo:nth-child(2){background-image:url("https://upload.wikimedia.org/wikipedia/commons/e/e1/Soy_Rebelde_Tour_-_Rio_de_Janeiro_-_Nov_10%2C_2023_-_53332610900.jpg"),url("assets/gallery/rbd-rebelde-cover.svg")!important;background-position:center!important;background-size:cover!important}
+.rbd-photo:nth-child(3){background-image:url("https://upload.wikimedia.org/wikipedia/commons/3/37/Soy_Rebelde_Tour_-_Rio_de_Janeiro_-_Nov_10%2C_2023_-_53332611055.jpg"),url("assets/gallery/rbd-rebelde-cover.svg")!important;background-position:center!important;background-size:cover!important}
+#roblox::after{background-image:linear-gradient(180deg,rgba(6,7,14,.03) 32%,rgba(6,7,14,.88) 100%),url("https://images.unsplash.com/photo-1772813457685-7ffe55ec191f?auto=format&fit=crop&fm=jpg&q=88&w=3000"),url("assets/gallery/gta-online.jpg")!important;background-position:center,center 62%,center!important;background-size:cover!important;background-repeat:no-repeat!important}
+#juegos::before{background-image:linear-gradient(180deg,rgba(3,4,8,.02) 30%,rgba(3,4,8,.9) 100%),url("https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/mobile/home/gamemodes/GameModes_DMZrecon.webp"),url("assets/gallery/gta-v-art.jpg")!important;background-position:center,center,center!important;background-size:cover!important;background-repeat:no-repeat!important}
+
+/* Rendimiento: las zonas largas se renderizan cuando se acercan al viewport. */
+main>section:not(.hero):not(.stats){content-visibility:auto;contain-intrinsic-size:700px}
+img{background-color:rgba(255,255,255,.025)}
+img[data-fallback-applied="true"]{filter:saturate(.88)}
+.external-media-failed{background:linear-gradient(135deg,rgba(255,45,120,.13),rgba(0,229,255,.08))}
+
+/* Navegación más clara. */
+.main-nav a[aria-current="true"]{color:var(--text);background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.site-header{transform:translateZ(0)}
+
+/* La tienda deja aún más claro que es una demo. */
+#tienda:before{content:"DEMO · SIN COBROS REALES";display:inline-flex;margin:0 0 12px;padding:7px 10px;border:1px solid rgba(255,213,74,.28);border-radius:99px;background:rgba(255,213,74,.08);color:var(--yellow);font-size:.6rem;font-weight:1000;letter-spacing:.12em}
+
+/* Evita animaciones pesadas para quien las tenga reducidas en el sistema. */
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ambient i,.hero:after,.logo-core,.energy-ring,.live-dot{animation:none!important}.reveal{transition:none!important}.cursor-glow,#fx-canvas{display:none!important}}
+
+@media(hover:none),(pointer:coarse){.cursor-glow{display:none!important}.tilt-card{transform:none!important}}
+
+@media(max-width:920px){
+  .fg-user-chip{max-width:120px;padding-inline:9px}.fg-user-chip b{max-width:80px}
+  main>section:not(.hero):not(.stats){contain-intrinsic-size:900px}
+}
+@media(max-width:720px){
+  .fg-auth-gate{padding:10px}.fg-auth-card{max-height:calc(100dvh - 20px);padding:22px 18px;border-radius:22px}.fg-auth-brand img{width:56px;height:56px}.fg-auth-copy{font-size:.83rem}
+  .fg-user-chip{order:-1;max-width:105px;height:40px}.fg-user-chip span{font-size:.65rem}.fg-user-chip b{font-size:.66rem;max-width:66px}
+  .site-header{gap:9px}.header-actions{gap:5px}.icon-button{width:40px;height:40px}
+  .hero{min-height:auto;padding:34px 21px;border-radius:26px}.hero-visual{min-height:340px}.logo-core{width:min(300px,76vw)}.energy-ring{width:315px;height:315px}.ring-two{width:350px;height:350px}
+  .section{padding-top:72px}.section-heading{align-items:flex-start}.rbd-section{margin-top:72px}
+  #roblox::after{min-height:300px!important;background-position:center,center 58%,center!important}#juegos::before{min-height:260px!important}
+}
+@media(max-width:430px){
+  .fg-auth-brand strong{font-size:1.65rem}.fg-auth-tabs button{font-size:.78rem}.fg-auth-form input{font-size:16px}
+  .fg-user-chip b{display:none}.fg-user-chip{width:40px;padding:0;justify-content:center}.fg-user-chip span{font-size:.8rem}
+  .hero-visual{min-height:300px}.energy-ring{width:270px;height:270px}.ring-two{width:305px;height:305px}
+}
