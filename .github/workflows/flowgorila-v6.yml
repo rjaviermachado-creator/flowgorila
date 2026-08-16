@@ -1,0 +1,161 @@
+name: FlowGorila V6 - Reparacion integral
+
+on:
+  push:
+    paths:
+      - '.github/workflows/flowgorila-v6.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar V6 y consolidar archivos
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          # 1) Aislar el progreso por perfil en el motor principal.
+          app_path = Path('app.js')
+          app = app_path.read_text(encoding='utf-8')
+          old_storage = '''const STORAGE_PREFIX = "flowgorila_v2_";
+          const storage = {
+            get(key, fallback) { try { const value = localStorage.getItem(STORAGE_PREFIX + key); return value === null ? fallback : JSON.parse(value); } catch { return fallback; } },
+            set(key, value) { try { localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value)); } catch {} },
+            clear() { try { Object.keys(localStorage).filter((key) => key.startsWith(STORAGE_PREFIX)).forEach((key) => localStorage.removeItem(key)); } catch {} }
+          };'''
+          new_storage = '''const ACTIVE_PROFILE = (() => {
+            try { return localStorage.getItem("flowgorila_active_user") || "guest"; }
+            catch { return "guest"; }
+          })();
+          const STORAGE_PREFIX = `flowgorila_v2_${ACTIVE_PROFILE}_`;
+          const storage = {
+            get(key, fallback) { try { const value = localStorage.getItem(STORAGE_PREFIX + key); return value === null ? fallback : JSON.parse(value); } catch { return fallback; } },
+            set(key, value) { try { localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value)); } catch {} },
+            clear() { try { Object.keys(localStorage).filter((key) => key.startsWith(STORAGE_PREFIX)).forEach((key) => localStorage.removeItem(key)); } catch {} }
+          };'''
+          if old_storage in app:
+              app = app.replace(old_storage, new_storage, 1)
+          elif 'const ACTIVE_PROFILE =' not in app:
+              raise SystemExit('No se encontro el bloque de almacenamiento esperado en app.js')
+          app_path.write_text(app, encoding='utf-8')
+
+          # 2) Construir un unico CSS final en el orden correcto.
+          css_sources = [
+              'styles.css',
+              'roblox-games.css',
+              'nintendo.css',
+              'user-gallery.css',
+              'arcade-v3.css',
+              'visual-upgrade.css',
+              'rbd.css',
+              'pokemon-gbc.css',
+              'flowgorila-media-20260814.css',
+              'flowgorila-v6.css',
+          ]
+          bundle = ['/* FlowGorila V6 bundle generado automaticamente. */\n']
+          for source in css_sources:
+              path = Path(source)
+              if not path.exists():
+                  raise SystemExit(f'Falta CSS requerido: {source}')
+              text = path.read_text(encoding='utf-8')
+              # visual-upgrade.css ya se concatena antes, por lo que eliminamos el import antiguo de rbd.css.
+              if source == 'rbd.css':
+                  text = re.sub(r'^@import\s+url\([^\n]+\);\s*', '', text, count=1)
+              bundle.append(f'\n/* ===== {source} ===== */\n{text}\n')
+          Path('flowgorila-bundle-v6.css').write_text(''.join(bundle), encoding='utf-8')
+
+          # 3) Limpiar el HEAD: un CSS, autenticacion antes del motor y robustez al final.
+          index_path = Path('index.html')
+          html = index_path.read_text(encoding='utf-8')
+          known_css = [
+              'styles.css','roblox-games.css','nintendo.css','user-gallery.css','arcade-v3.css',
+              'rbd.css','pokemon-gbc.css','flowgorila-media-20260814.css','flowgorila-v6.css',
+              'flowgorila-bundle-v6.css'
+          ]
+          for name in known_css:
+              pattern = rf'\s*<link\s+rel="stylesheet"\s+href="{re.escape(name)}(?:\?[^\"]*)?">\s*'
+              html = re.sub(pattern, '\n', html)
+
+          bundle_tag = '  <link rel="stylesheet" href="flowgorila-bundle-v6.css?v=6.0">\n'
+          favicon_match = re.search(r'(^\s*<link\s+rel="icon"[^>]*>\s*$)', html, flags=re.M)
+          if favicon_match:
+              insert_at = favicon_match.end()
+              html = html[:insert_at] + '\n' + bundle_tag.rstrip('\n') + html[insert_at:]
+          else:
+              html = html.replace('</head>', bundle_tag + '</head>', 1)
+
+          # Quitar cargas V6 previas si el workflow se vuelve a ejecutar.
+          html = re.sub(r'\s*<script\s+defer\s+src="auth-v6\.js(?:\?[^\"]*)?"></script>\s*', '\n', html)
+          html = re.sub(r'\s*<script\s+defer\s+src="robustness-v6\.js(?:\?[^\"]*)?"></script>\s*', '\n', html)
+
+          app_tag = '  <script defer src="app.js"></script>'
+          if app_tag not in html:
+              raise SystemExit('No se encontro app.js en index.html')
+          html = html.replace(app_tag, '  <script defer src="auth-v6.js?v=6.0"></script>\n' + app_tag, 1)
+
+          pokemon_tag = '  <script defer src="pokemon-gbc.js?v=5.2.0"></script>'
+          if pokemon_tag in html:
+              html = html.replace(pokemon_tag, pokemon_tag + '\n  <script defer src="robustness-v6.js?v=6.0"></script>', 1)
+          else:
+              html = html.replace('</head>', '  <script defer src="robustness-v6.js?v=6.0"></script>\n</head>', 1)
+
+          html = html.replace(
+              'Noticias recientes enlazadas a publicaciones oficiales de Roblox. Verificadas el 5 de agosto de 2026.',
+              'Archivo de novedades enlazado a publicaciones oficiales de Roblox. Las fechas corresponden a cada publicación.'
+          )
+          html = html.replace('<body>', '<body data-flowgorila-version="6">', 1)
+          index_path.write_text(html, encoding='utf-8')
+
+          # 4) Validaciones basicas de estructura local.
+          required = ['flowgorila-bundle-v6.css','auth-v6.js','app.js','pokemon-gbc.js','robustness-v6.js']
+          for item in required:
+              if not Path(item).exists():
+                  raise SystemExit(f'Falta recurso V6: {item}')
+
+          if html.count('id="rbd"') != 1:
+              raise SystemExit(f'RBD debe existir exactamente una vez; encontrado {html.count(chr(105)+chr(100)+chr(61)+chr(34)+chr(114)+chr(98)+chr(100)+chr(34))}')
+          if html.count('id="juegos"') != 1:
+              raise SystemExit('La zona Arcade no esta integra')
+          if html.count('id="roblox"') != 1:
+              raise SystemExit('La zona Roblox no esta integra')
+          PY
+
+      - name: Comprobar sintaxis JavaScript
+        run: |
+          node --check auth-v6.js
+          node --check app.js
+          node --check pokemon-gbc.js
+          node --check robustness-v6.js
+
+      - name: Comprobar recursos locales del HTML
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('index.html').read_text(encoding='utf-8')
+          missing=[]
+          for ref in re.findall(r'(?:src|href)="([^"#]+)"', html):
+              ref=ref.split('?',1)[0]
+              if ref.startswith(('http://','https://','mailto:','tel:','javascript:')): continue
+              if ref and not Path(ref).exists(): missing.append(ref)
+          if missing:
+              print('Recursos locales ausentes:', sorted(set(missing)))
+              raise SystemExit(1)
+          print('OK: todos los recursos locales referenciados por index.html existen.')
+          PY
+
+      - name: Publicar V6
+        run: |
+          git config user.name "FlowGorila V6 Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html app.js flowgorila-bundle-v6.css
+          git diff --cached --quiet && exit 0
+          git commit -m "FlowGorila V6: perfiles, CSS consolidado y estabilidad"
+          git push
