@@ -1,1 +1,0 @@
-FlowGorila generated visual assets. Updated 2026-08-14.
