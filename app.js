@@ -1,6 +1,10 @@
 "use strict";
 
-const STORAGE_PREFIX = "flowgorila_v2_";
+const ACTIVE_PROFILE = (() => {
+  try { return localStorage.getItem("flowgorila_active_user") || "guest"; }
+  catch { return "guest"; }
+})();
+const STORAGE_PREFIX = `flowgorila_v2_${ACTIVE_PROFILE}_`;
 const storage = {
   get(key, fallback) { try { const value = localStorage.getItem(STORAGE_PREFIX + key); return value === null ? fallback : JSON.parse(value); } catch { return fallback; } },
   set(key, value) { try { localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value)); } catch {} },
