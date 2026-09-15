@@ -67,7 +67,7 @@ jobs:
               pattern = rf'^[ \t]*<link\s+rel="stylesheet"\s+href="{re.escape(name)}(?:\?[^\"]*)?">[ \t]*\n?'
               html = re.sub(pattern, '', html, flags=re.M)
 
-          bundle_tag = '  <link rel="stylesheet" href="flowgorila-bundle-v6.css?v=6.1">'
+          bundle_tag = '  <link rel="stylesheet" href="flowgorila-bundle-v6.css?v=6.2">'
           favicon = re.search(r'^[ \t]*<link\s+rel="icon"[^>]*>[ \t]*$', html, flags=re.M)
           if favicon:
               html = html[:favicon.end()] + '\n' + bundle_tag + html[favicon.end():]
@@ -92,15 +92,16 @@ jobs:
               'Archivo de novedades enlazado a publicaciones oficiales de Roblox. Las fechas corresponden a cada publicación.'
           )
 
-          # Retirar por completo el apartado RBD y su enlace del menu.
-          html = re.sub(r'^[ \t]*<a\s+href="#rbd">RBD</a>[ \t]*\n?', '', html, count=1, flags=re.M)
-          html = re.sub(
-              r'\n[ \t]*<section class="rbd-section" id="rbd".*?</section>[ \t]*\n(?=[ \t]*<section class="section shell nintendo-section")',
-              '\n\n',
-              html,
-              count=1,
-              flags=re.S
-          )
+          # Retirar por completo RBD: menu + bloque entero hasta Nintendo.
+          html = html.replace('      <a href="#rbd">RBD</a>\n', '', 1)
+          rbd_start = html.find('<section class="rbd-section" id="rbd"')
+          nintendo_start = html.find('<section class="section shell nintendo-section"', rbd_start + 1 if rbd_start >= 0 else 0)
+          if rbd_start >= 0:
+              if nintendo_start < 0:
+                  raise SystemExit('No se encontro Nintendo despues de RBD')
+              prefix = html[:rbd_start].rstrip()
+              suffix = html[nintendo_start:].lstrip()
+              html = prefix + '\n\n    ' + suffix
 
           if '<body data-flowgorila-version="6">' not in html:
               html = html.replace('<body>', '<body data-flowgorila-version="6">', 1)
@@ -112,7 +113,7 @@ jobs:
           for section in ('juegos','roblox','nintendo','perfil'):
               count = html.count(f'id="{section}"')
               if count != 1: raise SystemExit(f'La seccion {section} aparece {count} veces')
-          if 'id="rbd"' in html or 'href="#rbd"' in html:
+          if 'id="rbd"' in html or 'href="#rbd"' in html or 'rbd-section' in html:
               raise SystemExit('RBD sigue presente en index.html')
           PY
 
