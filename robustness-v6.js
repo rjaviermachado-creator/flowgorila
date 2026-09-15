@@ -4,7 +4,6 @@
   const FALLBACKS = {
     nintendo: "assets/gallery/nintendo-switch-2-promo.jpg",
     roblox: "assets/gallery/roblox-experiences-wall.jpg",
-    rbd: "assets/gallery/rbd-rebelde-cover.svg",
     pokemon: "assets/gallery/pokemon-pikachu-art.jpg",
     gta: "assets/gallery/gta-online.jpg",
     generic: "flowgorila-logo.jpeg"
@@ -14,7 +13,6 @@
     const src = String(img.currentSrc || img.src || "").toLowerCase();
     if (img.closest("#nintendo") || src.includes("nintendo")) return FALLBACKS.nintendo;
     if (img.closest("#roblox") || src.includes("roblox")) return FALLBACKS.roblox;
-    if (img.closest("#rbd") || src.includes("rbd")) return FALLBACKS.rbd;
     if (img.closest(".pokemon-gbc-section") || img.closest("#juegos") && /pokemon|pikachu/.test(src)) return FALLBACKS.pokemon;
     if (/gta|rockstar/.test(src)) return FALLBACKS.gta;
     return FALLBACKS.generic;
@@ -23,7 +21,7 @@
   function protectImage(img) {
     if (!(img instanceof HTMLImageElement) || img.dataset.v6Protected) return;
     img.dataset.v6Protected = "true";
-    if (!img.closest(".site-header,.hero-visual,.rbd-cover")) img.loading = "lazy";
+    if (!img.closest(".site-header,.hero-visual")) img.loading = "lazy";
     img.decoding = "async";
     img.addEventListener("error", () => {
       if (img.dataset.fallbackApplied === "true") return;
