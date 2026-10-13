@@ -362,37 +362,69 @@ function person(x,z,style){
   legs.push({joint:hip,side});
  }
  if(style.bag){block(torso,.4,-.12,-.13,.35,.45,.17,M.gold);block(torso,.31,.24,-.16,.05,.7,.05,M.trim)}
- const route=style.route||[{x,z},{x:x+.6,z:z+.4}];
- people.push({root,torso,arms,legs,route,waypoint:1,phase:people.length*1.7,speed:style.age==='older'?.44:style.age==='teen'?.74:.61,walk:0,waiting:0});
+ people.push({root,torso,arms,legs,phase:people.length*1.7,speed:style.age==='older'?.55:style.age==='teen'?.9:.75,walk:0,waiting:0});
 }
-person(-4.2,5.4,{age:'teen',feminine:true,longHair:true,skin:0xe2ad89,shirt:0xb47ac6,pants:0x526c9c,hair:0x3c2d35,bag:true,route:[{x:-4.2,z:5.4},{x:-4.2,z:3.6},{x:-5.1,z:2.3},{x:-4.3,z:4.8}]});
-person(4.8,5.1,{age:'adult',feminine:false,skin:0x9f674e,shirt:0x57a99b,pants:0x344a6b,hair:0x242632,route:[{x:4.8,z:5.1},{x:5.3,z:2.8},{x:3.5,z:4.4}]});
-person(.4,-1.7,{age:'older',feminine:false,skin:0xf0c7a4,shirt:0xc58a58,pants:0x545c68,hair:0xd7d6cf,route:[{x:.4,z:-1.7},{x:1.7,z:-1.5},{x:1.8,z:.1},{x:.4,z:-1.7}]});
-person(-.9,5.9,{age:'teen',feminine:false,skin:0xc58b65,shirt:0x477bc4,pants:0x333c62,hair:0x4a332a,route:[{x:-.9,z:5.9},{x:-.5,z:4.6},{x:.7,z:5.4}]});
-person(6.2,3.7,{age:'adult',feminine:true,longHair:true,skin:0xf0c49f,shirt:0xd96e93,pants:0x576b84,hair:0x9b5a2d,route:[{x:6.2,z:3.7},{x:6.5,z:6.2},{x:4.7,z:6.6}]});
-person(-6.4,4.2,{age:'older',feminine:true,longHair:true,skin:0xb17b5f,shirt:0x779b8a,pants:0x59616d,hair:0xb5b5b9,route:[{x:-6.4,z:4.2},{x:-6.6,z:6.5},{x:-4.8,z:6.7}]});
+// Customers follow a purpose-driven state machine: enter -> browse -> queue -> pay -> exit,
+// or enter -> take a seat -> play -> exit. No endless wandering loops.
+const customerStyles=[
+ {age:'teen',feminine:true,longHair:true,skin:0xe2ad89,shirt:0xb47ac6,pants:0x526c9c,hair:0x3c2d35,bag:true},
+ {age:'adult',feminine:false,skin:0x9f674e,shirt:0x57a99b,pants:0x344a6b,hair:0x242632},
+ {age:'older',feminine:false,skin:0xf0c7a4,shirt:0xc58a58,pants:0x545c68,hair:0xd7d6cf},
+ {age:'teen',feminine:false,skin:0xc58b65,shirt:0x477bc4,pants:0x333c62,hair:0x4a332a},
+ {age:'adult',feminine:true,longHair:true,skin:0xf0c49f,shirt:0xd96e93,pants:0x576b84,hair:0x9b5a2d},
+ {age:'older',feminine:true,longHair:true,skin:0xb17b5f,shirt:0x779b8a,pants:0x59616d,hair:0xb5b5b9}
+];
+const entrance={x:0,z:8.25},checkout={x:3.7,z:-5.6};
+let arrivalClock=0,customerSerial=0;
+function spawnCustomer(){
+ if(people.length>=5)return;
+ const id=customerSerial++,style=customerStyles[id%customerStyles.length];
+ person(entrance.x+(id%3-1)*.35,entrance.z,style);
+ const p=people[people.length-1];p.kind=id%3===2?'play':'buy';
+ p.state='enter';p.timer=0;p.id=id;p.purchase=1+(id%2);p.seat=id%2===0?{x:-2.5,z:3.85}:{x:2.5,z:3.85};
+ p.browse=id%2?{x:5.1,z:1.9}:{x:-5.1,z:1.7};p.goal={x:0,z:6.5};p.queueSpot=-1;p.root.visible=true;
+}
+function setCustomerState(p,state){
+ p.state=state;p.timer=0;
+ if(state==='browse')p.goal=p.browse;
+ if(state==='queue')p.goal={x:3.2,z:-4.1}; // updated every frame from queue order
+ if(state==='play')p.goal=p.seat;
+ if(state==='leave')p.goal={x:0,z:8.35};
+}
 function updatePeople(dt,now){
- for(const p of people){
-  const target=p.route[p.waypoint];let dx=target.x-p.root.position.x,dz=target.z-p.root.position.z;
-  const dist=Math.hypot(dx,dz);let moving=false;
-  if(p.waiting>0)p.waiting-=dt;
-  else if(dist<.17){p.waypoint=(p.waypoint+1)%p.route.length;p.waiting=1.2+(p.phase%1.5)}
-  else {
-   const step=Math.min(dist,p.speed*dt);
-   const nx=p.root.position.x+dx/dist*step,nz=p.root.position.z+dz/dist*step;
-   // Customers use designated open aisles and do not teleport or follow the player.
-   p.root.position.x=nx;p.root.position.z=nz;
-   const angle=Math.atan2(dx,dz);
-   let turn=(angle-p.root.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI;
-   p.root.rotation.y+=turn*Math.min(1,dt*5);moving=true;
+ arrivalClock+=dt;
+ if(arrivalClock>6.5){arrivalClock=0;spawnCustomer()}
+ const queue=people.filter(p=>p.kind==='buy'&&p.state==='queue').sort((a,b)=>a.id-b.id);
+ queue.forEach((p,i)=>{p.queueSpot=i;p.goal=i===0?{x:3.45,z:-5.25}:{x:3.45,z:-5.25+i*1.05}});
+ for(let i=people.length-1;i>=0;i--){
+  const p=people[i];
+  if(p.state==='browse'&&p.timer>4)setCustomerState(p,'queue');
+  if(p.state==='play'&&p.timer>14)setCustomerState(p,'leave');
+  if(p.state==='leave'&&Math.hypot(p.root.position.x,p.root.position.z-8.35)<.22){world.remove(p.root);people.splice(i,1);continue}
+  if(p.state==='queue'&&p.queueSpot===0&&Math.hypot(p.root.position.x-p.goal.x,p.root.position.z-p.goal.z)<.5){
+   // Wait for player to operate the register; no automatic sales.
   }
-  if(moving)p.walk+=dt*8;const stride=moving?Math.sin(p.walk)*.48:0;
+  const dx=p.goal.x-p.root.position.x,dz=p.goal.z-p.root.position.z,dist=Math.hypot(dx,dz);
+  let moving=false;
+  if(dist>.13){
+   const step=Math.min(dist,p.speed*dt);
+   p.root.position.x+=dx/dist*step;p.root.position.z+=dz/dist*step;
+   const angle=Math.atan2(dx,dz),turn=(angle-p.root.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI;
+   p.root.rotation.y+=turn*Math.min(1,dt*6);moving=true
+  }else{
+   p.timer+=dt;
+   if(p.state==='enter')setCustomerState(p,p.kind==='play'?'play':'browse');
+   if(p.state==='play'){p.root.rotation.y=Math.PI;p.torso.rotation.x=-.08}
+  }
+  if(moving)p.walk+=dt*8;
+  const stride=moving?Math.sin(p.walk)*.42:0;
   p.legs[0].joint.rotation.x=stride;p.legs[1].joint.rotation.x=-stride;
-  p.arms[0].joint.rotation.x=-stride*.75;p.arms[1].joint.rotation.x=stride*.75;
-  p.torso.rotation.z=moving?Math.sin(p.walk)*.018:0;
-  p.torso.position.y=1.27+(moving?Math.abs(Math.sin(p.walk))*.012:Math.sin(now*.001+p.phase)*.004);
+  p.arms[0].joint.rotation.x=-stride*.7;p.arms[1].joint.rotation.x=stride*.7;
+  p.torso.rotation.z=moving?Math.sin(p.walk)*.012:0;
+  p.torso.position.y=1.27+(moving?Math.abs(Math.sin(p.walk))*.009:0);
  }
 }
+spawnCustomer();
 // Fresh, isolated save slot. No reference to previous game state.
 const SAVE='flowgorila-new-fps-shop-2026-v1';
 let data={cash:350,stock:10,sales:0,collection:[],quest:0,visits:0,restocks:0,opens:0,served:0};
@@ -423,7 +455,7 @@ function updateNavigation(now){
  routeLine.visible=beacon.visible=floorArrow.visible=active;
  if(!active)return;
  let target=missions[i].target;
- if(i===5){const p=people.reduce((best,p)=>Math.hypot(player.x-p.root.position.x,player.z-p.root.position.z)<Math.hypot(player.x-best.x,player.z-best.z)?{x:p.root.position.x,z:p.root.position.z}:best,{x:100,z:100});target=p}
+ if(i===5&&people.length){const p=people.reduce((best,p)=>Math.hypot(player.x-p.root.position.x,player.z-p.root.position.z)<Math.hypot(player.x-best.x,player.z-best.z)?{x:p.root.position.x,z:p.root.position.z}:best,{x:100,z:100});target=p}
  const dx=target.x-player.x,dz=target.z-player.z,dist=Math.hypot(dx,dz);
  if(dist<.55){routeLine.visible=floorArrow.visible=false}
  else {
@@ -467,10 +499,10 @@ const player={x:0,z:7.2,yaw:0,pitch:0},move={x:0,y:0};
 function interact(){
  if(modal.classList.contains('open')||tutorial.classList.contains('open'))return;
  const nearest=people.reduce((best,p)=>{const d=Math.hypot(player.x-p.root.position.x,player.z-p.root.position.z);return d<best.d?{p,d}:best},{p:null,d:Infinity});
- if(nearest.p&&nearest.d<1.25){data.served=(data.served||0)+1;data.cash+=8;persist();refresh();notice('😊 Cliente atendido · +8 € de propina');advanceQuest();return}
+ if(nearest.p&&nearest.d<1.25){data.served=(data.served||0)+1;notice(nearest.p.kind==='play'?'🎲 Cliente: voy a jugar una partida':'🛍️ Cliente: busco sobres de cartas');persist();refresh();advanceQuest();return}
  const counter=Math.hypot(player.x-3.6,player.z+7.8);
  const nearRack=furniture.some(f=>['rack','showcase'].includes(f.type)&&Math.hypot(player.x-f.x,player.z-f.z)<2.7);
- if(counter<3.2){if(!data.stock)return notice('Compra sobres en Gestión');data.stock--;data.cash+=22;data.sales++;persist();refresh();notice('🛍️ Venta realizada: +22 €');advanceQuest()}
+ if(counter<3.2){const buyer=people.filter(p=>p.kind==='buy'&&p.state==='queue'&&p.queueSpot===0&&Math.hypot(p.root.position.x-3.45,p.root.position.z+5.25)<.85).sort((a,b)=>a.id-b.id)[0];if(!buyer)return notice('⏳ Espera a que un cliente llegue a la caja');if(data.stock<buyer.purchase)return notice('📦 No hay sobres suficientes: repón en GESTIÓN');data.stock-=buyer.purchase;data.cash+=22*buyer.purchase;data.sales++;setCustomerState(buyer,'leave');persist();refresh();notice('🛍️ Cliente pagó '+22*buyer.purchase+' € y sale de la tienda');advanceQuest()}
  else if(nearRack){data.visits=(data.visits||0)+1;persist();refresh();advanceQuest();modal.classList.add('open')}
  else notice('Acércate a una estantería o al mostrador')}
 byId('interact').onclick=interact;
