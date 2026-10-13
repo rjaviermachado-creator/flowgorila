@@ -22,8 +22,8 @@ let THREE;
 try{THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}
 catch(_){THREE=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}
 const renderer=new THREE.WebGLRenderer({canvas:byId('scene'),antialias:false,powerPreference:'low-power'});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.15));
-renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,0.85));
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;
 const world=new THREE.Scene();world.background=new THREE.Color(0xc6d9e6);
 const camera=new THREE.PerspectiveCamera(76,1,.08,80);camera.rotation.order='YXZ';
 world.add(new THREE.HemisphereLight(0xf4f8ff,0x7b8499,2.3));
@@ -101,40 +101,72 @@ const series=[
  {name:'FÉNIX SOLAR',creature:'🔥',color:'#d34e83',accent:'#ffcc8a'},
  {name:'GALAXIA',creature:'🌟',color:'#4255a6',accent:'#e2b4ff'}
 ];
-function artTexture(s,kind='pack'){
- const cv=document.createElement('canvas');cv.width=384;cv.height=544;const q=cv.getContext('2d'),w=384,h=544;
- const grad=q.createLinearGradient(0,0,w,h);grad.addColorStop(0,s.accent);grad.addColorStop(.4,s.color);grad.addColorStop(1,'#101d43');q.fillStyle=grad;q.fillRect(0,0,w,h);
- // Foil streaks, stars, subtle rays and premium metallic border.
- q.save();q.translate(192,275);for(let i=0;i<18;i++){q.rotate(Math.PI/9);q.fillStyle=i%2?'#ffffff0d':'#ffefb518';q.fillRect(-8,-240,16,480)}q.restore();
- for(let i=0;i<35;i++){const x=(i*73+29)%384,y=(i*131+43)%544;q.fillStyle=i%3?'#ffffff70':'#ffe4a9';q.beginPath();q.arc(x,y,i%4===0?2.7:1.3,0,Math.PI*2);q.fill()}
- q.fillStyle='#081c39';q.fillRect(12,12,360,88);
- q.strokeStyle='#ffe5a0';q.lineWidth=9;q.strokeRect(9,9,366,526);
- q.strokeStyle='#ffffffa0';q.lineWidth=2;q.strokeRect(22,22,340,500);
- q.fillStyle='#ffe4a5';q.textAlign='center';q.font='900 29px system-ui';q.fillText('MONSTER LEGENDS',192,49);
- q.fillStyle='#fff';q.font='bold 25px system-ui';q.fillText(s.name,192,84);
- q.fillStyle='#ffffff35';q.beginPath();q.arc(192,286,136,0,Math.PI*2);q.fill();
- q.strokeStyle='#fff6cfaa';q.lineWidth=8;q.beginPath();q.arc(192,286,126,0,Math.PI*2);q.stroke();
- q.font='156px Apple Color Emoji,Segoe UI Emoji,sans-serif';q.fillText(s.creature,192,344);
- q.fillStyle='#0d2142dd';q.beginPath();q.roundRect(37,397,310,102,17);q.fill();
- q.fillStyle='#fff';q.font='900 27px system-ui';q.fillText(kind==='box'?'DISPLAY BOX · 24 SOBRES':kind==='card'?'CARTA COLECCIONABLE':'SOBRE · 10 CARTAS',192,439,295);
- q.font='bold 20px system-ui';q.fillStyle='#ffdd91';q.fillText(kind==='card'?'✦  EDICIÓN BRILLANTE  ✦':'SERIE PREMIUM · EDICIÓN 01',192,475);
- const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t
+// Reusable hand-drawn fantasy creature art and TCG-inspired packaging.
+const monsterInfo=[
+ {name:'DRACO LLAMA',hp:180,type:'FUEGO',attack:'Colmillo Ígneo',damage:120,sub:'Dragón volcánico'},
+ {name:'ZORRITO BOSQUE',hp:110,type:'PLANTA',attack:'Bosque Vivo',damage:70,sub:'Guardián del bosque'},
+ {name:'DELFÍN CELESTE',hp:130,type:'AGUA',attack:'Ola Lunar',damage:90,sub:'Espíritu del océano'},
+ {name:'RAYO LUNAR',hp:150,type:'RAYO',attack:'Voltaje Astral',damage:100,sub:'Bestia eléctrica'},
+ {name:'FÉNIX RUBÍ',hp:190,type:'FUEGO',attack:'Alas del Alba',damage:140,sub:'Ave de fuego eterno'},
+ {name:'ESTRELLA NOVA',hp:170,type:'PSÍQUICO',attack:'Explosión Nova',damage:110,sub:'Guardián galáctico'}
+];
+function creatureDrawing(q,index,cx,cy,scale){
+ q.save();q.translate(cx,cy);q.scale(scale,scale);
+ const palette=['#ef7542','#8be5a4','#6dd7e8','#f9d96c','#ffb36c','#c1a2f6'];
+ const main=palette[index],outline='#192a50';
+ function shape(points,fill,stroke=outline,width=8){q.beginPath();points.forEach(([x,y],i)=>i?q.lineTo(x,y):q.moveTo(x,y));q.closePath();q.fillStyle=fill;q.fill();q.lineWidth=width;q.lineJoin='round';q.strokeStyle=stroke;q.stroke()}
+ // Creature silhouette: ears/wings/tail, soft body, oversized head and expressive face.
+ if(index===0||index===4){shape([[-65,25],[-158,-62],[-118,80],[-55,95]],'#f7ae66');shape([[65,25],[158,-62],[118,80],[55,95]],'#f7ae66')}
+ else if(index===2){shape([[-70,50],[-150,5],[-130,100],[-50,95]],'#5ca9dd');shape([[70,50],[150,5],[130,100],[50,95]],'#5ca9dd')}
+ else {shape([[-58,10],[-133,-95],[-106,75],[-45,75]],main);shape([[58,10],[133,-95],[106,75],[45,75]],main)}
+ q.fillStyle='#263d6d';q.beginPath();q.ellipse(0,115,87,19,0,0,Math.PI*2);q.fill();
+ q.beginPath();q.ellipse(0,43,78,93,0,0,Math.PI*2);q.fillStyle=main;q.fill();q.lineWidth=9;q.strokeStyle=outline;q.stroke();
+ q.beginPath();q.ellipse(0,-76,104,93,0,0,Math.PI*2);q.fillStyle=main;q.fill();q.stroke();
+ for(const side of [-1,1]){q.beginPath();q.ellipse(side*39,-84,18,24,0,0,Math.PI*2);q.fillStyle='#fff';q.fill();q.beginPath();q.ellipse(side*40,-81,9,16,0,0,Math.PI*2);q.fillStyle=outline;q.fill();q.beginPath();q.arc(side*44,-88,4,0,Math.PI*2);q.fillStyle='#fff';q.fill()}
+ q.beginPath();q.arc(0,-43,11,0,Math.PI*2);q.fillStyle='#f8d0bc';q.fill();
+ q.beginPath();q.arc(0,-40,22,0,Math.PI);q.strokeStyle=outline;q.lineWidth=5;q.stroke();
+ for(const side of [-1,1]){q.beginPath();q.ellipse(side*54,110,30,19,0,0,Math.PI*2);q.fillStyle=main;q.fill();q.lineWidth=6;q.strokeStyle=outline;q.stroke()}
+ if(index===3||index===5){for(const side of [-1,1])shape([[side*78,-133],[side*116,-187],[side*99,-117]],'#fff4a6',outline,5)}
+ q.restore()
 }
-// Higher-resolution, readable collectible card previews without external downloads.
+function drawCard(q,index,rarity='RARA',size=1){
+ const s=series[index],info=monsterInfo[index],w=512,h=720;
+ const g=q.createLinearGradient(0,0,w,h);g.addColorStop(0,s.accent);g.addColorStop(.6,s.color);g.addColorStop(1,'#172a50');q.fillStyle=g;q.fillRect(0,0,w,h);
+ q.fillStyle='#15243e';q.fillRect(15,15,482,690);
+ q.fillStyle=rarity==='LEGENDARIA'?'#f7d46b':'#e8c88c';q.fillRect(25,25,462,670);
+ q.fillStyle=s.color;q.fillRect(38,38,436,642);
+ q.fillStyle='#faf4d9';q.fillRect(46,47,420,84);
+ q.fillStyle='#1b2844';q.font='900 35px system-ui';q.textAlign='left';q.fillText(info.name,61,98,310);
+ q.textAlign='right';q.font='900 29px system-ui';q.fillText(info.hp+' HP',452,97);
+ q.fillStyle='#11274e';q.fillRect(51,145,410,334);
+ const sky=q.createLinearGradient(0,155,0,475);sky.addColorStop(0,s.accent);sky.addColorStop(1,s.color);q.fillStyle=sky;q.fillRect(59,153,394,318);
+ for(let i=0;i<30;i++){q.fillStyle=i%2?'#fff8bb77':'#ffffff77';q.beginPath();q.arc(65+(i*113)%377,167+(i*79)%289,2+i%5,0,Math.PI*2);q.fill()}
+ creatureDrawing(q,index,256,334,.95);
+ q.fillStyle='#fff8d7';q.fillRect(52,484,408,33);q.fillStyle='#26354a';q.textAlign='center';q.font='bold 18px system-ui';q.fillText(info.sub+'  ·  '+info.type,256,507);
+ q.fillStyle='#fff7df';q.fillRect(52,524,408,106);
+ q.fillStyle='#25314a';q.textAlign='left';q.font='bold 27px system-ui';q.fillText('✦  '+info.attack,70,568,325);
+ q.textAlign='right';q.fillText(String(info.damage),444,568);
+ q.textAlign='left';q.font='17px system-ui';q.fillText('Debilidad  ×2     Resistencia  —     Retirada  ◇',70,606,365);
+ q.fillStyle='#17294a';q.fillRect(51,640,410,35);
+ q.fillStyle='#fff3b7';q.font='bold 16px system-ui';q.textAlign='center';q.fillText('MONSTER LEGENDS  •  '+rarity+'  •  001/'+(100+index),256,664)
+}
+const cardCanvases=series.map((s,i)=>{const cv=document.createElement('canvas');cv.width=512;cv.height=720;drawCard(cv.getContext('2d'),i,i===0?'LEGENDARIA':'RARA');return cv});
+function artTexture(s,kind='pack'){
+ const index=Math.max(0,series.indexOf(s)),cv=document.createElement('canvas');cv.width=384;cv.height=544;const q=cv.getContext('2d');
+ const grad=q.createLinearGradient(0,0,384,544);grad.addColorStop(0,s.accent);grad.addColorStop(.45,s.color);grad.addColorStop(1,'#102447');q.fillStyle=grad;q.fillRect(0,0,384,544);
+ for(let i=0;i<15;i++){q.save();q.translate(192,270);q.rotate(i*Math.PI/7.5);q.fillStyle='#ffffff15';q.fillRect(-8,-280,16,560);q.restore()}
+ q.strokeStyle='#ffeab1';q.lineWidth=11;q.strokeRect(12,12,360,520);
+ q.fillStyle='#122747';q.fillRect(20,20,344,93);q.fillStyle='#ffeab1';q.textAlign='center';q.font='900 29px system-ui';q.fillText('MONSTER LEGENDS',192,59);
+ q.fillStyle='#fff';q.font='bold 22px system-ui';q.fillText(s.name,192,96);
+ q.fillStyle='#ffffff66';q.beginPath();q.arc(192,294,146,0,Math.PI*2);q.fill();
+ creatureDrawing(q,index,192,304,.78);
+ q.fillStyle='#132c4ae8';q.beginPath();q.roundRect(25,434,334,80,12);q.fill();
+ q.fillStyle='#fff3c0';q.font='900 22px system-ui';q.fillText(kind==='box'?'CAJA DE 24 SOBRES':kind==='card'?'CARTA ESPECIAL':'SOBRE DE 10 CARTAS',192,469);
+ q.fillStyle='#fff';q.font='bold 17px system-ui';q.fillText('EXPANSIÓN 01  •  COLECCIÓN',192,497);
+ const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=1;return t
+}
 function cardImage(m,rarity){
- const s=series.find(s=>s.creature===m.icon)||series[0];
- const cv=document.createElement('canvas');cv.width=512;cv.height=720;const q=cv.getContext('2d');
- const g=q.createLinearGradient(0,0,512,720);g.addColorStop(0,s.accent);g.addColorStop(.46,s.color);g.addColorStop(1,'#15264d');q.fillStyle=g;q.fillRect(0,0,512,720);
- q.strokeStyle=rarity==='LEGENDARIA'?'#fff2a5':'#f2d28e';q.lineWidth=22;q.strokeRect(14,14,484,692);
- q.strokeStyle='#fff9d5';q.lineWidth=3;q.strokeRect(34,34,444,652);
- q.fillStyle='#11294ce8';q.fillRect(44,46,424,90);q.textAlign='center';q.fillStyle='#fff4bc';q.font='bold 37px system-ui';q.fillText(m.name,256,104,400);
- q.fillStyle='#ffffff38';q.beginPath();q.arc(256,344,186,0,Math.PI*2);q.fill();
- for(let i=0;i<25;i++){q.fillStyle='#fff7bb99';q.beginPath();q.arc((i*83)%480+16,(i*147)%500+125,2+(i%4),0,Math.PI*2);q.fill()}
- q.font='220px Apple Color Emoji,Segoe UI Emoji,sans-serif';q.fillText(m.icon,256,425);
- q.fillStyle='#102947e8';q.beginPath();q.roundRect(48,536,416,128,15);q.fill();
- q.fillStyle='#fff1b5';q.font='bold 30px system-ui';q.fillText('✦ '+rarity+' ✦',256,583);
- q.fillStyle='white';q.font='21px system-ui';q.fillText('MONSTER LEGENDS · SERIE 01',256,630);
- return cv.toDataURL('image/png')
+ const index=Math.max(0,monsterInfo.findIndex(i=>i.name===m.name.toUpperCase())),cv=document.createElement('canvas');cv.width=512;cv.height=720;drawCard(cv.getContext('2d'),index,rarity);return cv.toDataURL('image/png')
 }
 const packMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s),roughness:.55}));
 const boxMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s,'box'),roughness:.55}));
@@ -297,13 +329,13 @@ function capsule(parent,r,length,x,y,z,mat){
 function person(x,z,style){
  const root=new THREE.Group();root.position.set(x,0,z);world.add(root);
  const skin=skinMat(style.skin),cloth=material(style.shirt),trousers=material(style.pants),hair=material(style.hair),shoe=material(style.shoes||0x283747);
- const height=style.age==='teen'?.87:style.age==='older'?.95:1;
+ const height=style.age==='teen'?.92:style.age==='older'?.97:1;
  root.scale.setScalar(height);
- const torso=new THREE.Group();torso.position.y=1.09;root.add(torso);
- const body=new THREE.Mesh(new THREE.CylinderGeometry(style.feminine?.245:.285,.31,.73,12),cloth);body.position.y=.13;torso.add(body);
+ const torso=new THREE.Group();torso.position.y=1.27;root.add(torso);
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(style.feminine?.215:.25,.265,.73,10),cloth);body.position.y=.13;torso.add(body);
  const shoulders=new THREE.Mesh(new THREE.SphereGeometry(.33,12,10),cloth);shoulders.scale.set(1,.48,.63);shoulders.position.y=.45;torso.add(shoulders);
  capsule(torso,.09,.09,0,.57,0,skin);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.25,18,14),skin);head.scale.set(.91,1.12,.88);head.position.set(0,.85,.015);torso.add(head);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.25,14,12),skin);head.scale.set(.88,1.17,.87);head.position.set(0,.85,.015);torso.add(head);
  // Face with eyebrows, nose, ears, eyes and subtle mouth
  for(const side of [-1,1]){
   const ear=new THREE.Mesh(new THREE.SphereGeometry(.075,8,8),skin);ear.position.set(side*.245,.83,.01);torso.add(ear);
@@ -323,7 +355,7 @@ function person(x,z,style){
   capsule(shoulder,.075,.26,0,-.62,.025,skin);
   const hand=new THREE.Mesh(new THREE.SphereGeometry(.085,10,8),skin);hand.position.set(0,-.83,.025);shoulder.add(hand);
   arms.push({joint:shoulder,side});
-  const hip=new THREE.Group();hip.position.set(side*.16,.81,0);root.add(hip);
+  const hip=new THREE.Group();hip.position.set(side*.16,1.03,0);root.add(hip);
   capsule(hip,.115,.38,0,-.28,0,trousers);
   capsule(hip,.085,.29,0,-.7,.01,trousers);
   const foot=new THREE.Mesh(new THREE.BoxGeometry(.24,.15,.43),shoe);foot.position.set(0,-.92,.12);hip.add(foot);
@@ -358,7 +390,7 @@ function updatePeople(dt,now){
   p.legs[0].joint.rotation.x=stride;p.legs[1].joint.rotation.x=-stride;
   p.arms[0].joint.rotation.x=-stride*.75;p.arms[1].joint.rotation.x=stride*.75;
   p.torso.rotation.z=moving?Math.sin(p.walk)*.018:0;
-  p.torso.position.y=1.09+(moving?Math.abs(Math.sin(p.walk))*.026:Math.sin(now*.001+p.phase)*.008);
+  p.torso.position.y=1.27+(moving?Math.abs(Math.sin(p.walk))*.012:Math.sin(now*.001+p.phase)*.004);
  }
 }
 // Fresh, isolated save slot. No reference to previous game state.
@@ -430,7 +462,7 @@ try{if(!localStorage.getItem(SAVE+'-tutorial'))tutorial.classList.add('open')}ca
 byId('menu').onclick=()=>{refresh();modal.classList.add('open')};
 byId('close').onclick=()=>modal.classList.remove('open');
 byId('restock').onclick=()=>{if(data.cash<50)return notice('No tienes 50 €');data.cash-=50;data.stock+=5;data.restocks=(data.restocks||0)+1;persist();refresh();notice('📦 Compraste 5 sobres');advanceQuest()};
-byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const monsters=[{name:'Drako Llama',icon:'🐉'},{name:'Zorrito Bosque',icon:'🦊'},{name:'Delfín Celeste',icon:'🐬'},{name:'Rayo Lunar',icon:'⚡'},{name:'Fénix Rubí',icon:'🔥'},{name:'Estrella Nova',icon:'🌟'}];const m=monsters[Math.floor(Math.random()*monsters.length)];const rarity=Math.random()<.08?'LEGENDARIA':Math.random()<.3?'RARA':'COMÚN';data.collection.push(m.name+' · '+rarity);data.opens=(data.opens||0)+1;persist();refresh();advanceQuest();byId('cardPreview').style.display='block';byId('cardTitle').textContent=m.name;byId('cardArt').src=cardImage(m,rarity);byId('cardRarity').textContent='✦ '+rarity+' ✦';notice('✨ '+m.name+' · '+rarity)};
+byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const monsters=[{name:'Draco Llama',icon:'🐉'},{name:'Zorrito Bosque',icon:'🦊'},{name:'Delfín Celeste',icon:'🐬'},{name:'Rayo Lunar',icon:'⚡'},{name:'Fénix Rubí',icon:'🔥'},{name:'Estrella Nova',icon:'🌟'}];const m=monsters[Math.floor(Math.random()*monsters.length)];const rarity=Math.random()<.08?'LEGENDARIA':Math.random()<.3?'RARA':'COMÚN';data.collection.push(m.name+' · '+rarity);data.opens=(data.opens||0)+1;persist();refresh();advanceQuest();byId('cardPreview').style.display='block';byId('cardTitle').textContent=m.name;byId('cardArt').src=cardImage(m,rarity);byId('cardRarity').textContent='✦ '+rarity+' ✦';notice('✨ '+m.name+' · '+rarity)};
 const player={x:0,z:7.2,yaw:0,pitch:0},move={x:0,y:0};
 function interact(){
  if(modal.classList.contains('open')||tutorial.classList.contains('open'))return;
