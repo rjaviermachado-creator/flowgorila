@@ -43,6 +43,7 @@ block(world,-8,2.6,0,.25,5.2,18,M.wall);block(world,8,2.6,0,.25,5.2,18,M.wall);
 block(world,0,2.6,-9,16,5.2,.25,M.wall);
 block(world,0,4.85,-8.8,16,.35,.3,M.blue);
 // Modern suspended ceiling with luminous LED panels.
+const metal=new THREE.MeshStandardMaterial({color:0x283846,metalness:.7,roughness:.29});
 const ceiling=material(0xe8ecf0),glow=new THREE.MeshBasicMaterial({color:0xfff8e8});
 block(world,0,5.05,0,16,.2,18,ceiling);
 for(let z of [-6.5,-1,4.5])for(let x of [-5,0,5]){
@@ -180,7 +181,7 @@ function categoryHeader(x,z,idx){
 const walnut=new THREE.MeshStandardMaterial({color:0x775642,roughness:.43,metalness:.06});
 const felt=new THREE.MeshStandardMaterial({color:0x224d59,roughness:.91});
 const upholstery=new THREE.MeshStandardMaterial({color:0x345d81,roughness:.79});
-const metal=new THREE.MeshStandardMaterial({color:0x283846,metalness:.7,roughness:.29});
+
 const lightStrip=new THREE.MeshBasicMaterial({color:0x6de0eb});
 function table(x,z){
  block(world,x,.91,z,3.05,.13,1.72,walnut);
