@@ -22,7 +22,7 @@ let THREE;
 try{THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}
 catch(_){THREE=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}
 const renderer=new THREE.WebGLRenderer({canvas:byId('scene'),antialias:false,powerPreference:'low-power'});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,0.85));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,0.8));
 renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;
 const world=new THREE.Scene();world.background=new THREE.Color(0xc6d9e6);
 const camera=new THREE.PerspectiveCamera(76,1,.08,80);camera.rotation.order='YXZ';
@@ -263,7 +263,7 @@ function chair(x,z,turn=0){
  for(const dx of [-.27,.27])for(const dz of [-.25,.25])block(g,dx,.25,dz,.065,.5,.065,metal);
  block(g,0,.54,-.29,.52,.025,.035,M.gold)
 }
-for(const x of [-2.5,2.5]){chair(x,4.02,Math.PI);chair(x,.85,0)}
+for(const x of [-2.5,2.5]){chair(x,4.02,0);chair(x,.85,Math.PI)}
 block(world,3.6,.67,-7.8,3.4,1.34,1.35,M.frame);block(world,3.6,.68,-7.09,2.9,.72,.045,M.blue);
 block(world,3.6,1.37,-7.8,3.55,.12,1.5,M.white);
 block(world,4.4,1.6,-7.8,.6,.37,.25,M.dark);block(world,4.4,1.8,-7.64,.66,.43,.06,M.blue);
@@ -504,16 +504,16 @@ const cuff=new THREE.MeshStandardMaterial({color:0xe9c27e,roughness:.7});
 const gloveDetails=new THREE.MeshStandardMaterial({color:0xbd8168,roughness:.85});
 const handParts=[];
 for(const side of [-1,1]){
- const arm=new THREE.Group();arm.position.set(side*.43,-.53,-.72);arm.rotation.z=side*.13;viewHands.add(arm);
- const forearm=new THREE.Mesh(new THREE.CylinderGeometry(.095,.145,.43,10),sleeve);forearm.rotation.x=-.63;forearm.position.set(0,-.07,.18);arm.add(forearm);
+ const arm=new THREE.Group();arm.position.set(side*.31,-.53,-.65);arm.rotation.z=side*.09;viewHands.add(arm);
+ const forearm=new THREE.Mesh(new THREE.CylinderGeometry(.092,.125,.43,10),sleeve);forearm.rotation.x=-.63;forearm.position.set(0,-.07,.18);arm.add(forearm);
  const trim=new THREE.Mesh(new THREE.CylinderGeometry(.102,.102,.065,10),cuff);trim.rotation.x=-.63;trim.position.set(0,.105,.055);arm.add(trim);
  const wrist=new THREE.Mesh(new THREE.CylinderGeometry(.079,.087,.15,10),handSkin);wrist.rotation.x=-.63;wrist.position.set(0,.19,-.02);arm.add(wrist);
- const palm=new THREE.Mesh(new THREE.SphereGeometry(.105,12,10),handSkin);palm.scale.set(1.02,1.34,.66);palm.position.set(0,.28,-.09);arm.add(palm);
+ const palm=new THREE.Mesh(new THREE.SphereGeometry(.108,16,12),handSkin);palm.scale.set(1.07,1.4,.62);palm.position.set(0,.28,-.09);arm.add(palm);
  for(let i=0;i<4;i++){
-  const finger=new THREE.Mesh(new THREE.CapsuleGeometry(.023,.09-i*.009,4,7),handSkin);
-  finger.position.set((i-1.5)*.049,.405-i*.006,-.125);finger.rotation.x=-.3;arm.add(finger)
+  const finger=new THREE.Mesh(new THREE.CapsuleGeometry(.022,.105-i*.011,4,8),handSkin);
+  finger.position.set((i-1.5)*.049,.408-i*.007,-.125);finger.rotation.x=-.23;arm.add(finger)
  }
- const thumb=new THREE.Mesh(new THREE.CapsuleGeometry(.035,.075,4,8),handSkin);thumb.position.set(-side*.115,.29,-.06);thumb.rotation.z=side*.7;arm.add(thumb);
+ const thumb=new THREE.Mesh(new THREE.CapsuleGeometry(.032,.092,4,8),handSkin);thumb.position.set(-side*.115,.29,-.06);thumb.rotation.z=side*.7;arm.add(thumb);
  handParts.push(arm)
 }
 let handAction=0;
@@ -544,10 +544,10 @@ joy.addEventListener('pointerdown',e=>{e.preventDefault();jid=e.pointerId;joy.se
 joy.addEventListener('pointermove',e=>{if(jid===e.pointerId)updateJoy(e)});
 function endJoy(e){if(e.pointerId!==jid)return;jid=null;move.x=move.y=0;thumb.style.transform='translate(0,0)'}
 joy.addEventListener('pointerup',endJoy);joy.addEventListener('pointercancel',endJoy);
-let lookId=null,px=0,py=0;
+let lookId=null,px=0,py=0,targetYaw=player.yaw,targetPitch=player.pitch;
 const canvas=byId('scene');
 canvas.addEventListener('pointerdown',e=>{lookId=e.pointerId;px=e.clientX;py=e.clientY;canvas.setPointerCapture(lookId)});
-canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;player.yaw-=(e.clientX-px)*.006;player.pitch=Math.max(-1.1,Math.min(1.1,player.pitch-(e.clientY-py)*.004));px=e.clientX;py=e.clientY});
+canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;targetYaw-=(e.clientX-px)*.0045;targetPitch=Math.max(-1.1,Math.min(1.1,targetPitch-(e.clientY-py)*.0035));px=e.clientX;py=e.clientY});
 canvas.addEventListener('pointerup',()=>lookId=null);canvas.addEventListener('pointercancel',()=>lookId=null);
 const keys=new Set();
 window.addEventListener('keydown',e=>{keys.add(e.key.toLowerCase());if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();if(e.key.toLowerCase()==='e')interact()});
@@ -559,7 +559,7 @@ function collision(x,z){
 }
 function resize(){const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
 window.addEventListener('resize',resize);resize();
-let previous=performance.now();
+let previous=performance.now(),lastHudUpdate=0;
 function animate(now){
  requestAnimationFrame(animate);
  const dt=Math.min(.05,(now-previous)/1000);previous=now;
@@ -570,16 +570,19 @@ function animate(now){
  const length=Math.hypot(side,forward);
  if(length>.07){walking=true;
  side/=Math.max(1,length);forward/=Math.max(1,length);
- const dx=(Math.cos(player.yaw)*side-Math.sin(player.yaw)*forward)*dt*3.5;
- const dz=(-Math.sin(player.yaw)*side-Math.cos(player.yaw)*forward)*dt*3.5;
+ const dx=(Math.cos(player.yaw)*side-Math.sin(player.yaw)*forward)*dt*3.15;
+ const dz=(-Math.sin(player.yaw)*side-Math.cos(player.yaw)*forward)*dt*3.15;
  if(!collision(player.x+dx,player.z))player.x+=dx;
  if(!collision(player.x,player.z+dz))player.z+=dz
  }}
+ const cameraEase=1-Math.exp(-dt*17);
+ player.yaw+=(targetYaw-player.yaw)*cameraEase;
+ player.pitch+=(targetPitch-player.pitch)*cameraEase;
  camera.position.set(player.x,1.65,player.z);
  camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;
  animateHands(dt,walking,now);
  updatePeople(dt,now);
- if(!tutorial.classList.contains('open'))updateQuest();updateNavigation(now);renderer.render(world,camera)
+ if(!tutorial.classList.contains('open')&&now-lastHudUpdate>220){updateQuest();lastHudUpdate=now}updateNavigation(now);renderer.render(world,camera)
 }
 requestAnimationFrame(animate);
 updateQuest();
