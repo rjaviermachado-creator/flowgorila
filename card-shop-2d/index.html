@@ -8,7 +8,7 @@
 <div id="hud"><div class="pane"><b>🃏 CARD SHOP 3D</b><small>PRIMERA PERSONA · NUEVO JUEGO</small></div><div class="pane" id="balance"></div></div>
 <div id="aim">＋</div><div id="toast">Preparando el mundo 3D…</div>
 <div id="controls"><div id="joystick" aria-label="Joystick para caminar"><div id="thumb"></div></div><div id="actions"><button id="interact">✋ USAR</button><button id="menu" class="alt">☰ GESTIÓN</button></div></div>
-<div id="panel"><div id="panelInner"><h2>🏪 Mi tienda</h2><p>Camina por los pasillos, mira las estanterías y acércate al mostrador para vender sobres.</p><p id="inventory"></p><button id="restock">📦 Comprar 5 sobres · 50 €</button><button id="open">✨ Abrir un sobre</button><p id="cards"></p><button id="close" class="alt">Volver a la tienda</button></div></div>
+<div id="panel"><div id="panelInner"><h2>🏪 Mi tienda</h2><p>Camina por los pasillos, mira las estanterías y acércate al mostrador para vender sobres.</p><p id="inventory"></p><button id="restock">📦 Comprar 5 sobres · 50 €</button><button id="open">✨ Abrir un sobre</button><p id="cards"></p><div id="cardPreview" style="display:none;margin:10px auto;width:190px;min-height:255px;padding:10px;border:7px solid #f3cf70;border-radius:17px;background:linear-gradient(145deg,#4f83c4,#243968);text-align:center;box-shadow:0 10px 24px #0007"><div style="font-weight:900;color:#ffe7a1" id="cardTitle"></div><div id="cardArt" style="font-size:92px;margin:20px 0"></div><div id="cardRarity" style="font-weight:900;color:#fff1a4"></div></div><button id="close" class="alt">Volver a la tienda</button></div></div>
 <div id="fatal"><div><h2>El 3D no ha podido iniciarse</h2><p id="reason"></p><p>Prueba a abrir la página directamente en Safari actualizado. No se mostrará un juego 2D en su lugar.</p></div></div>
 <script>
 (async function(){
@@ -43,6 +43,29 @@ sign('CARD SHOP DELUXE',0,3.7,-8.84,7.2,1.05);
 sign('SOBRES Y CARTAS',-5.1,2.8,-8.83,3.5,.5);
 sign('CAJA',3.7,2.8,-8.83,2.5,.5);
 // Detailed free-standing shelving: frames, individual shelves and 3D booster packs.
+// Original collectible monster series, each with its own illustrated packaging.
+const series=[
+ {name:'DRACO FUEGO',creature:'🐉',color:'#ef6b42',accent:'#ffd26a'},
+ {name:'BOSQUE MÍSTICO',creature:'🦊',color:'#2f9876',accent:'#b7f5a0'},
+ {name:'OCÉANO AZUL',creature:'🐬',color:'#337cce',accent:'#a3ecff'},
+ {name:'LUNA ELÉCTRICA',creature:'⚡',color:'#8062d2',accent:'#f9e776'},
+ {name:'FÉNIX SOLAR',creature:'🔥',color:'#d34e83',accent:'#ffcc8a'},
+ {name:'GALAXIA',creature:'🌟',color:'#4255a6',accent:'#e2b4ff'}
+];
+function artTexture(s,kind='pack'){
+ const cv=document.createElement('canvas');cv.width=256;cv.height=384;const q=cv.getContext('2d');
+ const grad=q.createLinearGradient(0,0,256,384);grad.addColorStop(0,s.accent);grad.addColorStop(.38,s.color);grad.addColorStop(1,'#182b58');q.fillStyle=grad;q.fillRect(0,0,256,384);
+ q.strokeStyle='#ffdf8b';q.lineWidth=12;q.strokeRect(11,11,234,362);
+ q.fillStyle='#142844';q.fillRect(14,18,228,65);q.textAlign='center';q.fillStyle='#fff0b2';q.font='bold 23px sans-serif';q.fillText('MONSTER LEGENDS',128,46);
+ q.fillStyle='#ffffff';q.font='bold 19px sans-serif';q.fillText(s.name,128,76);
+ q.beginPath();q.arc(128,208,89,0,Math.PI*2);q.fillStyle='#ffffff44';q.fill();
+ q.font='112px Apple Color Emoji,Segoe UI Emoji,sans-serif';q.fillText(s.creature,128,249);
+ q.fillStyle='#ffedb2';q.font='bold 23px sans-serif';q.fillText(kind==='box'?'CAJA COLECCIÓN':'SOBRE DE CARTAS',128,335);
+ q.font='bold 14px sans-serif';q.fillText('EDICIÓN ESPECIAL',128,359);
+ const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;return t
+}
+const packMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s),roughness:.55}));
+const boxMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s,'box'),roughness:.55}));
 const furniture=[];
 function rack(x,z,angle=0){
  const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=angle;world.add(g);
@@ -50,8 +73,10 @@ function rack(x,z,angle=0){
  for(const edge of [-1,1])block(g,edge*1.26,1.5,0,.13,3,.88,M.trim);
  for(const y of [.22,1.12,2.02,2.91])block(g,0,y,0,2.65,.1,.9,M.wood);
  for(const y of [.63,1.53,2.43])for(let i=0;i<6;i++){
- const pack=block(g,-1.03+i*.4,y,.08,.29,.54,.17,[M.pink,M.blue,M.gold,M.green,M.purple,M.white][i]);
- block(g,-1.03+i*.4,y+.1,.176,.22,.13,.013,M.white)
+ const idx=(i+Math.round((x+8)*2))%6;
+ block(g,-1.03+i*.4,y,.08,.34,.57,.16,M.gold);
+ const face=new THREE.Mesh(new THREE.PlaneGeometry(.31,.54),packMats[idx]);face.position.set(-1.03+i*.4,y,.169);g.add(face);
+ block(g,-1.03+i*.4,y+.32,.07,.32,.055,.18,M.white)
  }
  furniture.push({x,z,r:1.75,type:'rack'});
 }
@@ -59,7 +84,7 @@ rack(-5.8,-4.9);rack(-2.7,-4.9);rack(.4,-4.9);rack(-5.8,.2);rack(5.6,-4.9);rack(
 function table(x,z){
  block(world,x,.92,z,2.9,.17,1.55,M.wood);
  for(const dx of [-1.2,1.2])for(const dz of [-.58,.58])block(world,x+dx,.47,z+dz,.15,.9,.15,M.trim);
- for(let i=0;i<4;i++)block(world,x-.95+i*.63,1.1,z,.42,.2,.6,[M.blue,M.pink,M.green,M.purple][i]);
+ for(let i=0;i<4;i++){const px=x-.95+i*.63;block(world,px,1.15,z,.47,.3,.62,[M.blue,M.pink,M.green,M.purple][i]);const face=new THREE.Mesh(new THREE.PlaneGeometry(.42,.5),boxMats[(i+(x>0?2:0))%6]);face.position.set(px,1.31,z+.315);world.add(face)}
  furniture.push({x,z,r:1.85,type:'table'})
 }
 table(-2.5,2.4);table(2.5,2.4);
@@ -74,14 +99,32 @@ for(const x of [-7.2,7.2])for(const z of [-7.6,7.6]){
 }
 // Customers are 3D, not sprites.
 const people=[];
-function person(x,z,color){
+function person(x,z,style){
  const g=new THREE.Group();g.position.set(x,0,z);world.add(g);
- block(g,0,1.15,0,.55,.83,.35,material(color));
- const head=new THREE.Mesh(new THREE.SphereGeometry(.28,12,10),M.skin);head.position.y=1.87;g.add(head);
- for(const side of [-1,1]){block(g,side*.36,1.15,0,.16,.66,.18,material(color));block(g,side*.15,.43,0,.19,.82,.23,M.dark)}
+ const skin=material(style.skin),cloth=material(style.shirt),pants=material(style.pants),hair=material(style.hair);
+ const scale=style.age==='older'?.94:style.age==='teen'?.87:1;g.scale.setScalar(scale);
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(style.feminine?.28:.32,.3,.9,10),cloth);body.position.y=1.16;g.add(body);
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.18,10),skin);neck.position.y=1.68;g.add(neck);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.29,16,12),skin);head.position.y=1.95;g.add(head);
+ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.3,16,10,0,Math.PI*2,0,Math.PI*.46),hair);hairCap.position.y=2.04;g.add(hairCap);
+ if(style.longHair){for(const side of [-1,1])block(g,side*.24,1.77,-.05,.16,.55,.27,hair)}
+ for(const side of [-1,1]){
+ const arm=new THREE.Mesh(new THREE.CylinderGeometry(.105,.085,.76,9),cloth);arm.position.set(side*.39,1.22,0);arm.rotation.z=side*.12;g.add(arm);
+ const hand=new THREE.Mesh(new THREE.SphereGeometry(.1,8,7),skin);hand.position.set(side*.43,.83,0);g.add(hand);
+ block(g,side*.16,.47,0,.22,.89,.28,pants);
+ block(g,side*.16,.065,.11,.25,.15,.39,M.dark);
+ const eye=new THREE.Mesh(new THREE.SphereGeometry(.032,8,8),M.dark);eye.position.set(side*.11,1.97,.263);g.add(eye)
+ }
+ if(style.age==='older'){const glasses=material(0x6e7585);for(const side of [-1,1]){const rim=new THREE.Mesh(new THREE.TorusGeometry(.092,.013,6,12),glasses);rim.position.set(side*.12,1.97,.29);g.add(rim)}block(g,0,1.97,.29,.11,.016,.025,glasses)}
+ if(style.bag){block(g,.37,.88,-.23,.36,.5,.16,M.gold)}
  people.push({g,x,z,phase:people.length*2.1});
 }
-person(-4.2,5.4,0x9c83ca);person(4.8,5.1,0x68a59b);person(.4,-1.7,0xdb936d);
+person(-4.2,5.4,{age:'teen',feminine:true,longHair:true,skin:0xe2ad89,shirt:0xb47ac6,pants:0x526c9c,hair:0x3c2d35,bag:true});
+person(4.8,5.1,{age:'adult',feminine:false,skin:0x9f674e,shirt:0x57a99b,pants:0x344a6b,hair:0x242632});
+person(.4,-1.7,{age:'older',feminine:false,skin:0xf0c7a4,shirt:0xc58a58,pants:0x545c68,hair:0xd7d6cf});
+person(-.9,5.9,{age:'teen',feminine:false,skin:0xc58b65,shirt:0x477bc4,pants:0x333c62,hair:0x4a332a});
+person(6.2,3.7,{age:'adult',feminine:true,longHair:true,skin:0xf0c49f,shirt:0xd96e93,pants:0x576b84,hair:0x9b5a2d});
+person(-6.4,4.2,{age:'older',feminine:true,longHair:true,skin:0xb17b5f,shirt:0x779b8a,pants:0x59616d,hair:0xb5b5b9});
 // Fresh, isolated save slot. No reference to previous game state.
 const SAVE='flowgorila-new-fps-shop-2026-v1';
 let data={cash:350,stock:10,sales:0,collection:[]};
@@ -93,7 +136,7 @@ const modal=byId('panel');
 byId('menu').onclick=()=>{refresh();modal.classList.add('open')};
 byId('close').onclick=()=>modal.classList.remove('open');
 byId('restock').onclick=()=>{if(data.cash<50)return notice('No tienes 50 €');data.cash-=50;data.stock+=5;persist();refresh();notice('📦 Compraste 5 sobres')};
-byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const names=['Dragón Dorado','Fénix','Lobo Celeste','Gato Mágico','Reina Prisma'];const name=names[Math.floor(Math.random()*names.length)];data.collection.push(name);persist();refresh();notice('✨ Carta conseguida: '+name)};
+byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const monsters=[{name:'Drako Llama',icon:'🐉'},{name:'Zorrito Bosque',icon:'🦊'},{name:'Delfín Celeste',icon:'🐬'},{name:'Rayo Lunar',icon:'⚡'},{name:'Fénix Rubí',icon:'🔥'},{name:'Estrella Nova',icon:'🌟'}];const m=monsters[Math.floor(Math.random()*monsters.length)];const rarity=Math.random()<.08?'LEGENDARIA':Math.random()<.3?'RARA':'COMÚN';data.collection.push(m.name+' · '+rarity);persist();refresh();byId('cardPreview').style.display='block';byId('cardTitle').textContent=m.name;byId('cardArt').textContent=m.icon;byId('cardRarity').textContent='✦ '+rarity+' ✦';notice('✨ '+m.name+' · '+rarity)};
 const player={x:0,z:7.2,yaw:0,pitch:0},move={x:0,y:0};
 function interact(){
  if(modal.classList.contains('open'))return;
