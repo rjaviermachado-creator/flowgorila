@@ -68,6 +68,17 @@ sign('SOBRES • CAJAS • CARTAS RARAS • TORNEOS',0,4.46,-8.83,10,.42);
 // Retail accent bands and digital category signs
 for(const x of [-7.83,7.83]){block(world,x,3.35,0,.07,.11,16,M.blue);block(world,x,.16,0,.12,.26,16,M.trim)}
 const neon=new THREE.MeshBasicMaterial({color:0x79d5fa});
+// Branded wall paint, architectural coves, and continuous accent lighting.
+const mint=material(0x94c7bd),navy=material(0x243c57),warm=material(0xf3d6a0),accent=material(0xe7a864);
+for(const side of [-1,1]){
+ block(world,side*7.76,2.3,-1.2,.075,2.9,11.8,material(side<0?0xe0efea:0xe8e6f3));
+ block(world,side*7.72,3.8,-1.2,.11,.17,14,navy);
+ block(world,side*7.72,3.68,-1.2,.12,.065,14,neon);
+ for(const z of [-7,-2,3])block(world,side*7.7,2.4,z,.12,2.3,.11,accent)
+}
+for(const x of [-7.4,7.4])block(world,x,4.78,0,.16,.12,16,navy);
+for(const z of [-8.25,7.8])block(world,0,4.78,z,15,.12,.16,navy);
+
 block(world,0,3.08,-8.81,13,.055,.07,neon);
 
 // Detailed free-standing shelving: frames, individual shelves and 3D booster packs.
@@ -106,6 +117,13 @@ function displayCard(s,x,y,z,scale=.45){
  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(scale*.7,scale),new THREE.MeshBasicMaterial({map:artTexture(s),side:THREE.DoubleSide}));
  mesh.position.set(x,y,z+.037);world.add(mesh);return backing
 }
+// Curated shop branding and premium retail display details.
+function labelPanel(text,x,y,z,w=2,h=.55,background='#2e5576',foreground='#ffffff',angle=0){
+ const cv=document.createElement('canvas');cv.width=512;cv.height=144;const ctx=cv.getContext('2d');
+ ctx.fillStyle=background;ctx.fillRect(0,0,512,144);ctx.fillStyle=foreground;ctx.font='bold 45px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,73,490);
+ const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}));m.position.set(x,y,z);m.rotation.y=angle;world.add(m);return m
+}
 const furniture=[];
 function rack(x,z,angle=0){
  const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=angle;world.add(g);
@@ -124,6 +142,13 @@ function rack(x,z,angle=0){
  furniture.push({x,z,r:1.75,type:'rack'});
 }
 rack(-5.8,-4.9);rack(-2.7,-4.9);rack(.4,-4.9);rack(-5.8,.2);rack(5.6,-4.9);rack(5.6,.2);
+// Decorative pack dividers and collection price strips.
+for(const z of [-4.9,.2])for(const x of [-5.8,5.6]){
+ for(let j=0;j<3;j++){const strip=block(world,x,.34+j*.9,z+.53,2.2,.08,.025,M.gold);strip.material=material(j===1?0x7ed9dc:0xeecf75)}
+}
+labelPanel('EXPANSIONES',-4.3,4.15,-8.78,3.7,.56,'#f4b846','#24344c');
+labelPanel('EDICIONES LIMITADAS',-.3,4.15,-8.78,4,.56,'#7955a7','#ffffff');
+labelPanel('PAGA AQUÍ',4.2,4.15,-8.78,2.5,.56,'#238e94','#ffffff');
 // Large colorful expansion headers visible from the aisle.
 function categoryHeader(x,z,idx){
  const g=new THREE.Group();g.position.set(x,3.17,z+.19);world.add(g);
@@ -142,6 +167,11 @@ function table(x,z){
  furniture.push({x,z,r:1.85,type:'table'})
 }
 table(-2.5,2.4);table(2.5,2.4);
+// Table-edge merchandising and themed tabletop accessories.
+for(const x of [-2.5,2.5]){
+ for(const dx of [-1.25,1.25])block(world,x+dx,.97,2.4,.06,.1,1.52,M.gold);
+ block(world,x,.96,2.4,2.8,.06,.07,M.blue)
+}
 // Dedicated card-playing corner: green felt playmats, chairs and card stacks.
 function chair(x,z,turn=0){
  const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=turn;world.add(g);
@@ -181,9 +211,34 @@ furniture.push({x:-3.7,z:-7.95,r:2.6,type:'showcase'});
 for(let i=0;i<3;i++)poster(series[i],-6.3+i*2.2,2.9,-8.78,1.65,2.25);
 for(let i=0;i<3;i++)poster(series[i+3],-7.77,2.85,-5+i*4,1.6,2.2,Math.PI/2);
 for(let i=0;i<2;i++)poster(series[i+1],7.77,2.85,-5+i*5,1.6,2.2,-Math.PI/2);
+// Small checkout accessories and retail counter details.
+block(world,3.65,1.46,-7.16,.42,.055,.3,M.dark);
+for(let i=0;i<4;i++)block(world,2.2+i*.27,1.53,-7.76,.19,.18,.34,[M.gold,M.purple,M.pink,M.green][i]);
+// Wall-mounted product shelving on the side aisles.
+for(const side of [-1,1])for(const z of [-5,-2.5,0,2.5]){
+ for(const y of [1.15,1.95,2.75]){
+  block(world,side*7.45,y,z,.55,.085,1.75,M.white);
+  for(let i=0;i<3;i++){
+   const pack=block(world,side*7.36,y+.29,z-.5+i*.48,.2,.49,.34,[M.blue,M.pink,M.purple][i]);
+   pack.rotation.y=side*.13
+  }
+ }
+}
+// Decorative wall clocks and prize emblems.
+function roundEmblem(x,y,z,color){
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.45,.075,8,24),material(color));ring.position.set(x,y,z);world.add(ring);
+ const face=new THREE.Mesh(new THREE.CircleGeometry(.37,24),material(0xfff4d9));face.position.set(x,y,z-.025);world.add(face);
+}
+roundEmblem(6.35,3.9,-8.7,0xe9ad51);
+// Welcome signs and visible shop departments.
+labelPanel('BIENVENIDOS',0,3.65,8.81,3.4,.5,'#315e7a','#ffdc80',Math.PI);
+labelPanel('JUEGA Y CAMBIA',-3.2,3.25,7.82,3.2,.55,'#2b897d','#ffffff');
+labelPanel('COLECCIONA',3.6,3.25,7.82,3.1,.55,'#7352a4','#ffffff');
+// Potted greenery: plants with trunk and layered foliage rather than plain spheres.
 for(const x of [-7.2,7.2])for(const z of [-7.6,7.6]){
  block(world,x,.33,z,.65,.66,.65,M.trim);
- const leaves=new THREE.Mesh(new THREE.SphereGeometry(.52,12,10),M.green);leaves.position.set(x,1.07,z);world.add(leaves);
+ block(world,x,.88,z,.12,.65,.12,M.trim);
+ for(let j=0;j<3;j++){const leaves=new THREE.Mesh(new THREE.SphereGeometry(.3+j*.07,10,9),M.green);leaves.position.set(x+(j-1)*.13,1.22+j*.2,z);world.add(leaves)}
 }
 // Customers are 3D, not sprites.
 // Animated humanoid customers with articulated arms, legs, natural proportions and shop routines.
