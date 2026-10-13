@@ -1,297 +1,49 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Card Shop Deluxe V15 FPS 3D | FlowGorila</title><style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#11182a;color:#f6f7ff;font:15px system-ui,-apple-system,sans-serif}button{font:inherit;cursor:pointer;border:1px solid #ffffff25;background:#354b79;color:#fff;border-radius:12px;padding:11px 13px;font-weight:750}button:active{transform:scale(.97)}button:disabled{opacity:.45}.wrap{max-width:1100px;margin:auto;padding:12px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.top a{color:#d5e3ff;text-decoration:none}.top h1{font-size:21px;margin:5px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.stat{background:#253450;border:1px solid #ffffff1b;border-radius:14px;padding:10px;text-align:center}.stat b{display:block;font-size:20px;color:#ffdc83}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px}.board{background:#1c2840;border:3px solid #52678a;border-radius:18px;padding:9px;position:relative}.board canvas{display:block;width:100%;aspect-ratio:1.35;touch-action:none;border-radius:11px;background:#c2a784}.panel{background:#24324c;border:1px solid #ffffff22;border-radius:16px;padding:15px}.panel h2{margin:0 0 12px;font-size:18px}.actions{display:grid;gap:9px}.actions button{text-align:left;background:#385582}.actions small{display:block;font-weight:400;opacity:.8}.help{color:#c6d3e9;font-size:13px;line-height:1.5}.note{min-height:44px;background:#18243a;border-radius:10px;padding:10px;color:#ffe4a4;margin:12px 0}.collection{max-height:145px;overflow:auto;display:flex;gap:6px;flex-wrap:wrap}.chip{border:1px solid #ffffff35;background:#152440;border-radius:10px;padding:7px 9px;font-size:12px}.controls{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:10px}.controls button{min-width:55px}.overlay{position:fixed;inset:0;background:#08101cdd;display:none;align-items:center;justify-content:center;padding:20px;z-index:5}.dialog{width:min(100%,380px);background:linear-gradient(140deg,#31476b,#1c2944);border:1px solid #9bbaff77;border-radius:20px;padding:22px;text-align:center}.dialog h2{margin-top:0}.dialog p{line-height:1.5;color:#d9e3f3}.dialog button{width:100%;margin-top:8px}.card{width:145px;height:185px;border:7px solid #f2d680;border-radius:13px;margin:15px auto;background:radial-gradient(circle,#8ae5e7,#356bb3 60%,#263167);display:grid;place-items:center;font-size:70px;box-shadow:0 12px 25px #0007}.badge{font-size:11px;color:#a9dbff;letter-spacing:.1em;font-weight:bold}@media(max-width:750px){.layout{grid-template-columns:1fr}.stats{gap:5px}.stat{padding:8px 3px}.stat b{font-size:17px}.top h1{font-size:18px}.board{padding:5px}.board canvas{aspect-ratio:1.1}.panel{padding:12px}.actions{grid-template-columns:repeat(2,minmax(0,1fr))}.actions button{font-size:13px;padding:11px}.help{font-size:12px}}
- .shop-banner{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 16px;background:linear-gradient(110deg,#243e62,#3d5776);border:1px solid #c9a96e77;border-radius:15px;margin-bottom:10px}.shop-banner span{font-size:11px;color:#ffdc92;font-weight:800}.shop-banner strong{font-size:14px}.progress-hint{background:#17263d;border-radius:12px;padding:12px;margin-bottom:12px;color:#dce6f6}.progress-track{height:8px;background:#43526a;border-radius:12px;overflow:hidden;margin-top:9px}.progress-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f5b658,#ffe9a1);transition:width .4s}.board{box-shadow:0 20px 50px #0005}.actions button{transition:background .15s,transform .15s}.actions button:hover{background:#486ba1}.flash{animation:flash .45s}@keyframes flash{from{background:#685331}to{background:#18243a}}@media(max-width:750px){.shop-banner{padding:10px;flex-wrap:wrap}.shop-banner strong{order:3;width:100%}}  .shop-report{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.shop-report>div{background:#16243a;border:1px solid #ffffff18;border-radius:12px;padding:10px}.shop-report span{display:block;font-size:11px;color:#b7c8e4}.shop-report strong{display:block;margin-top:5px;color:#ffe5a4;font-size:17px}.collection .chip{background:linear-gradient(130deg,#344d76,#172742);border-color:#e9c37d66}.stat{background:linear-gradient(140deg,#2d4063,#1b2941)}  .board canvas{background:#f3dfc5}.board{border-color:#8ea7c6;background:#314a6a}.controls button{background:#344f7a;box-shadow:0 4px 0 #1b2d4a;touch-action:none}.stat b{font-variant-numeric:tabular-nums}@media(max-width:750px){.wrap{padding:9px}.stats{margin:9px 0}.board canvas{aspect-ratio:1.285}.controls{gap:5px}.controls button{min-width:48px;padding:11px 9px}.controls button:last-child{flex:1}.shop-banner{margin-bottom:8px}}  .collection{max-height:330px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.album-card{padding:5px;background:#14243d;border:1px solid #d8b97866;border-radius:10px;text-align:center;min-width:0}.album-card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}.album-card span,.album-card small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;margin-top:3px}.album-card small{color:#f4d18b}.tcg-card{width:min(100%,245px);margin:8px auto 16px;padding:9px;border:7px solid var(--edge);border-radius:17px;background:linear-gradient(150deg,#fff6d5,#c5d7ec);color:#263149;box-shadow:0 14px 32px #0006;animation:cardReveal .5s ease-out}.tcg-top{display:flex;justify-content:space-between;align-items:center;gap:4px;text-align:left;font-size:15px}.tcg-top span{font-size:10px}.tcg-card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border:3px solid #fff9;border-radius:9px;margin:7px 0}.tcg-meta{display:flex;justify-content:space-between;font-weight:800;font-size:13px}.tcg-desc{margin-top:7px;font-size:11px;text-align:left}.tcg-value{margin-top:8px;padding:6px;background:#ffffff9c;border-radius:7px;font-size:13px;font-weight:800}@keyframes cardReveal{from{transform:translateY(25px) scale(.88);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}.dialog{max-height:90vh;overflow-y:auto}@media(max-width:750px){.collection{grid-template-columns:repeat(4,minmax(0,1fr))}} </style><style id="studio-redesign">
-:root{color-scheme:dark;font-synthesis:none}
-body{background:radial-gradient(ellipse at 48% -25%,#34415b 0,#141a2a 52%,#0b101b 100%);color:#f4f2ed;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{max-width:1250px;padding:18px}
-.top{padding:8px 2px 15px;border-bottom:1px solid #ffffff18}
-.top h1{font-size:clamp(21px,3vw,29px);font-weight:900;letter-spacing:-.045em}
-.top .badge{color:#eac58b;letter-spacing:.22em}
-.top a{background:#ffffff0c;border:1px solid #ffffff20;border-radius:30px;padding:10px 15px;font-size:12px}
-.stats{gap:11px;margin:18px 0}
-.stat{background:linear-gradient(145deg,#27324b,#1a2337);border:1px solid #ffffff17;border-radius:17px;padding:15px 8px;color:#aab8cb;font-size:12px;box-shadow:0 9px 25px #0002}
-.stat b{font-size:clamp(20px,2.7vw,30px);letter-spacing:-.05em;color:#f8d39b;margin-top:4px}
-.layout{grid-template-columns:minmax(0,1fr) 310px;gap:17px}
-.shop-banner{background:linear-gradient(115deg,#1d3c44,#24414a 55%,#334b55);border:1px solid #b1c6b244;border-radius:16px;padding:16px 20px}
-.shop-banner span{color:#d3f1d5}.shop-banner strong{font-size:15px}
-.board{background:#101d29;border:1px solid #92b6bb55;padding:8px;border-radius:22px;box-shadow:0 25px 65px #0006}
-.board canvas{border-radius:15px;aspect-ratio:1.285;image-rendering:auto}
-.panel{background:linear-gradient(155deg,#243148,#1b2538);border:1px solid #ffffff1b;border-radius:20px;padding:19px;box-shadow:0 16px 40px #0003}
-.panel h2{font-size:17px;letter-spacing:-.02em}
-.actions{gap:9px}.actions button{border-radius:13px;padding:13px 14px;background:linear-gradient(120deg,#334a69,#2b3d59);border:1px solid #ffffff15;box-shadow:0 4px 14px #0002;font-weight:800}
-.actions button:hover{background:#456386}
-.actions small{margin-top:4px;color:#b7c7d8;font-size:11px}
-.controls{gap:8px}.controls button{border-radius:13px;background:#2d4563;border:1px solid #91a7c544;box-shadow:0 3px 0 #172338;min-height:47px}
-.controls #use{background:linear-gradient(110deg,#bd8654,#e5af6b);color:#1e2634;border-color:#f3d39a;font-weight:900}
-.note{background:#172a35;border:1px solid #83b8aa44;color:#e5f3e8;border-radius:13px;line-height:1.45}
-.shop-report>div{background:#172338}.progress-hint{background:#172338}
-.dialog{background:linear-gradient(140deg,#293b55,#172336);border-color:#c6a46b88;box-shadow:0 25px 70px #000a}
-@media(max-width:750px){.wrap{padding:9px}.top{padding:4px 3px 10px}.top h1{font-size:19px}.top a{font-size:11px;padding:8px}.stats{gap:6px;margin:10px 0}.stat{padding:9px 3px;font-size:10px}.stat b{font-size:19px}.layout{gap:12px}.board{padding:4px;border-radius:15px}.board canvas{border-radius:11px;aspect-ratio:1.285}.shop-banner{padding:11px 13px}.panel{padding:14px}.controls{gap:5px}.controls button{min-width:45px;padding:10px 8px;min-height:45px}.controls #use{flex:1}}
-</style><style id="mobile-layout-hotfix">
-/* Fix: the final Studio Edition layout must override the desktop grid on phones. */
-.layout>div,.layout>.panel{min-width:0}
-.board canvas{height:auto}
-@media(max-width:850px){
-.wrap{width:100%;max-width:100%;padding:10px}
-.layout{display:flex!important;flex-direction:column!important;grid-template-columns:none!important;gap:12px}
-.layout>div:first-child{order:0;width:100%;min-width:0}
-.layout>.panel{order:1;width:100%;min-width:0}
-.shop-banner{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px}
-.shop-banner span,.shop-banner strong{width:auto!important;order:initial!important;font-size:12px;line-height:1.3}
-.shop-banner strong{flex:1 1 48%;text-align:center}
-.board{width:100%;padding:5px;overflow:hidden}
-.board canvas{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:9/7}
-.controls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.controls button{min-width:0!important;width:100%;padding:12px 3px;font-size:16px}
-.controls #use{grid-column:auto;flex:none}
-.panel{padding:15px}
-.actions{grid-template-columns:repeat(2,minmax(0,1fr))}
-.actions button{min-width:0;padding:12px 10px;font-size:13px}
-.actions small{font-size:11px}
-.top{gap:8px}.top>div{min-width:0}.top h1{font-size:clamp(16px,4.5vw,22px)}
-.top a{flex:0 0 auto;max-width:125px}
-}
-@media(max-width:390px){.shop-banner strong{flex-basis:100%;order:3}.controls{gap:4px}.controls button{font-size:14px}.stat{font-size:9px}}
-</style><style id="v8-game-first">@media(max-width:850px){.stats{margin:7px 0}.shop-banner{padding:8px 10px}.board{border:2px solid #e3b86a;border-radius:15px;box-shadow:0 8px 30px #0005}.board canvas{border-radius:10px}.controls{margin-top:7px}.note{margin:7px 0;min-height:0}.panel{background:#1d2b41}.panel h2{font-size:17px}.top{margin-bottom:2px}}@media(min-width:851px){.wrap{max-width:1250px}.layout{grid-template-columns:minmax(0,1fr) 310px}.board{box-shadow:0 18px 45px #0005}}</style><style id="v11-tools">#cameraTools{display:flex;gap:7px;align-items:center;justify-content:center;padding:8px 0 2px;flex-wrap:wrap}#cameraTools button{background:#294d67;border:1px solid #83bfd077;padding:8px 13px;font-size:13px}#live3d{font-size:11px;font-weight:800;letter-spacing:.07em;color:#9fe9b4;padding:7px}#shop3d{display:block;width:100%;touch-action:none}</style><style id="v12-status">.board{position:relative}#renderStatus{position:absolute;z-index:8;left:14px;right:14px;top:14px;padding:10px 12px;border-radius:11px;background:#12263ef0;color:#fff0c2;font-weight:750;font-size:13px;text-align:center;box-shadow:0 6px 22px #0008;pointer-events:none}#shop3d{aspect-ratio:9/7!important;max-width:100%;display:block!important}</style><style id="v14-fps">#fpsMobile{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 4px;touch-action:none;user-select:none}#fpsStick{width:116px;height:116px;border-radius:50%;background:radial-gradient(circle,#7899c344,#27445e99);border:2px solid #9ac9edaa;display:grid;place-items:center;touch-action:none;flex-shrink:0}#fpsKnob{width:53px;height:53px;border-radius:50%;background:linear-gradient(145deg,#83c9f1,#326caa);border:3px solid #c6edff;box-shadow:0 4px 15px #0008;pointer-events:none}#fpsRight{flex:1;height:112px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px dashed #90c2e877;border-radius:17px;padding:12px;touch-action:none;background:#17334d88}#fpsRight span{font-size:11px;color:#d8ecff;font-weight:800;max-width:120px}#fpsInteract{background:#c47b37;color:white;white-space:nowrap;font-size:13px}@media(max-width:440px){#fpsStick{width:105px;height:105px}#fpsRight{height:105px;padding:7px}#fpsRight span{font-size:10px;max-width:75px}#fpsInteract{padding:11px 8px;font-size:12px}}</style><style id="v15-visibility">#shop3d{display:block!important;width:100%!important;position:relative;z-index:2;background:#132d41}#fpsMobile{display:flex}#cameraTools{margin-top:6px}#renderStatus{z-index:20}</style></head><body><main class="wrap"><div class="top"><div><div class="badge">FLOWGORILA · STUDIO EDITION</div><h1>🏪 CARD SHOP 2D <span style="color:#f8ca78">DELUXE <small style="font-size:11px;vertical-align:middle">V15 · FPS 3D</small></span></h1></div><a href="../#juegos">← Volver a FlowGorila</a></div><div class="stats"><div class="stat">💰 Monedas<b id="cash">0</b></div><div class="stat">📦 Almacén<b id="stock">0</b></div><div class="stat">🛒 Expuestos<b id="display">0</b></div><div class="stat">⭐ Ventas<b id="sales">0</b></div></div><div class="layout"><div><div class="shop-banner"><span>✦ TIENDA ABIERTA</span><strong>TIENDA FPS 3D · V15</strong><span id="shopLevel">LOCAL NIVEL 1</span></div><div class="board"><canvas id="game" width="900" height="700" aria-label="Tienda de cartas en vista superior"></canvas></div><div class="controls"><button data-dir="up">▲</button><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button><button id="use">✋ Usar</button></div><div class="note" id="note">¡Bienvenido! Acércate a la caja o a las estanterías.</div><div class="help">📱 Toca el suelo de la tienda para caminar o utiliza las flechas. 💻 Usa WASD y E para interactuar. Los clientes exploran las estanterías, hacen cola y pagan en caja.</div></div><aside class="panel"><h2>🎮 Gestiona tu tienda</h2><div class="progress-hint">🏆 Próximo objetivo: <strong id="objective">5 ventas</strong><div class="progress-track"><i id="objectiveBar"></i></div></div><div class="actions"><button id="buy">📦 Pedir mercancía<small>5 sobres · 60 monedas</small></button><button id="restock">🛍️ Reponer estante<small>Colocar hasta 5 sobres</small></button><button id="pack">🎴 Abrir un sobre<small>Descubre cartas especiales</small></button><button id="sell">💎 Vender carta<small>Vende la última carta</small></button><button id="upgrade">🔧 Mejorar tienda<small>Más clientes · 180 monedas</small></button><button id="reset">↺ Nueva partida<small>Reinicia tu progreso</small></button></div><div class="shop-report"><div><span>📈 Beneficio por sobre</span><strong>+23 💰</strong></div><div><span>🏬 Capacidad de exposición</span><strong id="capacity">—</strong></div></div><h2 style="margin-top:22px">🎴 Mis cartas ilustradas</h2><p class="help">Toca una carta para verla ampliada y consultar su valor.</p><div id="collection" class="collection"></div><p class="help">Los avances se guardan automáticamente en este navegador.</p></aside></div></main><div class="overlay" id="overlay"><div class="dialog"><h2 id="modalTitle"></h2><div id="modalBody"></div><button id="close">Continuar</button></div></div>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#102338"><title>Card Shop Deluxe — Nueva tienda 3D | FlowGorila</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#102338;color:white;font:14px system-ui,-apple-system,sans-serif;touch-action:none}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#hud{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none;z-index:4}.brand,.stats{background:#10243cdd;border:1px solid #b6d5ff55;border-radius:14px;padding:9px 12px;backdrop-filter:blur(10px);box-shadow:0 5px 20px #0005}.brand b{display:block;font-size:16px;color:#ffe49d}.brand small{color:#b9d9f4}.stats{text-align:right;font-weight:800}.stats span{display:block;color:#ffe49d}#message{position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:7;background:#11263ae9;border:1px solid #ffe09e99;padding:12px 17px;border-radius:13px;text-align:center;max-width:min(90vw,390px);pointer-events:none;transition:opacity .3s}#reticle{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;color:#fff9;text-shadow:0 2px 6px #000;pointer-events:none}#mobile{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));z-index:5;display:flex;align-items:end;justify-content:space-between;padding:0 18px;pointer-events:none}#stick{width:132px;height:132px;border:2px solid #b3d8ff99;border-radius:50%;background:#1c4b7188;display:grid;place-items:center;pointer-events:auto;touch-action:none;backdrop-filter:blur(5px)}#knob{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#9ce0ff,#4087bd);border:3px solid #e5f8ff;box-shadow:0 4px 14px #0008;pointer-events:none}#right{display:flex;flex-direction:column;gap:8px;align-items:end;pointer-events:auto}button{border:1px solid #ffdc9d;background:#bd7939;color:#fff;border-radius:15px;font-weight:850;font-size:14px;padding:14px 18px;box-shadow:0 4px 16px #0007}#hint{font-size:12px;color:#fff;background:#152b43b9;padding:7px 10px;border-radius:10px}#error{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;text-align:center;padding:24px;background:#102338}#error div{max-width:450px;line-height:1.6}#error a{color:#ffdf91}#shop{position:fixed;z-index:10;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:#081827d9;touch-action:auto}#shop.open{display:flex}#shopPanel{width:min(420px,100%);background:#1b344d;border:1px solid #99cbef;border-radius:20px;padding:20px;box-shadow:0 15px 40px #000a}#shopPanel h2{margin:0 0 10px;color:#ffdf95}#shopPanel p{line-height:1.5}#shopPanel button{margin:5px}#shopPanel .secondary{background:#365978;border-color:#85bce2}#shopPanel .line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #ffffff2b}@media(max-width:550px){#stick{width:112px;height:112px}#knob{width:50px;height:50px}#hud{left:8px;right:8px}.brand b{font-size:14px}.brand,.stats{padding:8px}#hint{max-width:130px;text-align:right}button{padding:13px 15px}}
+</style></head><body><canvas id="game" aria-label="Simulador de tienda de cartas en primera persona y tres dimensiones"></canvas><div id="hud"><div class="brand"><b>🃏 CARD SHOP DELUXE</b><small>NUEVO JUEGO · PRIMERA PERSONA 3D</small></div><div class="stats"><span id="money">💰 500 €</span><div id="stock">📦 12 sobres</div><div id="sales">🛍️ 0 ventas</div></div></div><div id="reticle">＋</div><div id="message">Cargando tu nueva tienda 3D…</div><div id="mobile"><div id="stick"><div id="knob"></div></div><div id="right"><div id="hint">Desliza por la pantalla para mirar</div><button id="use">✋ INTERACTUAR</button><button id="pause" style="background:#365978;border-color:#85bce2">☰ TIENDA</button></div></div><div id="shop"><div id="shopPanel"><h2>🏪 Gestión de tienda</h2><p>Recorre el local en primera persona. Acércate a una estantería para reponer sobres o al mostrador para vender.</p><div class="line"><span>Comprar 6 sobres (60 €)</span><button id="buy">Comprar</button></div><div class="line"><span>Abrir un sobre (colección)</span><button id="openPack" class="secondary">Abrir</button></div><div id="collection" style="margin:10px 0;color:#ffde95"></div><button id="close" class="secondary">Volver a jugar</button></div></div><div id="error"><div><h2>No se pudo iniciar el motor 3D</h2><p id="errorText"></p><p>Abre esta página en Safari o Chrome actualizado con WebGL habilitado.</p></div></div>
 <script>
-window.addEventListener('error',e=>{const n=document.getElementById('note');if(n)n.textContent='Error del juego: '+e.message});
-const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d'),KEY='cicocis-shop-2d-v1',oldKey='cicocis-shop-3d-v1';let s={cash:250,stock:5,display:3,sales:0,cards:[],level:1};try{let old=JSON.parse(localStorage.getItem(KEY));if(!old){let legacy=JSON.parse(localStorage.getItem(oldKey));if(legacy)old={cash:legacy.money??250,stock:legacy.packs??5,display:legacy.display??3,sales:legacy.sales??0,cards:(legacy.cards||[]).map(c=>({name:c.n||c.name||'Carta',value:c.v||c.value||20,icon:'🎴'})),level:1}}if(old)s={...s,...old}}catch(e){}
-let player={x:450,y:490},target=null,held={},customers=[],last=performance.now(),spawn=0,paused=false,confetti=[],elapsed=0,particles=[],customerId=0;const cards=[['Flamín','🔥',20],['Aquafin','💧',22],['Florín','🌿',18],['Voltix','⚡',35],['Lunara','🌙',70],['Drakón','🐉',120]],fixtures=[{x:85,y:130,w:160,h:90,type:'shelf',name:'Estante A'},{x:85,y:285,w:160,h:90,type:'shelf',name:'Estante B'},{x:650,y:130,w:160,h:90,type:'shelf',name:'Estante C'},{x:650,y:285,w:160,h:90,type:'shelf',name:'Estante D'},{x:345,y:95,w:210,h:95,type:'counter',name:'Caja'},{x:345,y:285,w:210,h:90,type:'display',name:'Vitrina'}];
-
-// Ilustraciones originales SVG: las cartas se dibujan en el navegador sin descargas externas.
-const cardStyles={
-'Florín':{a:'#184d43',b:'#6cd3a0',frame:'#7fce9b',rarity:'Común',type:'Naturaleza',power:38,shape:'plant'},
-'Flamín':{a:'#6b1834',b:'#ffb64f',frame:'#ffbd70',rarity:'Común',type:'Fuego',power:45,shape:'fire'},
-'Aquafin':{a:'#174477',b:'#7ee7e6',frame:'#7dcde8',rarity:'Común',type:'Agua',power:42,shape:'water'},
-'Voltix':{a:'#4b2c89',b:'#fce475',frame:'#d5b4ff',rarity:'Rara',type:'Rayo',power:76,shape:'electric'},
-'Lunara':{a:'#24285d',b:'#e8c9ff',frame:'#d4a6ff',rarity:'Épica',type:'Lunar',power:108,shape:'moon'},
-'Drakón':{a:'#431b40',b:'#ff8d68',frame:'#ffd878',rarity:'Legendaria',type:'Dragón',power:155,shape:'dragon'}
-};
-function cardArt(name){
-const d=cardStyles[name]||cardStyles['Florín'];const common='<ellipse cx="150" cy="246" rx="81" ry="17" fill="#112338" opacity=".22"/>';
-const shapes={
-plant:'<path d="M149 215Q92 157 137 110Q172 138 151 185Q167 105 216 118Q225 181 158 205" fill="#80f0a4" stroke="#245e52" stroke-width="7"/><path d="M137 207Q85 170 78 206Q106 242 148 225Q207 178 229 207Q202 244 160 225" fill="#3ba976" stroke="#225a52" stroke-width="6"/><circle cx="148" cy="191" r="31" fill="#f3df91"/><circle cx="136" cy="186" r="5" fill="#344a43"/><circle cx="159" cy="186" r="5" fill="#344a43"/><path d="M138 201Q149 211 159 201" fill="none" stroke="#344a43" stroke-width="4"/>',
-fire:'<path d="M146 76Q199 142 184 167Q229 140 211 216Q193 262 143 259Q76 257 84 191Q89 154 119 132Q108 175 145 178Q172 145 146 76Z" fill="#ff843c" stroke="#8e3649" stroke-width="7"/><path d="M145 143Q173 191 156 202Q190 192 174 232Q144 260 118 230Q107 210 131 188Z" fill="#ffe6a1"/><circle cx="130" cy="216" r="5" fill="#60304b"/><circle cx="158" cy="216" r="5" fill="#60304b"/>',
-water:'<path d="M149 84Q193 143 209 189Q222 249 150 255Q78 250 90 189Q103 147 149 84Z" fill="#76dfff" stroke="#2a6fa8" stroke-width="8"/><path d="M112 195Q136 179 175 198" stroke="#fff" stroke-width="9" opacity=".6" fill="none"/><circle cx="132" cy="215" r="6" fill="#204c79"/><circle cx="167" cy="215" r="6" fill="#204c79"/><circle cx="222" cy="132" r="12" fill="#c7fbff"/><circle cx="87" cy="150" r="8" fill="#c7fbff"/>',
-electric:'<path d="M160 86L96 181H139L113 267L213 152H166L192 86Z" fill="#ffe65b" stroke="#8754a5" stroke-width="8"/><circle cx="128" cy="186" r="5" fill="#44345e"/><circle cx="163" cy="186" r="5" fill="#44345e"/><path d="M74 109L91 128L76 147M224 205L207 225L224 244" fill="none" stroke="#fff0b3" stroke-width="8"/>',
-moon:'<path d="M189 78A93 93 0 1 0 228 232A92 92 0 0 1 189 78Z" fill="#f8e2b6" stroke="#af89e1" stroke-width="7"/><path d="M100 154L117 122L133 154L117 186Z M209 105L217 87L225 105L217 123Z" fill="#fff"/><circle cx="130" cy="214" r="5" fill="#61588b"/><circle cx="155" cy="214" r="5" fill="#61588b"/><path d="M133 225Q143 234 154 225" fill="none" stroke="#61588b" stroke-width="4"/>',
-dragon:'<path d="M110 214Q67 143 93 104L143 146Q182 83 218 114L191 159Q243 194 209 247L146 263Z" fill="#a85a93" stroke="#512950" stroke-width="8"/><path d="M117 136L99 83L147 117M179 119L221 79L211 148" fill="#ffcc78" stroke="#512950" stroke-width="7"/><path d="M111 192Q138 164 177 181Q211 205 182 242Q144 265 112 230Z" fill="#f19b7b" stroke="#512950" stroke-width="6"/><circle cx="134" cy="197" r="6" fill="#3c2341"/><circle cx="170" cy="197" r="6" fill="#3c2341"/><path d="M148 215L156 229L164 214" fill="#fff"/>'
-};
-let svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><defs><radialGradient id="bg"><stop stop-color="'+d.b+'"/><stop offset="1" stop-color="'+d.a+'"/></radialGradient></defs><rect width="300" height="300" rx="22" fill="url(#bg)"/><circle cx="150" cy="150" r="108" fill="#ffffff" opacity=".11"/><path d="M20 250Q150 220 280 250" fill="none" stroke="#ffffff" stroke-opacity=".2" stroke-width="3"/>'+common+shapes[d.shape]+'</svg>';
-return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)
-}
-function cardMarkup(card){let d=cardStyles[card.name]||cardStyles['Florín'];return '<div class="tcg-card" style="--edge:'+d.frame+'"><div class="tcg-top"><strong>'+card.name+'</strong><span>✦ '+d.type+'</span></div><img src="'+cardArt(card.name)+'" alt="Ilustración de '+card.name+'"><div class="tcg-meta"><span>'+d.rarity+'</span><b>⚔ '+d.power+'</b></div><div class="tcg-desc">Criatura · Colección Orígenes</div><div class="tcg-value">💰 Valor: '+card.value+'</div></div>'}
-function viewCard(index){let card=s.cards[index];if(card)modal('🎴 Carta de colección',cardMarkup(card)+'<p>Conserva esta carta o véndela desde el panel de tienda.</p>')}
-
-function save(){s.level=Math.max(1,Math.min(4,Number(s.level)||1));s.stock=Math.max(0,Number(s.stock)||0);s.display=Math.max(0,Number(s.display)||0);s.cash=Math.max(0,Number(s.cash)||0);localStorage.setItem(KEY,JSON.stringify(s));$('capacity').textContent=s.display+' / '+(10+s.level*5);$('shopLevel').textContent='LOCAL NIVEL '+s.level;let goal=Math.ceil((s.sales+1)/5)*5;$('objective').textContent=goal+' ventas';$('objectiveBar').style.width=(s.sales%5)/5*100+'%';$('cash').textContent=s.cash;$('stock').textContent=s.stock;$('display').textContent=s.display;$('sales').textContent=s.sales;$('collection').innerHTML=s.cards.length?s.cards.slice(-24).map((c,i)=>'<button class="album-card" data-card="'+(s.cards.length-Math.min(24,s.cards.length)+i)+'"><img src="'+cardArt(c.name)+'" alt="'+c.name+'"><span>'+c.name+'</span><small>💰 '+c.value+'</small></button>').join(''):'<span class="help">Abre sobres para descubrir tus primeras cartas ilustradas.</span>';document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>viewCard(Number(b.dataset.card)))}save();
-function note(t){$('note').textContent=t;$('note').classList.remove('flash');void $('note').offsetWidth;$('note').classList.add('flash')}function modal(title,html){paused=true;$('modalTitle').textContent=title;$('modalBody').innerHTML=html;$('overlay').style.display='flex'}$('close').onclick=()=>{paused=false;$('overlay').style.display='none'};
-function buy(){if(s.cash<60)return note('Necesitas 60 monedas.');s.cash-=60;s.stock+=5;save();note('📦 ¡Llegaron 5 sobres!')}function restock(){let capacity=10+s.level*5;let n=Math.min(5,s.stock,Math.max(0,capacity-s.display));if(!n)return note(s.stock===0?'No hay sobres en almacén.':'Las estanterías están llenas.');s.stock-=n;s.display+=n;save();note('🛍️ Colocaste '+n+' sobres en las estanterías.')}function pack(){if(s.stock<1)return note('Compra más sobres para abrirlos.');s.stock--;let r=Math.random(),i=r>.97?5:r>.86?4:r>.65?3:Math.floor(Math.random()*3),c=cards[i];s.cards.push({name:c[0],icon:c[1],value:c[2]});save();modal('✨ ¡Nueva carta!', cardMarkup({name:c[0],value:c[2]}))}function sell(){let c=s.cards.pop();if(!c)return note('Aún no tienes cartas.');s.cash+=c.value;save();note('💰 Vendiste '+c.name+' por '+c.value+' monedas.')}function upgrade(){if(s.level>=4)return note('Tu tienda ya tiene todas las mejoras.');if(s.cash<180)return note('Necesitas 180 monedas.');s.cash-=180;s.level++;save();celebrate();note('🎉 Tienda mejorada al nivel '+s.level+'. Llegarán más clientes.')}
-$('buy').onclick=buy;$('restock').onclick=restock;$('pack').onclick=pack;$('sell').onclick=sell;$('upgrade').onclick=upgrade;$('reset').onclick=()=>{if(confirm('¿Reiniciar toda tu tienda?')){localStorage.removeItem(KEY);location.reload()}};$('use').onclick=interact;
-function nearest(){let best=null,d=115;for(let f of fixtures){let dx=Math.max(f.x-player.x,0,player.x-(f.x+f.w)),dy=Math.max(f.y-player.y,0,player.y-(f.y+f.h)),dist=Math.hypot(dx,dy);if(dist<d){d=dist;best=f}}return best}function interact(){let f=nearest();if(!f)return note('Acércate a una estantería, la caja o la vitrina.');if(f.type==='counter')buy();else if(f.type==='shelf')restock();else modal('💎 Vitrina de colección','<p>Tienes '+s.cards.length+' cartas. Valor total: '+s.cards.reduce((a,c)=>a+c.value,0)+' monedas.</p>')}
-canvas.addEventListener('pointerdown',e=>{let r=canvas.getBoundingClientRect();target=screenToShop((e.clientX-r.left)/r.width*900,(e.clientY-r.top)/r.height*700)});document.querySelectorAll('[data-dir]').forEach(b=>{let k=b.dataset.dir;b.addEventListener('pointerdown',e=>{held[k]=true;b.setPointerCapture(e.pointerId)});for(let ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>held[k]=false)});document.addEventListener('keydown',e=>{let k=e.key.toLowerCase();held[k]=true;if(k==='e')interact()});document.addEventListener('keyup',e=>held[e.key.toLowerCase()]=false);
-function rect(x,y,w,h,color,r=0){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}function celebrate(){for(let i=0;i<36;i++)confetti.push({x:450,y:340,vx:(Math.random()-.5)*250,vy:-Math.random()*260,life:1.5,color:['#ffe185','#fb6b98','#71dbf1'][i%3]})}function txt(t,x,y,size=18,color='#fff'){ctx.fillStyle=color;ctx.font='bold '+size+'px system-ui';ctx.textAlign='center';ctx.fillText(t,x,y)}function collide(x,y){if(x<25||x>875||y<45||y>670)return true;return fixtures.some(f=>x>f.x-18&&x<f.x+f.w+18&&y>f.y-18&&y<f.y+f.h+18)}function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.fill()}
-function person(x,y,color,isPlayer=false,phase=0){ctx.save();ctx.translate(x,y);let bob=Math.sin(elapsed*6+phase)*1.8;
-ctx.fillStyle='#1a273b38';ctx.beginPath();ctx.ellipse(0,25,22,8,0,0,Math.PI*2);ctx.fill();ctx.translate(0,bob);
-rounded(-13,15,11,15,4,'#313b50');rounded(3,15,11,15,4,'#313b50');
-rounded(-20,-6,40,30,12,'#253647');rounded(-17,-10,34,34,11,color);rounded(-12,-7,24,6,3,'#ffffff2c');
-rounded(-23,-4,9,22,5,color);rounded(14,-4,9,22,5,color);
-ctx.fillStyle=['#eebc91','#d99978','#9e6955','#f0cba7'][Math.abs(phase)%4];ctx.beginPath();ctx.ellipse(0,-19,15,17,0,0,Math.PI*2);ctx.fill();
-ctx.fillStyle=isPlayer?'#252a3e':['#443329','#252c42','#6a453c','#372b35'][Math.abs(phase)%4];ctx.beginPath();ctx.arc(0,-24,15,Math.PI,Math.PI*2);ctx.fill();rounded(-15,-28,7,13,3,ctx.fillStyle);rounded(9,-28,7,13,3,ctx.fillStyle);
-ctx.fillStyle='#252a35';ctx.beginPath();ctx.arc(-5,-17,1.7,0,Math.PI*2);ctx.arc(5,-17,1.7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#945d57';ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(0,-13,4,.2,Math.PI-.2);ctx.stroke();
-if(isPlayer){rounded(-18,-48,36,15,7,'#e7b96b');txt('TÚ',0,-37,11,'#273443')}ctx.restore()}
-
-function furniture(f){
-const shelf=f.type==='shelf',counter=f.type==='counter',x=f.x,y=f.y,w=f.w,h=f.h;
-ctx.save();
-ctx.fillStyle='#2a29313b';ctx.beginPath();ctx.ellipse(x+w/2,y+h+18,w*.55,18,0,0,Math.PI*2);ctx.fill();
-rounded(x+5,y+18,w,h,12,shelf?'#674532':counter?'#334a61':'#345e67');
-rounded(x,y+8,w,h-5,12,shelf?'#9c6949':counter?'#496e8a':'#4a8790');
-rounded(x+5,y+3,w-10,20,7,shelf?'#eac396':counter?'#b5dce9':'#bce8e7');
-if(shelf){
-rounded(x+9,y+22,w-18,h-34,6,'#674536');
-rounded(x+14,y+28,w-28,42,4,'#332d42');
-const cols=['#f6b85c','#ee759d','#6faff1','#ab86e9'];
-for(let i=0;i<4;i++){let px=x+19+i*(w-38)/4,pw=(w-45)/4;
-rounded(px+2,y+32,pw,39,3,'#201c35');
-rounded(px,y+29,pw,39,3,cols[i]);rounded(px+3,y+32,pw-6,9,2,'#fff9');
-ctx.fillStyle='#ffffffb9';ctx.beginPath();ctx.arc(px+pw/2,y+51,8,0,Math.PI*2);ctx.fill();
-txt(['✦','⚡','❀','★'][i],px+pw/2,y+56,13,'#3d3054')}
-rounded(x+11,y+75,w-22,11,3,'#e2b37b');
-rounded(x+14,y+88,w-28,18,4,'#2c393e');txt(f.name,x+w/2,y+101,12,'#f8e6bb');
-}else if(counter){
-rounded(x+12,y+23,w-24,h-36,7,'#d5e6e8');
-rounded(x+20,y+26,74,42,7,'#40586f');rounded(x+25,y+29,64,29,4,'#8dc9cb');
-rounded(x+117,y+23,54,38,6,'#273c54');rounded(x+124,y+29,40,24,4,'#d5a66a');
-txt('CAJA',x+w/2,y+85,17,'#254458');
-}else{
-rounded(x+13,y+25,w-26,h-40,8,'#b8edf0');rounded(x+18,y+29,w-36,h-48,6,'#e9f9f6');
-txt('✦  ✧  ✦',x+w/2,y+53,24,'#be9349');txt('VITRINA',x+w/2,y+85,14,'#2c6470');
-}
-ctx.restore();
-}
-function drawShop(){
-
-const floor=ctx.createLinearGradient(0,0,900,700);floor.addColorStop(0,'#d9c3a2');floor.addColorStop(.55,'#f1dec2');floor.addColorStop(1,'#c8ac8c');ctx.fillStyle=floor;ctx.fillRect(0,0,900,700);
-for(let y=65;y<700;y+=58){for(let x=(Math.floor(y/58)%2)*-67;x<900;x+=134){rounded(x+3,y+3,128,52,4,'#ffffff12');ctx.strokeStyle='#9c7e6030';ctx.lineWidth=1;ctx.strokeRect(x+3,y+3,128,52)}}
-rounded(0,0,900,67,0,'#182d37');rounded(0,60,900,9,0,'#b58a55');
-for(let x=30;x<900;x+=210){rounded(x,0,155,42,0,'#29454d');rounded(x+6,0,143,35,0,'#365861');ctx.fillStyle='#d2b27a';ctx.fillRect(x+15,0,3,35);ctx.fillRect(x+137,0,3,35)}
-ctx.save();ctx.shadowColor='#ffde99';ctx.shadowBlur=20;rounded(254,7,392,48,12,'#203b43');ctx.restore();txt('✦   THE CARD ATELIER   ✦',450,40,25,'#ffe0a3');
-for(let i=0;i<6;i++){let x=70+i*145;ctx.save();ctx.globalAlpha=.1;ctx.fillStyle='#fff5d2';ctx.beginPath();ctx.ellipse(x,100,65,115,0,0,Math.PI*2);ctx.fill();ctx.restore()}
-rounded(298,394,305,224,26,'#97704b35');rounded(310,405,280,202,23,'#d4a97e');rounded(318,414,264,186,19,'#e7c7a1');rounded(327,423,246,168,17,'#f5dfbc');
-for(let i=0;i<4;i++){ctx.strokeStyle='#e6b98766';ctx.lineWidth=2;ctx.beginPath();ctx.arc(450,505,28+i*25,0,Math.PI*2);ctx.stroke()}
-for(let side of [0,1]){let x=side?753:28;rounded(x+8,484,120,112,17,'#1e453e44');rounded(x,472,120,112,17,'#386f63');rounded(x+8,479,104,98,14,'#579884');for(let j=0;j<5;j++){let lx=x+20+j*18;ctx.strokeStyle='#285b4c';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(x+60,548);ctx.quadraticCurveTo(lx,511,lx,488+(j%2)*12);ctx.stroke();ctx.fillStyle=j%2?'#a9d8a1':'#75bd8d';ctx.beginPath();ctx.ellipse(lx,492+(j%2)*12,15,26,j%2?-.5:.5,0,Math.PI*2);ctx.fill()}rounded(x+13,560,94,17,7,'#244b44')}
-rounded(375,644,150,56,13,'#9bb8bd');rounded(384,649,132,51,10,'#d7ecea');rounded(390,654,120,38,7,'#a3c5c5');txt('ENTRADA',450,681,17,'#264952');
-for(let f of fixtures){depthFurniture(f);furniture(f)}
-for(let customer of customers){person(customer.x,customer.y,customer.color,false,customer.id||0);if(customer.hasPack){rounded(customer.x+13,customer.y-31,20,27,4,'#6a3f88');rounded(customer.x+17,customer.y-26,12,17,3,'#e9bc70')}if(customer.phase==='browse')txt('✦',customer.x,customer.y-46,21,'#ffd66e');if(customer.phase==='checkout')txt('💳',customer.x,customer.y-45,19)}
-person(player.x,player.y,'#4775d8',true,0);
-for(let p of particles){ctx.globalAlpha=Math.max(0,p.life);txt(p.label,p.x,p.y,19,p.color);ctx.globalAlpha=1}
-for(let p of confetti){ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,9,9)}
-let f=nearest();if(f){ctx.save();ctx.shadowColor='#f9d38b';ctx.shadowBlur=16;ctx.strokeStyle='#f7cb73';ctx.lineWidth=3;ctx.setLineDash([8,6]);ctx.strokeRect(f.x-5,f.y-5,f.w+10,f.h+10);ctx.restore()}
-}
-
-
-// V9: perspective shop view; simulation continues using the original world coordinates.
-const SHOP_VIEW={a:.66,b:.17,c:-.34,d:.65,e:272,f:20};
-function screenToShop(x,y){let v=SHOP_VIEW,det=v.a*v.d-v.b*v.c,dx=x-v.e,dy=y-v.f;return {x:Math.max(25,Math.min(875,(v.d*dx-v.c*dy)/det)),y:Math.max(45,Math.min(670,(-v.b*dx+v.a*dy)/det))}}
-function face(points,fill){ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fill()}
-function depthFurniture(f){let x=f.x,y=f.y,w=f.w,h=f.h,z=f.type==='shelf'?42:f.type==='counter'?30:25;
-face([[x,y],[x+w,y],[x+w,y-z],[x,y-z]],'#e2bd87');
-face([[x+w,y],[x+w,y+h],[x+w,y+h-z],[x+w,y-z]],'#4b3c48');
-face([[x,y],[x,y+h],[x,y+h-z],[x,y-z]],'#785746');
-rounded(x+7,y-z+7,w-14,12,4,'#f7d9a2');
-}
-function draw(){
-ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,900,700);
-const backdrop=ctx.createLinearGradient(0,0,900,700);backdrop.addColorStop(0,'#10243b');backdrop.addColorStop(.55,'#193a50');backdrop.addColorStop(1,'#0b1729');ctx.fillStyle=backdrop;ctx.fillRect(0,0,900,700);
-for(let i=0;i<14;i++){ctx.fillStyle=i%2?'#ffffff05':'#0000000a';ctx.fillRect(0,i*54,900,27)}
-ctx.save();ctx.setTransform(SHOP_VIEW.a,SHOP_VIEW.b,SHOP_VIEW.c,SHOP_VIEW.d,SHOP_VIEW.e,SHOP_VIEW.f);
-ctx.shadowColor='#0009';ctx.shadowBlur=35;ctx.shadowOffsetY=24;rounded(0,0,900,700,0,'#a07c61');ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
-drawShop();
-ctx.restore();
-ctx.save();ctx.fillStyle='#07162599';rounded(15,16,248,49,12,'#0a2335dd');ctx.font='bold 17px system-ui';ctx.textAlign='left';ctx.fillStyle='#ffe2a0';ctx.fillText('✦ CARD ATELIER',29,38);ctx.font='11px system-ui';ctx.fillStyle='#b9d6e5';ctx.fillText('TIENDA · VISTA EN PERSPECTIVA',29,54);ctx.restore();
-}
-
-function move(dt){let x=(+(held.d||held.arrowright||held.right)-+(held.a||held.arrowleft||held.left)),y=(+(held.s||held.arrowdown||held.down)-+(held.w||held.arrowup||held.up));
-if(window.shopFPS&&window.shopFPS.active){let joy=window.shopFPS.joy;const strafe=x+joy.x,forward=-y+joy.y,angle=window.shopFPS.yaw; x=Math.sin(angle)*forward+Math.cos(angle)*strafe;y=Math.cos(angle)*forward-Math.sin(angle)*strafe;target=null;}
-if(target&&!x&&!y){let dx=target.x-player.x,dy=target.y-player.y,d=Math.hypot(dx,dy);if(d>7){x=dx/d;y=dy/d}else target=null}if(x||y){let n=Math.hypot(x,y),speed=225*dt,nx=player.x+x/n*speed,ny=player.y+y/n*speed;if(!collide(nx,player.y))player.x=nx;if(!collide(player.x,ny))player.y=ny}}
-function pop(x,y,label,color='#ffe49b'){particles.push({x,y,label,color,life:1.4})}function walkTo(c,x,y,dt,speed=92){let dx=x-c.x,dy=y-c.y,d=Math.hypot(dx,dy);if(d<speed*dt+2){c.x=x;c.y=y;return true}c.x+=dx/d*speed*dt;c.y+=dy/d*speed*dt;return false}
-function customer(dt){
-spawn+=dt;
-if(spawn>Math.max(2.8,8-s.level*1.1)){spawn=0;if(customers.length<5){let id=customerId++,shelf=fixtures[id%4],side=shelf.x<450?290:610;customers.push({x:450+(Math.random()-.5)*18,y:650,phase:'enter',color:['#b16c83','#548f8b','#a78cce','#db9a63'][id%4],id,wait:0,shelf,side,hasPack:false,queueTime:0})}}
-let queue=customers.filter(c=>c.phase==='queue'||c.phase==='checkout').sort((a,b)=>a.id-b.id);
-for(let c of customers){
-if(c.phase==='enter'){if(walkTo(c,450,430,dt))c.phase='aisle'}
-else if(c.phase==='aisle'){if(walkTo(c,c.side,430,dt))c.phase='shelf'}
-else if(c.phase==='shelf'){if(walkTo(c,c.side,c.shelf.y+c.shelf.h/2,dt)){c.phase='browse';c.wait=1.3+Math.random()*1.5}}
-else if(c.phase==='browse'){c.wait-=dt;if(c.wait<=0){if(s.display>0){c.hasPack=true;pop(c.x,c.y-35,'🎴');c.phase='returnAisle'}else{c.phase='leaveAisle';if(!customers.some(v=>v!==c&&v.warnedEmpty)){note('⚠️ Estanterías vacías: repón sobres.');c.warnedEmpty=true}}}}
-else if(c.phase==='returnAisle'){if(walkTo(c,c.side,245,dt))c.phase='toQueue'}
-else if(c.phase==='toQueue'){if(walkTo(c,610,245,dt))c.phase='queue'}
-else if(c.phase==='queue'||c.phase==='checkout'){let pos=queue.indexOf(c);if(pos<0)pos=queue.length;let qx=610-Math.min(pos,4)*39,qy=245;if(walkTo(c,qx,qy,dt,65)){if(pos===0){c.phase='checkout';c.queueTime+=dt;if(c.queueTime>1.2){if(c.hasPack&&s.display>0){s.display--;s.cash+=35;s.sales++;save();pop(c.x,c.y-39,'+35 💰');if(s.sales%5===0)celebrate();note('🛒 Cliente atendido en caja: +35 monedas')}else note('⚠️ No quedan sobres para cobrar.');c.phase='exitCheckout';queue.shift()}}}}
-else if(c.phase==='exitCheckout'){if(walkTo(c,610,430,dt))c.phase='exit'}
-else if(c.phase==='leaveAisle'){if(walkTo(c,c.side,430,dt))c.phase='exitSide'}
-else if(c.phase==='exitSide'){if(walkTo(c,450,430,dt))c.phase='exit'}
-else if(c.phase==='exit'){if(walkTo(c,450,690,dt))c.phase='gone'}
-}
-customers=customers.filter(c=>c.phase!=='gone');
-}
-function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.06);last=now;try{if(!paused){move(dt);customer(dt);elapsed+=dt;for(let p of particles){p.y-=25*dt;p.life-=dt}particles=particles.filter(p=>p.life>0);for(let p of confetti){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=300*dt;p.life-=dt}confetti=confetti.filter(p=>p.life>0)}draw()}catch(err){note('Error de dibujo: '+err.message);console.error(err)}}draw();requestAnimationFrame(loop);
-</script>
-<script>
-(async function startReal3D(){
-const status=document.createElement('div');status.id='renderStatus';status.textContent='⏳ Cargando tienda 3D…';document.querySelector('.board').appendChild(status);
-let THREE;
+(async()=>{
+const canvas=document.getElementById('game'),msg=document.getElementById('message'),error=document.getElementById('error');
+function notify(t){msg.textContent=t;msg.style.opacity=1;clearTimeout(notify.timer);notify.timer=setTimeout(()=>msg.style.opacity=0,3000)}
+let T;try{try{T=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}catch(e){T=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}}catch(e){document.getElementById('errorText').textContent='No se pudo descargar Three.js: '+e.message;error.style.display='flex';return}
 try{
-try{THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}
-catch(first){THREE=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}
-status.textContent='⏳ Preparando gráficos 3D…';
-const original=document.getElementById('game'), board=original.parentElement;
-const view=document.createElement('canvas');view.id='shop3d';view.setAttribute('aria-label','Tienda tridimensional interactiva');board.appendChild(view);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x182d46);
-const camera=new THREE.PerspectiveCamera(74,1,.08,100);camera.position.set(11,16,19);camera.lookAt(0,0,0);
-const renderer=new THREE.WebGLRenderer({canvas:view,antialias:true,alpha:false,powerPreference:'low-power'});
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-scene.add(new THREE.HemisphereLight(0xf0f7ff,0x78879c,2.3));
-const sun=new THREE.DirectionalLight(0xffe5c1,2.8);sun.position.set(-5,14,8);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-14;sun.shadow.camera.right=14;sun.shadow.camera.top=14;sun.shadow.camera.bottom=-14;scene.add(sun);
-const mat=(color,roughness=.75)=>new THREE.MeshStandardMaterial({color,roughness});
-const wood=mat(0xc99e72),wall=mat(0x547c8d),dark=mat(0x26394d),gold=mat(0xf2c879),glass=new THREE.MeshStandardMaterial({color:0xa8dce5,transparent:true,opacity:.62,metalness:.18,roughness:.16});
-function box(parent,x,y,z,w,h,d,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
-function sphere(parent,x,y,z,r,m){const o=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),m);o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o}
-function wx(x){return (x-450)/57}function wz(y){return (y-350)/48}
-box(scene,0,-.17,0,16.6,.3,15.2,wood);
-const tile=mat(0xe7d6bd);for(let x=-7.5;x<8;x+=1.5)for(let z=-7;z<8;z+=1.5)box(scene,x,-.008,z,1.46,.018,1.46,((x+z)*10)%3<0?mat(0xe1cbb1):tile);
-box(scene,0,2,-7.38,16.6,4,.22,wall);box(scene,-8.2,1.35,0,.22,2.7,15.1,wall);
-box(scene,0,3.85,-7.12,10,.36,.22,dark);box(scene,0,3.85,-6.98,7.5,.15,.25,gold);
-for(let x of [-6.8,6.8]){box(scene,x,1.8,-7.15,.12,2.3,.12,gold);box(scene,x,2.85,-7.1,1.7,.15,.15,gold)}
-
-// V11: signage, stock-aware 3D shelves and camera controls
-function sign(text,bg='#213d59',fg='#fff0c9'){const cv=document.createElement('canvas');cv.width=512;cv.height=128;const g=cv.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,512,128);g.strokeStyle='#f2c879';g.lineWidth=9;g.strokeRect(8,8,496,112);g.fillStyle=fg;g.font='bold 45px system-ui';g.textAlign='center';g.textBaseline='middle';g.fillText(text,256,65);const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;return new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide})}
-const storeSign=new THREE.Mesh(new THREE.PlaneGeometry(6.5,1.4),sign('CARD ATELIER'));storeSign.position.set(0,2.9,-7.23);scene.add(storeSign);
-for(let i=0;i<3;i++){const poster=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.5),sign(['DRAGONES','SOBRES','COLECCIÓN'][i],['#783e60','#35667b','#4a537f'][i]));poster.position.set(-5+i*5,2,-7.235);scene.add(poster)}
-// More detailed furnishings and walkable first-person presentation.
-const floorRug=mat(0x536c7c);box(scene,0,.015,3.9,3.2,.026,1.4,floorRug);
-for(let x of [-7.1,7.1])for(let z of [-5.5,0,5.4]){box(scene,x,2.95,z,.25,.2,.25,mat(0xffe9b1));}
-const fixtureProducts=[];
-const fixtures3=[];
-const colors=[0xffc56d,0xf07aa5,0x80baff,0xb09bf6].map(v=>mat(v));
-for(const f of fixtures){let g=new THREE.Group();scene.add(g);g.position.set(wx(f.x+f.w/2),0,wz(f.y+f.h/2));const w=f.w/57,d=f.h/48;
-if(f.type==='shelf'){
-box(g,0,.38,0,w,.72,d,mat(0x805b46));box(g,0,.83,0,w+.08,.13,d+.1,mat(0xeac89b));
-for(let side of [-1,1]){box(g,side*w*.46,1.2,-d*.17,.10,1.2,d*.83,mat(0x624637));box(g,side*w*.46,1.68,-d*.17,.15,.12,d*.86,gold)}
-box(g,0,.6,d*.47,w*.88,.12,.1,mat(0x4d3840));
-box(g,0,1.16,-d*.28,w,.68,.16,mat(0x6d4a3b));box(g,0,1.52,-d*.28,w+.08,.12,.24,gold);
-const products=[];for(let i=0;i<4;i++){const px=(i-1.5)*w/4;const pack=box(g,px,1.09,-d*.08,w/5,.43,.32,colors[i]);box(g,px,1.32,-d*.08,w/5,.06,.34,mat(0xfff1cb));products.push(pack)}fixtureProducts.push(products);
-}else if(f.type==='counter'){
-box(g,0,.51,0,w,1,d,mat(0x43647a));box(g,0,.51,d*.51,w*.92,.65,.04,mat(0x264458));box(g,0,.72,d*.54,w*.62,.16,.055,gold);box(g,0,1.08,0,w+.18,.17,d+.18,mat(0xd5e9e9));box(g,-w*.22,1.29,0,.85,.37,.15,dark);box(g,-w*.22,1.43,-.02,.7,.22,.05,mat(0x7bc8de));box(g,w*.28,1.22,0,.75,.25,.55,mat(0x33485d));
-}else{
-box(g,0,.48,0,w,.85,d,mat(0x467d87));box(g,0,.55,d*.51,w*.85,.48,.04,mat(0x285563));box(g,0,1.02,0,w+.08,.14,d+.08,glass);
-for(let i=0;i<3;i++)box(g,(i-1)*w*.26,1.14,0,.42,.05,.55,gold);
-}
-fixtures3.push(g);
-}
-for(let i=0;i<2;i++){let x=i?-6.9:6.9,z=4.8;box(scene,x,.4,z,1,.8,1,mat(0x466e62));for(let k=0;k<5;k++){let leaf=sphere(scene,x+(k-2)*.17,1.15+Math.abs(k-2)*.12,z,.38,mat(k%2?0x5aaf80:0x3c8c70));leaf.scale.set(.65,1.4,.65)}}
-box(scene,0,.018,6.25,2.4,.035,1.4,mat(0x9bbec7));
-function character(color){const g=new THREE.Group();const skin=mat(0xf1b992),shirt=mat(color),hair=mat(0x3a3035);
-box(g,0,.56,0,.39,.69,.27,shirt);box(g,-.11,.15,0,.14,.42,.18,dark);box(g,.11,.15,0,.14,.42,.18,dark);
-box(g,-.28,.63,0,.16,.57,.19,shirt);box(g,.28,.63,0,.16,.57,.19,shirt);
-sphere(g,0,1.18,0,.26,skin);sphere(g,0,1.35,-.04,.26,hair);return g}
-const hero=character(0x4f8df0);scene.add(hero);
-// Two-thumb mobile controls: left joystick, right swipe camera.
-const mobile=document.createElement('div');mobile.id='fpsMobile';mobile.innerHTML='<div id="fpsStick" aria-label="Joystick de movimiento"><div id="fpsKnob"></div></div><div id="fpsRight"><span>DESLIZA PARA MIRAR ↔</span><button id="fpsInteract" type="button">✋ USAR</button></div>';board.appendChild(mobile);
-const stick=mobile.querySelector('#fpsStick'),knob=mobile.querySelector('#fpsKnob'),right=mobile.querySelector('#fpsRight');
-let stickId=null,lookId=null,lookX=0,lookY=0;
-stick.addEventListener('pointerdown',e=>{e.preventDefault();stickId=e.pointerId;stick.setPointerCapture(stickId);updateStick(e)});
-function updateStick(e){const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,max=r.width*.32,scale=Math.min(1,max/(Math.hypot(dx,dy)||1));const xx=dx*scale,yy=dy*scale;knob.style.transform='translate('+xx+'px,'+yy+'px)';window.shopFPS.joy.x=xx/max;window.shopFPS.joy.y=-yy/max}
-stick.addEventListener('pointermove',e=>{if(e.pointerId===stickId)updateStick(e)});
-function releaseStick(e){if(e.pointerId!==stickId)return;stickId=null;knob.style.transform='translate(0,0)';window.shopFPS.joy.x=0;window.shopFPS.joy.y=0}
-stick.addEventListener('pointerup',releaseStick);stick.addEventListener('pointercancel',releaseStick);stick.addEventListener('lostpointercapture',releaseStick);
-right.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;e.preventDefault();lookId=e.pointerId;lookX=e.clientX;lookY=e.clientY;right.setPointerCapture(lookId)});
-right.addEventListener('pointermove',e=>{if(e.pointerId!==lookId||!firstPerson)return;lookYaw-=(e.clientX-lookX)*.008;lookPitch=Math.max(-.7,Math.min(.7,lookPitch-(e.clientY-lookY)*.005));lookX=e.clientX;lookY=e.clientY;window.shopFPS.yaw=lookYaw});
-right.addEventListener('pointerup',()=>lookId=null);right.addEventListener('pointercancel',()=>lookId=null);
-mobile.querySelector('#fpsInteract').addEventListener('click',()=>interact());
-const guests=new Map(),lastPositions=new Map();
-const cameraAngles=[{x:11,y:16,z:19},{x:0,y:20,z:23},{x:-12,y:15,z:18}];let cameraIndex=0,zoom=1,firstPerson=true,lookYaw=0,lookPitch=0;window.shopFPS={active:true,yaw:lookYaw,joy:{x:0,y:0}};
-const toolbar=document.createElement('div');toolbar.id='cameraTools';toolbar.innerHTML='<button type="button" id="mode3d">👁 Primera persona</button><button type="button" id="rotate3d">↪ Girar vista</button><button type="button" id="zoom3d">🔍 Zoom</button><span id="live3d">● 3D ACTIVO</span><small style="width:100%;text-align:center;color:#c9dcec">Arrastra sobre la tienda para mirar a tu alrededor. Usa las flechas para caminar.</small>';board.appendChild(toolbar);
-toolbar.querySelector('#mode3d').onclick=()=>{firstPerson=!firstPerson;window.shopFPS.active=firstPerson;toolbar.querySelector('#mode3d').textContent=firstPerson?'👁 Primera persona':'🏬 Vista general'};
-toolbar.querySelector('#rotate3d').onclick=()=>{if(firstPerson)lookYaw+=Math.PI/4;else cameraIndex=(cameraIndex+1)%cameraAngles.length};
-toolbar.querySelector('#zoom3d').onclick=()=>{zoom=zoom===1?.78:zoom===.78?1.2:1};
-const guests=new Map();
-const plane=new THREE.Plane(new THREE.Vector3(0,1,0),0),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
-let dragging=false,lastPX=0,lastPY=0,moved=false;
-view.addEventListener('pointermove',e=>{if(!dragging||!firstPerson)return;const dx=e.clientX-lastPX,dy=e.clientY-lastPY;lookYaw-=dx*.007;window.shopFPS.yaw=lookYaw;lookPitch=Math.max(-.55,Math.min(.55,lookPitch-dy*.004));lastPX=e.clientX;lastPY=e.clientY;if(Math.abs(dx)+Math.abs(dy)>1)moved=true});
-view.addEventListener('pointerup',()=>{dragging=false});view.addEventListener('pointercancel',()=>{dragging=false});
-view.addEventListener('pointerdown',e=>{dragging=true;moved=false;lastPX=e.clientX;lastPY=e.clientY;if(firstPerson)return;const r=view.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height*2-1));raycaster.setFromCamera(pointer,camera);const hit=new THREE.Vector3();if(raycaster.ray.intersectPlane(plane,hit)){target={x:Math.max(25,Math.min(875,hit.x*57+450)),y:Math.max(45,Math.min(670,hit.z*48+350))}}});
-function resize(){let w=board.clientWidth-10,h=Math.round(w*700/900);view.style.width='100%';view.style.height=h+'px';renderer.setSize(Math.max(1,w),Math.max(1,h),false);camera.aspect=w/h;camera.updateProjectionMatrix()}
-new ResizeObserver(resize).observe(board);resize();
-original.style.setProperty('display','none','important');view.style.display='block';view.style.touchAction='none';view.style.borderRadius='10px';
-function render(t){requestAnimationFrame(render);mobile.style.display=firstPerson?'flex':'none';
-if(firstPerson){camera.position.lerp(new THREE.Vector3(wx(player.x),1.48,wz(player.y)),.25);camera.lookAt(camera.position.x+Math.sin(lookYaw),camera.position.y+Math.sin(lookPitch),camera.position.z+Math.cos(lookYaw));hero.visible=false;}
-else{hero.visible=true;const desired=cameraAngles[cameraIndex];camera.position.lerp(new THREE.Vector3(desired.x*zoom,desired.y*zoom,desired.z*zoom),.075);camera.lookAt(0,0,0)}
-if(typeof player!=='undefined'){const old=lastPositions.get('hero');if(old){const dx=player.x-old.x,dz=player.y-old.y;if(Math.hypot(dx,dz)>.1)hero.rotation.y=Math.atan2(dx/57,dz/48)}lastPositions.set('hero',{x:player.x,y:player.y});hero.position.set(wx(player.x),.04+Math.sin(t*.012)*.018,wz(player.y))}
-if(typeof customers!=='undefined'){const active=new Set();for(const c of customers){active.add(c.id);let g=guests.get(c.id);if(!g){g=character([0xc17a93,0x6cb3a2,0xb49dd5,0xe7ad73][c.id%4]);scene.add(g);guests.set(c.id,g)}{const old=lastPositions.get(c.id);if(old){const dx=c.x-old.x,dz=c.y-old.y;if(Math.hypot(dx,dz)>.2)g.rotation.y=Math.atan2(dx/57,dz/48)}lastPositions.set(c.id,{x:c.x,y:c.y});g.position.set(wx(c.x),.04+Math.sin(t*.004+c.id)*.02,wz(c.y))}}for(const [id,g] of guests)if(!active.has(id)){scene.remove(g);guests.delete(id);lastPositions.delete(id)}}
-if(typeof s!=='undefined'){const n=Math.max(0,Math.min(16,s.display));fixtureProducts.forEach((row,i)=>row.forEach((pack,j)=>{pack.visible=i*4+j<n}))}
-renderer.render(scene,camera)}
-requestAnimationFrame(render);
-status.textContent='✓ PRIMERA PERSONA 3D ACTIVA';setTimeout(()=>status.remove(),3200);
-}catch(e){console.error('3D unavailable',e);status.textContent='⚠️ No se pudo activar el 3D: '+(e&&e.message?e.message:'error desconocido')+' · Se muestra la vista 2D';document.getElementById('note').textContent='⚠️ Error al cargar el motor 3D. Haz una captura del aviso para poder corregirlo.'}
+const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;
+const scene=new T.Scene();scene.background=new T.Color('#9ccce6');scene.fog=new T.Fog('#a9d2e5',20,40);
+const camera=new T.PerspectiveCamera(75,innerWidth/innerHeight,.07,65);camera.rotation.order='YXZ';
+scene.add(new T.HemisphereLight(0xf4faff,0x70849a,2.4));const sun=new T.DirectionalLight(0xffe5ba,2.3);sun.position.set(-5,12,3);scene.add(sun);
+const mat=(c,rough=.72)=>new T.MeshStandardMaterial({color:c,roughness:rough});const cream=mat(0xf3e4cc),white=mat(0xfaf6ea),wood=mat(0xb4774c),darkwood=mat(0x67462f),gold=mat(0xf3b84f,.4),blue=mat(0x4383a8),steel=mat(0x34495d),pink=mat(0xe98fa3),green=mat(0x4b9a7a),glass=new T.MeshStandardMaterial({color:0xa8e9fa,transparent:true,opacity:.35,metalness:.25,roughness:.1,side:T.DoubleSide});
+function cube(x,y,z,w,h,d,m,parent=scene){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);parent.add(o);return o}
+function cyl(x,y,z,r,h,m,parent=scene){const o=new T.Mesh(new T.CylinderGeometry(r,r,h,12),m);o.position.set(x,y,z);parent.add(o);return o}
+function label(text,x,y,z,w,h,color='#163953',face=0){const cv=document.createElement('canvas');cv.width=512;cv.height=128;const ctx=cv.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,512,128);ctx.fillStyle='#fff5d6';ctx.font='bold 47px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64,485);const tex=new T.CanvasTexture(cv);tex.colorSpace=T.SRGBColorSpace;const o=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex,side:T.DoubleSide}));o.position.set(x,y,z);o.rotation.y=face;scene.add(o)}
+// Actual 3D room with walls, ceiling beams and individual floor tiles
+cube(0,-.18,0,18,.35,20,cream);for(let x=-8.5;x<=8.5;x+=1)for(let z=-9.5;z<=9.5;z+=1){cube(x,.012,z,.98,.025,.98,((Math.round(x+z)&1)?mat(0xd8e6e8):mat(0xc6d9dd)))}
+cube(-9,2.5,0,.26,5,20,white);cube(9,2.5,0,.26,5,20,white);cube(0,2.5,-10,18,5,.26,white);
+cube(0,4.7,-9.8,18,.32,.35,blue);cube(-8.8,4.7,0,.35,.32,20,blue);cube(8.8,4.7,0,.35,.32,20,blue);
+for(let z of [-7,-1,5]){cube(0,4.64,z,15,.12,.24,white);for(let x of [-6,0,6])cube(x,4.58,z,2.4,.06,.48,mat(0xfff6d9,.2))}
+cube(0,.012,8.5,4,.035,2.4,blue);label('CARD SHOP DELUXE',0,3.65,-9.8,7.8,1.1);
+for(let x of [-7.5,7.5]){cube(x,1.65,-9.72,1.8,2.4,.1,pink);label('OFERTAS',x,2.25,-9.64,1.6,.4)}
+// Real shelving: posts, boards, dividers, back panels and packs
+const shelves=[];function shelf(x,z,rot=0){const g=new T.Group();g.position.set(x,0,z);g.rotation.y=rot;scene.add(g);cube(0,1.55,-.43,2.8,3.05,.11,steel,g);for(let side of [-1,1])cube(side*1.35,1.55,0,.12,3.1,.95,wood,g);for(let y of [.25,1.12,1.99,2.84])cube(0,y,0,2.8,.11,.95,wood,g);for(let y of [.7,1.58,2.45])for(let i=0;i<6;i++){const colors=[pink,blue,gold,green,mat(0x997ac9),mat(0xe8ac68)];cube(-1.05+i*.42,y,.12,.3,.52,.18,colors[i],g);cube(-1.05+i*.42,y+.12,.22,.22,.15,.018,white,g)}shelves.push({x,z,r:1.95})}
+shelf(-6.5,-5);shelf(-3,-5);shelf(3,-5);shelf(6.5,-5);shelf(-6.5,1);shelf(6.5,1);
+function table(x,z){cube(x,.94,z,3.2,.18,1.8,wood);for(let dx of [-1.35,1.35])for(let dz of [-.65,.65])cube(x+dx,.47,z+dz,.17,.94,.17,darkwood);cube(x,1.07,z,1.8,.07,.95,blue);for(let i=0;i<5;i++){cube(x-1.05+i*.5,1.18,z,.35,.18,.46,[pink,gold,green,blue,white][i])}}
+table(-2.3,2.5);table(2.3,2.5);
+cube(0,.62,-8.3,4.6,1.24,1.25,wood);cube(0,1.28,-8.3,4.8,.12,1.4,darkwood);cube(-1.2,1.48,-8.3,.7,.35,.2,steel);cube(1.1,1.46,-8.3,.7,.26,.65,blue);label('CAJA · VENDER',0,2.4,-9.75,3.8,.55);
+for(let x of [-8.1,8.1])for(let z of [-7,6]){cyl(x,.35,z,.42,.7,wood);cyl(x,.85,z,.16,.5,green);for(let a=0;a<5;a++){const o=new T.Mesh(new T.SphereGeometry(.34,8,7),green);o.position.set(x+Math.cos(a*1.26)*.25,1.2,z+Math.sin(a*1.26)*.25);scene.add(o)}}
+// Character customers with actual 3D body parts
+const customers=[];function customer(x,z,color){const g=new T.Group();g.position.set(x,0,z);scene.add(g);cube(0,1.22,0,.55,.83,.35,mat(color),g);const head=new T.Mesh(new T.SphereGeometry(.28,12,9),mat(0xf1c49b));head.position.y=1.94;g.add(head);for(let side of [-1,1]){cube(side*.37,1.25,0,.17,.7,.19,mat(color),g);cube(side*.15,.48,0,.2,.85,.24,steel,g)}customers.push({g,baseX:x,baseZ:z,phase:Math.random()*6})}customer(-4,4,0xb16bba);customer(3,-2,0x65ad93);customer(5,6,0xe8a05e);
+const saveKey='flowgorila-card-shop-fps-new-v1';let state={money:500,stock:12,sales:0,cards:[]};try{state={...state,...JSON.parse(localStorage.getItem(saveKey)||'{}')}}catch(e){}function save(){try{localStorage.setItem(saveKey,JSON.stringify(state))}catch(e){}}function ui(){document.getElementById('money').textContent='💰 '+state.money+' €';document.getElementById('stock').textContent='📦 '+state.stock+' sobres';document.getElementById('sales').textContent='🛍️ '+state.sales+' ventas';document.getElementById('collection').textContent='Cartas coleccionadas: '+state.cards.length+(state.cards.length?' · '+state.cards.slice(-3).join(', '):'')}ui();
+const player={x:0,z:7,yaw:Math.PI,pitch:0},joy={x:0,y:0};const keys=new Set();addEventListener('keydown',e=>{keys.add(e.key.toLowerCase());if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();if(e.key.toLowerCase()==='e')interact()});addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+const stick=document.getElementById('stick'),knob=document.getElementById('knob');let stickId=null;function stickMove(e){const r=stick.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),max=r.width*.32,ratio=Math.min(1,max/(Math.hypot(dx,dy)||1));joy.x=dx*ratio/max;joy.y=-dy*ratio/max;knob.style.transform='translate('+dx*ratio+'px,'+dy*ratio+'px)'}
+stick.addEventListener('pointerdown',e=>{e.preventDefault();stickId=e.pointerId;stick.setPointerCapture(stickId);stickMove(e)});stick.addEventListener('pointermove',e=>{if(e.pointerId===stickId)stickMove(e)});function stickEnd(e){if(e.pointerId!==stickId)return;stickId=null;joy.x=joy.y=0;knob.style.transform='translate(0,0)'}stick.addEventListener('pointerup',stickEnd);stick.addEventListener('pointercancel',stickEnd);
+let lookId=null,lx=0,ly=0;canvas.addEventListener('pointerdown',e=>{lookId=e.pointerId;lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(lookId)});canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;player.yaw-=(e.clientX-lx)*.005;player.pitch=Math.max(-1.2,Math.min(1.2,player.pitch-(e.clientY-ly)*.004));lx=e.clientX;ly=e.clientY});canvas.addEventListener('pointerup',()=>lookId=null);canvas.addEventListener('pointercancel',()=>lookId=null);
+const modal=document.getElementById('shop');document.getElementById('pause').onclick=()=>modal.classList.add('open');document.getElementById('close').onclick=()=>modal.classList.remove('open');
+document.getElementById('buy').onclick=()=>{if(state.money<60)return notify('Necesitas 60 €');state.money-=60;state.stock+=6;save();ui();notify('📦 Compraste 6 sobres')};
+document.getElementById('openPack').onclick=()=>{if(!state.stock)return notify('No quedan sobres');state.stock--;const names=['Dragón Solar','Gato Cósmico','Fénix Azul','Guardián Rubí','Lobo Lunar','Reina Prisma'];const name=names[Math.floor(Math.random()*names.length)];state.cards.push(name);save();ui();notify('✨ Nueva carta: '+name)};
+function interact(){if(modal.classList.contains('open'))return;const dCounter=Math.hypot(player.x,player.z+8.3),dShelf=Math.min(...shelves.map(s=>Math.hypot(player.x-s.x,player.z-s.z)));if(dCounter<3.3){if(state.stock<1)return notify('Compra sobres desde ☰ TIENDA');state.stock--;state.money+=25;state.sales++;save();ui();notify('💰 Vendiste un sobre por 25 €')}else if(dShelf<2.6){modal.classList.add('open');notify('📦 Estantería de sobres')}else notify('Acércate a una estantería o al mostrador de caja')}
+document.getElementById('use').onclick=interact;
+function blocked(x,z){if(x< -8.55||x>8.55||z< -9.3||z>9.45)return true;for(const s of shelves){if(Math.abs(x-s.x)<1.85&&Math.abs(z-s.z)<1.05)return true}for(const tx of [-2.3,2.3])if(Math.abs(x-tx)<2&&Math.abs(z-2.5)<1.3)return true;if(Math.abs(x)<2.75&&z< -7.15)return true;return false}
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
+let prev=performance.now();function frame(t){requestAnimationFrame(frame);const dt=Math.min(.05,(t-prev)/1000);prev=t;if(!modal.classList.contains('open')){let sx=joy.x+(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0),fw=joy.y+(keys.has('w')||keys.has('arrowup')?1:0)-(keys.has('s')||keys.has('arrowdown')?1:0);const n=Math.hypot(sx,fw);if(n>.05){sx/=Math.max(1,n);fw/=Math.max(1,n);const dx=(Math.cos(player.yaw)*sx+Math.sin(player.yaw)*fw)*dt*3.7,dz=(-Math.sin(player.yaw)*sx+Math.cos(player.yaw)*fw)*dt*3.7;if(!blocked(player.x+dx,player.z))player.x+=dx;if(!blocked(player.x,player.z+dz))player.z+=dz}}camera.position.set(player.x,1.68,player.z);camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;for(const c of customers){c.g.position.x=c.baseX+Math.sin(t*.0005+c.phase)*.55;c.g.position.z=c.baseZ+Math.cos(t*.0004+c.phase)*.6;c.g.rotation.y=Math.sin(t*.0005+c.phase)*.5}renderer.render(scene,camera)}requestAnimationFrame(frame);notify('✓ Tienda 3D nueva · Usa el joystick para caminar');
+}catch(e){document.getElementById('errorText').textContent=e.message||String(e);error.style.display='flex';console.error(e)}
 })();
 </script></body></html>
