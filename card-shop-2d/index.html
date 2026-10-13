@@ -186,33 +186,79 @@ for(const x of [-7.2,7.2])for(const z of [-7.6,7.6]){
  const leaves=new THREE.Mesh(new THREE.SphereGeometry(.52,12,10),M.green);leaves.position.set(x,1.07,z);world.add(leaves);
 }
 // Customers are 3D, not sprites.
+// Animated humanoid customers with articulated arms, legs, natural proportions and shop routines.
 const people=[];
-function person(x,z,style){
- const g=new THREE.Group();g.position.set(x,0,z);world.add(g);
- const skin=material(style.skin),cloth=material(style.shirt),pants=material(style.pants),hair=material(style.hair);
- const scale=style.age==='older'?.94:style.age==='teen'?.87:1;g.scale.setScalar(scale);
- const body=new THREE.Mesh(new THREE.CylinderGeometry(style.feminine?.28:.32,.3,.9,10),cloth);body.position.y=1.16;g.add(body);
- const neck=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.18,10),skin);neck.position.y=1.68;g.add(neck);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.29,20,16),skin);head.position.y=1.95;g.add(head);
- const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.3,20,12,0,Math.PI*2,0,Math.PI*.46),hair);hairCap.position.y=2.04;g.add(hairCap);
- if(style.longHair){for(const side of [-1,1])block(g,side*.24,1.77,-.05,.16,.55,.27,hair)}
- for(const side of [-1,1]){
- const arm=new THREE.Mesh(new THREE.CylinderGeometry(.105,.085,.76,9),cloth);arm.position.set(side*.39,1.22,0);arm.rotation.z=side*.12;g.add(arm);
- const hand=new THREE.Mesh(new THREE.SphereGeometry(.1,8,7),skin);hand.position.set(side*.43,.83,0);g.add(hand);
- block(g,side*.16,.47,0,.22,.89,.28,pants);
- block(g,side*.16,.065,.11,.25,.15,.39,M.dark);
- const eye=new THREE.Mesh(new THREE.SphereGeometry(.032,8,8),M.dark);eye.position.set(side*.11,1.97,.263);g.add(eye)
- }
- if(style.age==='older'){const glasses=material(0x6e7585);for(const side of [-1,1]){const rim=new THREE.Mesh(new THREE.TorusGeometry(.092,.013,6,12),glasses);rim.position.set(side*.12,1.97,.29);g.add(rim)}block(g,0,1.97,.29,.11,.016,.025,glasses)}
- if(style.bag){block(g,.37,.88,-.23,.36,.5,.16,M.gold)}
- people.push({g,x,z,phase:people.length*2.1});
+const skinMat=hex=>new THREE.MeshStandardMaterial({color:hex,roughness:.87});
+function capsule(parent,r,length,x,y,z,mat){
+ const o=new THREE.Mesh(new THREE.CapsuleGeometry(r,length,5,10),mat);o.position.set(x,y,z);parent.add(o);return o
 }
-person(-4.2,5.4,{age:'teen',feminine:true,longHair:true,skin:0xe2ad89,shirt:0xb47ac6,pants:0x526c9c,hair:0x3c2d35,bag:true});
-person(4.8,5.1,{age:'adult',feminine:false,skin:0x9f674e,shirt:0x57a99b,pants:0x344a6b,hair:0x242632});
-person(.4,-1.7,{age:'older',feminine:false,skin:0xf0c7a4,shirt:0xc58a58,pants:0x545c68,hair:0xd7d6cf});
-person(-.9,5.9,{age:'teen',feminine:false,skin:0xc58b65,shirt:0x477bc4,pants:0x333c62,hair:0x4a332a});
-person(6.2,3.7,{age:'adult',feminine:true,longHair:true,skin:0xf0c49f,shirt:0xd96e93,pants:0x576b84,hair:0x9b5a2d});
-person(-6.4,4.2,{age:'older',feminine:true,longHair:true,skin:0xb17b5f,shirt:0x779b8a,pants:0x59616d,hair:0xb5b5b9});
+function person(x,z,style){
+ const root=new THREE.Group();root.position.set(x,0,z);world.add(root);
+ const skin=skinMat(style.skin),cloth=material(style.shirt),trousers=material(style.pants),hair=material(style.hair),shoe=material(style.shoes||0x283747);
+ const height=style.age==='teen'?.87:style.age==='older'?.95:1;
+ root.scale.setScalar(height);
+ const torso=new THREE.Group();torso.position.y=1.09;root.add(torso);
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(style.feminine?.245:.285,.31,.73,12),cloth);body.position.y=.13;torso.add(body);
+ const shoulders=new THREE.Mesh(new THREE.SphereGeometry(.33,12,10),cloth);shoulders.scale.set(1,.48,.63);shoulders.position.y=.45;torso.add(shoulders);
+ capsule(torso,.09,.09,0,.57,0,skin);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.25,18,14),skin);head.scale.set(.91,1.12,.88);head.position.set(0,.85,.015);torso.add(head);
+ // Face with eyebrows, nose, ears, eyes and subtle mouth
+ for(const side of [-1,1]){
+  const ear=new THREE.Mesh(new THREE.SphereGeometry(.075,8,8),skin);ear.position.set(side*.245,.83,.01);torso.add(ear);
+  const eye=new THREE.Mesh(new THREE.SphereGeometry(.023,8,7),material(0x20252c));eye.position.set(side*.091,.885,.226);torso.add(eye);
+  const brow=block(torso,side*.091,.949,.22,.085,.018,.02,hair);
+ }
+ capsule(torso,.035,.03,0,.79,.234,skin);
+ block(torso,0,.698,.231,.105,.013,.016,material(0x8b4d51));
+ const hairTop=new THREE.Mesh(new THREE.SphereGeometry(.258,16,12,0,Math.PI*2,0,Math.PI*.46),hair);hairTop.position.set(0,.95,0);torso.add(hairTop);
+ if(style.longHair)for(const side of [-1,1])capsule(torso,.105,.4,side*.21,.65,-.065,hair);
+ if(style.age==='older'){const frame=material(0x646e78);for(const side of [-1,1]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.082,.012,6,14),frame);ring.position.set(side*.102,.88,.242);torso.add(ring)}block(torso,0,.88,.244,.09,.014,.014,frame)}
+ const arms=[],legs=[];
+ for(const side of [-1,1]){
+  const shoulder=new THREE.Group();shoulder.position.set(side*.31,.41,0);torso.add(shoulder);
+  capsule(shoulder,.103,.34,side*.02,-.25,0,cloth);
+  const elbow=new THREE.Mesh(new THREE.SphereGeometry(.092,10,8),cloth);elbow.position.y=-.46;shoulder.add(elbow);
+  capsule(shoulder,.075,.26,0,-.62,.025,skin);
+  const hand=new THREE.Mesh(new THREE.SphereGeometry(.085,10,8),skin);hand.position.set(0,-.83,.025);shoulder.add(hand);
+  arms.push({joint:shoulder,side});
+  const hip=new THREE.Group();hip.position.set(side*.16,.81,0);root.add(hip);
+  capsule(hip,.115,.38,0,-.28,0,trousers);
+  capsule(hip,.085,.29,0,-.7,.01,trousers);
+  const foot=new THREE.Mesh(new THREE.BoxGeometry(.24,.15,.43),shoe);foot.position.set(0,-.92,.12);hip.add(foot);
+  legs.push({joint:hip,side});
+ }
+ if(style.bag){block(torso,.4,-.12,-.13,.35,.45,.17,M.gold);block(torso,.31,.24,-.16,.05,.7,.05,M.trim)}
+ const route=style.route||[{x,z},{x:x+.6,z:z+.4}];
+ people.push({root,torso,arms,legs,route,waypoint:1,phase:people.length*1.7,speed:style.age==='older'?.44:style.age==='teen'?.74:.61,walk:0,waiting:0});
+}
+person(-4.2,5.4,{age:'teen',feminine:true,longHair:true,skin:0xe2ad89,shirt:0xb47ac6,pants:0x526c9c,hair:0x3c2d35,bag:true,route:[{x:-4.2,z:5.4},{x:-4.2,z:3.6},{x:-5.1,z:2.3},{x:-4.3,z:4.8}]});
+person(4.8,5.1,{age:'adult',feminine:false,skin:0x9f674e,shirt:0x57a99b,pants:0x344a6b,hair:0x242632,route:[{x:4.8,z:5.1},{x:5.3,z:2.8},{x:3.5,z:4.4}]});
+person(.4,-1.7,{age:'older',feminine:false,skin:0xf0c7a4,shirt:0xc58a58,pants:0x545c68,hair:0xd7d6cf,route:[{x:.4,z:-1.7},{x:1.7,z:-1.5},{x:1.8,z:.1},{x:.4,z:-1.7}]});
+person(-.9,5.9,{age:'teen',feminine:false,skin:0xc58b65,shirt:0x477bc4,pants:0x333c62,hair:0x4a332a,route:[{x:-.9,z:5.9},{x:-.5,z:4.6},{x:.7,z:5.4}]});
+person(6.2,3.7,{age:'adult',feminine:true,longHair:true,skin:0xf0c49f,shirt:0xd96e93,pants:0x576b84,hair:0x9b5a2d,route:[{x:6.2,z:3.7},{x:6.5,z:6.2},{x:4.7,z:6.6}]});
+person(-6.4,4.2,{age:'older',feminine:true,longHair:true,skin:0xb17b5f,shirt:0x779b8a,pants:0x59616d,hair:0xb5b5b9,route:[{x:-6.4,z:4.2},{x:-6.6,z:6.5},{x:-4.8,z:6.7}]});
+function updatePeople(dt,now){
+ for(const p of people){
+  const target=p.route[p.waypoint];let dx=target.x-p.root.position.x,dz=target.z-p.root.position.z;
+  const dist=Math.hypot(dx,dz);let moving=false;
+  if(p.waiting>0)p.waiting-=dt;
+  else if(dist<.17){p.waypoint=(p.waypoint+1)%p.route.length;p.waiting=1.2+(p.phase%1.5)}
+  else {
+   const step=Math.min(dist,p.speed*dt);
+   const nx=p.root.position.x+dx/dist*step,nz=p.root.position.z+dz/dist*step;
+   // Customers use designated open aisles and do not teleport or follow the player.
+   p.root.position.x=nx;p.root.position.z=nz;
+   const angle=Math.atan2(dx,dz);
+   let turn=(angle-p.root.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI;
+   p.root.rotation.y+=turn*Math.min(1,dt*5);moving=true;
+  }
+  if(moving)p.walk+=dt*8;const stride=moving?Math.sin(p.walk)*.48:0;
+  p.legs[0].joint.rotation.x=stride;p.legs[1].joint.rotation.x=-stride;
+  p.arms[0].joint.rotation.x=-stride*.75;p.arms[1].joint.rotation.x=stride*.75;
+  p.torso.rotation.z=moving?Math.sin(p.walk)*.018:0;
+  p.torso.position.y=1.09+(moving?Math.abs(Math.sin(p.walk))*.026:Math.sin(now*.001+p.phase)*.008);
+ }
+}
 // Fresh, isolated save slot. No reference to previous game state.
 const SAVE='flowgorila-new-fps-shop-2026-v1';
 let data={cash:350,stock:10,sales:0,collection:[]};
@@ -272,7 +318,7 @@ function animate(now){
  }}
  camera.position.set(player.x,1.65,player.z);
  camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;
- for(const p of people){p.g.position.x=p.x+Math.sin(now*.00045+p.phase)*.3;p.g.rotation.y=Math.sin(now*.0006+p.phase)*.4}
+ updatePeople(dt,now);
  renderer.render(world,camera)
 }
 requestAnimationFrame(animate);
