@@ -1,49 +1,151 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#102338"><title>Card Shop Deluxe — Nueva tienda 3D | FlowGorila</title><style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#102338;color:white;font:14px system-ui,-apple-system,sans-serif;touch-action:none}#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}#hud{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none;z-index:4}.brand,.stats{background:#10243cdd;border:1px solid #b6d5ff55;border-radius:14px;padding:9px 12px;backdrop-filter:blur(10px);box-shadow:0 5px 20px #0005}.brand b{display:block;font-size:16px;color:#ffe49d}.brand small{color:#b9d9f4}.stats{text-align:right;font-weight:800}.stats span{display:block;color:#ffe49d}#message{position:fixed;left:50%;top:22%;transform:translateX(-50%);z-index:7;background:#11263ae9;border:1px solid #ffe09e99;padding:12px 17px;border-radius:13px;text-align:center;max-width:min(90vw,390px);pointer-events:none;transition:opacity .3s}#reticle{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;color:#fff9;text-shadow:0 2px 6px #000;pointer-events:none}#mobile{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));z-index:5;display:flex;align-items:end;justify-content:space-between;padding:0 18px;pointer-events:none}#stick{width:132px;height:132px;border:2px solid #b3d8ff99;border-radius:50%;background:#1c4b7188;display:grid;place-items:center;pointer-events:auto;touch-action:none;backdrop-filter:blur(5px)}#knob{width:58px;height:58px;border-radius:50%;background:linear-gradient(145deg,#9ce0ff,#4087bd);border:3px solid #e5f8ff;box-shadow:0 4px 14px #0008;pointer-events:none}#right{display:flex;flex-direction:column;gap:8px;align-items:end;pointer-events:auto}button{border:1px solid #ffdc9d;background:#bd7939;color:#fff;border-radius:15px;font-weight:850;font-size:14px;padding:14px 18px;box-shadow:0 4px 16px #0007}#hint{font-size:12px;color:#fff;background:#152b43b9;padding:7px 10px;border-radius:10px}#error{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;text-align:center;padding:24px;background:#102338}#error div{max-width:450px;line-height:1.6}#error a{color:#ffdf91}#shop{position:fixed;z-index:10;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:#081827d9;touch-action:auto}#shop.open{display:flex}#shopPanel{width:min(420px,100%);background:#1b344d;border:1px solid #99cbef;border-radius:20px;padding:20px;box-shadow:0 15px 40px #000a}#shopPanel h2{margin:0 0 10px;color:#ffdf95}#shopPanel p{line-height:1.5}#shopPanel button{margin:5px}#shopPanel .secondary{background:#365978;border-color:#85bce2}#shopPanel .line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #ffffff2b}@media(max-width:550px){#stick{width:112px;height:112px}#knob{width:50px;height:50px}#hud{left:8px;right:8px}.brand b{font-size:14px}.brand,.stats{padding:8px}#hint{max-width:130px;text-align:right}button{padding:13px 15px}}
-</style></head><body><canvas id="game" aria-label="Simulador de tienda de cartas en primera persona y tres dimensiones"></canvas><div id="hud"><div class="brand"><b>🃏 CARD SHOP DELUXE</b><small>NUEVO JUEGO · PRIMERA PERSONA 3D</small></div><div class="stats"><span id="money">💰 500 €</span><div id="stock">📦 12 sobres</div><div id="sales">🛍️ 0 ventas</div></div></div><div id="reticle">＋</div><div id="message">Cargando tu nueva tienda 3D…</div><div id="mobile"><div id="stick"><div id="knob"></div></div><div id="right"><div id="hint">Desliza por la pantalla para mirar</div><button id="use">✋ INTERACTUAR</button><button id="pause" style="background:#365978;border-color:#85bce2">☰ TIENDA</button></div></div><div id="shop"><div id="shopPanel"><h2>🏪 Gestión de tienda</h2><p>Recorre el local en primera persona. Acércate a una estantería para reponer sobres o al mostrador para vender.</p><div class="line"><span>Comprar 6 sobres (60 €)</span><button id="buy">Comprar</button></div><div class="line"><span>Abrir un sobre (colección)</span><button id="openPack" class="secondary">Abrir</button></div><div id="collection" style="margin:10px 0;color:#ffde95"></div><button id="close" class="secondary">Volver a jugar</button></div></div><div id="error"><div><h2>No se pudo iniciar el motor 3D</h2><p id="errorText"></p><p>Abre esta página en Safari o Chrome actualizado con WebGL habilitado.</p></div></div>
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#101a2b">
+<title>Card Shop 3D | FlowGorila</title>
+<style>
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#101a2b;color:white;font-family:system-ui,-apple-system,sans-serif;touch-action:none}canvas{display:block;width:100%;height:100%;touch-action:none}#hud{position:fixed;z-index:3;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}.pane{background:#11243bdc;border:1px solid #b4d8ef70;border-radius:13px;padding:10px 13px;box-shadow:0 4px 16px #0005;backdrop-filter:blur(7px)}.pane b{display:block;color:#ffe4a3}.pane small{color:#c0d8ea}#balance{text-align:right;line-height:1.6;font-weight:700}#aim{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;opacity:.85;pointer-events:none}#toast{position:fixed;top:25%;left:50%;transform:translateX(-50%);background:#0d2138e8;border:1px solid #e7c581;border-radius:13px;padding:11px 15px;max-width:90vw;text-align:center;z-index:4;pointer-events:none;transition:opacity .3s}#controls{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));z-index:4;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px;pointer-events:none}#joystick{height:118px;width:118px;border-radius:50%;border:2px solid #b4ddffad;background:#1745689c;display:grid;place-items:center;pointer-events:auto;touch-action:none}#thumb{height:53px;width:53px;border-radius:50%;background:linear-gradient(135deg,#b1e8ff,#3777b0);border:3px solid white;pointer-events:none;box-shadow:0 3px 12px #0009}#actions{display:flex;flex-direction:column;gap:9px;pointer-events:auto}button{padding:13px 15px;border-radius:12px;border:1px solid #ffe4a3;background:#b67736;color:white;font-size:14px;font-weight:800;box-shadow:0 4px 15px #0007}button.alt{background:#2d526f;border-color:#94c8e7}#panel{display:none;position:fixed;inset:0;z-index:8;background:#071524e6;align-items:center;justify-content:center;padding:18px;touch-action:auto}#panel.open{display:flex}#panelInner{width:min(430px,100%);background:#203b53;border:1px solid #91c6e8;border-radius:18px;padding:20px;line-height:1.5}#panelInner h2{margin:0;color:#ffe2a1}#panelInner button{margin:5px 5px 5px 0}#fatal{display:none;position:fixed;inset:0;background:#111c2e;z-index:20;padding:30px;align-items:center;justify-content:center;text-align:center;line-height:1.6}#fatal.show{display:flex}@media(max-width:420px){#joystick{width:105px;height:105px}#thumb{width:48px;height:48px}.pane{padding:8px 10px;font-size:12px}button{padding:12px}}
+</style></head><body>
+<canvas id="scene" aria-label="Tienda tridimensional desde los ojos del jugador"></canvas>
+<div id="hud"><div class="pane"><b>🃏 CARD SHOP 3D</b><small>PRIMERA PERSONA · NUEVO JUEGO</small></div><div class="pane" id="balance"></div></div>
+<div id="aim">＋</div><div id="toast">Preparando el mundo 3D…</div>
+<div id="controls"><div id="joystick" aria-label="Joystick para caminar"><div id="thumb"></div></div><div id="actions"><button id="interact">✋ USAR</button><button id="menu" class="alt">☰ GESTIÓN</button></div></div>
+<div id="panel"><div id="panelInner"><h2>🏪 Mi tienda</h2><p>Camina por los pasillos, mira las estanterías y acércate al mostrador para vender sobres.</p><p id="inventory"></p><button id="restock">📦 Comprar 5 sobres · 50 €</button><button id="open">✨ Abrir un sobre</button><p id="cards"></p><button id="close" class="alt">Volver a la tienda</button></div></div>
+<div id="fatal"><div><h2>El 3D no ha podido iniciarse</h2><p id="reason"></p><p>Prueba a abrir la página directamente en Safari actualizado. No se mostrará un juego 2D en su lugar.</p></div></div>
 <script>
-(async()=>{
-const canvas=document.getElementById('game'),msg=document.getElementById('message'),error=document.getElementById('error');
-function notify(t){msg.textContent=t;msg.style.opacity=1;clearTimeout(notify.timer);notify.timer=setTimeout(()=>msg.style.opacity=0,3000)}
-let T;try{try{T=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}catch(e){T=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}}catch(e){document.getElementById('errorText').textContent='No se pudo descargar Three.js: '+e.message;error.style.display='flex';return}
+(async function(){
+'use strict';
+const byId=id=>document.getElementById(id);
+const toast=byId('toast');let toastTimer;
+function notice(s){toast.textContent=s;toast.style.opacity='1';clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.style.opacity='0',3300)}
+function fail(e){byId('reason').textContent=String(e?.message||e);byId('fatal').classList.add('show');console.error('Card Shop 3D:',e)}
 try{
-const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;
-const scene=new T.Scene();scene.background=new T.Color('#9ccce6');scene.fog=new T.Fog('#a9d2e5',20,40);
-const camera=new T.PerspectiveCamera(75,innerWidth/innerHeight,.07,65);camera.rotation.order='YXZ';
-scene.add(new T.HemisphereLight(0xf4faff,0x70849a,2.4));const sun=new T.DirectionalLight(0xffe5ba,2.3);sun.position.set(-5,12,3);scene.add(sun);
-const mat=(c,rough=.72)=>new T.MeshStandardMaterial({color:c,roughness:rough});const cream=mat(0xf3e4cc),white=mat(0xfaf6ea),wood=mat(0xb4774c),darkwood=mat(0x67462f),gold=mat(0xf3b84f,.4),blue=mat(0x4383a8),steel=mat(0x34495d),pink=mat(0xe98fa3),green=mat(0x4b9a7a),glass=new T.MeshStandardMaterial({color:0xa8e9fa,transparent:true,opacity:.35,metalness:.25,roughness:.1,side:T.DoubleSide});
-function cube(x,y,z,w,h,d,m,parent=scene){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);parent.add(o);return o}
-function cyl(x,y,z,r,h,m,parent=scene){const o=new T.Mesh(new T.CylinderGeometry(r,r,h,12),m);o.position.set(x,y,z);parent.add(o);return o}
-function label(text,x,y,z,w,h,color='#163953',face=0){const cv=document.createElement('canvas');cv.width=512;cv.height=128;const ctx=cv.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,512,128);ctx.fillStyle='#fff5d6';ctx.font='bold 47px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64,485);const tex=new T.CanvasTexture(cv);tex.colorSpace=T.SRGBColorSpace;const o=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex,side:T.DoubleSide}));o.position.set(x,y,z);o.rotation.y=face;scene.add(o)}
-// Actual 3D room with walls, ceiling beams and individual floor tiles
-cube(0,-.18,0,18,.35,20,cream);for(let x=-8.5;x<=8.5;x+=1)for(let z=-9.5;z<=9.5;z+=1){cube(x,.012,z,.98,.025,.98,((Math.round(x+z)&1)?mat(0xd8e6e8):mat(0xc6d9dd)))}
-cube(-9,2.5,0,.26,5,20,white);cube(9,2.5,0,.26,5,20,white);cube(0,2.5,-10,18,5,.26,white);
-cube(0,4.7,-9.8,18,.32,.35,blue);cube(-8.8,4.7,0,.35,.32,20,blue);cube(8.8,4.7,0,.35,.32,20,blue);
-for(let z of [-7,-1,5]){cube(0,4.64,z,15,.12,.24,white);for(let x of [-6,0,6])cube(x,4.58,z,2.4,.06,.48,mat(0xfff6d9,.2))}
-cube(0,.012,8.5,4,.035,2.4,blue);label('CARD SHOP DELUXE',0,3.65,-9.8,7.8,1.1);
-for(let x of [-7.5,7.5]){cube(x,1.65,-9.72,1.8,2.4,.1,pink);label('OFERTAS',x,2.25,-9.64,1.6,.4)}
-// Real shelving: posts, boards, dividers, back panels and packs
-const shelves=[];function shelf(x,z,rot=0){const g=new T.Group();g.position.set(x,0,z);g.rotation.y=rot;scene.add(g);cube(0,1.55,-.43,2.8,3.05,.11,steel,g);for(let side of [-1,1])cube(side*1.35,1.55,0,.12,3.1,.95,wood,g);for(let y of [.25,1.12,1.99,2.84])cube(0,y,0,2.8,.11,.95,wood,g);for(let y of [.7,1.58,2.45])for(let i=0;i<6;i++){const colors=[pink,blue,gold,green,mat(0x997ac9),mat(0xe8ac68)];cube(-1.05+i*.42,y,.12,.3,.52,.18,colors[i],g);cube(-1.05+i*.42,y+.12,.22,.22,.15,.018,white,g)}shelves.push({x,z,r:1.95})}
-shelf(-6.5,-5);shelf(-3,-5);shelf(3,-5);shelf(6.5,-5);shelf(-6.5,1);shelf(6.5,1);
-function table(x,z){cube(x,.94,z,3.2,.18,1.8,wood);for(let dx of [-1.35,1.35])for(let dz of [-.65,.65])cube(x+dx,.47,z+dz,.17,.94,.17,darkwood);cube(x,1.07,z,1.8,.07,.95,blue);for(let i=0;i<5;i++){cube(x-1.05+i*.5,1.18,z,.35,.18,.46,[pink,gold,green,blue,white][i])}}
-table(-2.3,2.5);table(2.3,2.5);
-cube(0,.62,-8.3,4.6,1.24,1.25,wood);cube(0,1.28,-8.3,4.8,.12,1.4,darkwood);cube(-1.2,1.48,-8.3,.7,.35,.2,steel);cube(1.1,1.46,-8.3,.7,.26,.65,blue);label('CAJA · VENDER',0,2.4,-9.75,3.8,.55);
-for(let x of [-8.1,8.1])for(let z of [-7,6]){cyl(x,.35,z,.42,.7,wood);cyl(x,.85,z,.16,.5,green);for(let a=0;a<5;a++){const o=new T.Mesh(new T.SphereGeometry(.34,8,7),green);o.position.set(x+Math.cos(a*1.26)*.25,1.2,z+Math.sin(a*1.26)*.25);scene.add(o)}}
-// Character customers with actual 3D body parts
-const customers=[];function customer(x,z,color){const g=new T.Group();g.position.set(x,0,z);scene.add(g);cube(0,1.22,0,.55,.83,.35,mat(color),g);const head=new T.Mesh(new T.SphereGeometry(.28,12,9),mat(0xf1c49b));head.position.y=1.94;g.add(head);for(let side of [-1,1]){cube(side*.37,1.25,0,.17,.7,.19,mat(color),g);cube(side*.15,.48,0,.2,.85,.24,steel,g)}customers.push({g,baseX:x,baseZ:z,phase:Math.random()*6})}customer(-4,4,0xb16bba);customer(3,-2,0x65ad93);customer(5,6,0xe8a05e);
-const saveKey='flowgorila-card-shop-fps-new-v1';let state={money:500,stock:12,sales:0,cards:[]};try{state={...state,...JSON.parse(localStorage.getItem(saveKey)||'{}')}}catch(e){}function save(){try{localStorage.setItem(saveKey,JSON.stringify(state))}catch(e){}}function ui(){document.getElementById('money').textContent='💰 '+state.money+' €';document.getElementById('stock').textContent='📦 '+state.stock+' sobres';document.getElementById('sales').textContent='🛍️ '+state.sales+' ventas';document.getElementById('collection').textContent='Cartas coleccionadas: '+state.cards.length+(state.cards.length?' · '+state.cards.slice(-3).join(', '):'')}ui();
-const player={x:0,z:7,yaw:0,pitch:0},joy={x:0,y:0};const keys=new Set();addEventListener('keydown',e=>{keys.add(e.key.toLowerCase());if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();if(e.key.toLowerCase()==='e')interact()});addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
-const stick=document.getElementById('stick'),knob=document.getElementById('knob');let stickId=null;function stickMove(e){const r=stick.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),max=r.width*.32,ratio=Math.min(1,max/(Math.hypot(dx,dy)||1));joy.x=dx*ratio/max;joy.y=-dy*ratio/max;knob.style.transform='translate('+dx*ratio+'px,'+dy*ratio+'px)'}
-stick.addEventListener('pointerdown',e=>{e.preventDefault();stickId=e.pointerId;stick.setPointerCapture(stickId);stickMove(e)});stick.addEventListener('pointermove',e=>{if(e.pointerId===stickId)stickMove(e)});function stickEnd(e){if(e.pointerId!==stickId)return;stickId=null;joy.x=joy.y=0;knob.style.transform='translate(0,0)'}stick.addEventListener('pointerup',stickEnd);stick.addEventListener('pointercancel',stickEnd);
-let lookId=null,lx=0,ly=0;canvas.addEventListener('pointerdown',e=>{lookId=e.pointerId;lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(lookId)});canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;player.yaw-=(e.clientX-lx)*.005;player.pitch=Math.max(-1.2,Math.min(1.2,player.pitch-(e.clientY-ly)*.004));lx=e.clientX;ly=e.clientY});canvas.addEventListener('pointerup',()=>lookId=null);canvas.addEventListener('pointercancel',()=>lookId=null);
-const modal=document.getElementById('shop');document.getElementById('pause').onclick=()=>modal.classList.add('open');document.getElementById('close').onclick=()=>modal.classList.remove('open');
-document.getElementById('buy').onclick=()=>{if(state.money<60)return notify('Necesitas 60 €');state.money-=60;state.stock+=6;save();ui();notify('📦 Compraste 6 sobres')};
-document.getElementById('openPack').onclick=()=>{if(!state.stock)return notify('No quedan sobres');state.stock--;const names=['Dragón Solar','Gato Cósmico','Fénix Azul','Guardián Rubí','Lobo Lunar','Reina Prisma'];const name=names[Math.floor(Math.random()*names.length)];state.cards.push(name);save();ui();notify('✨ Nueva carta: '+name)};
-function interact(){if(modal.classList.contains('open'))return;const dCounter=Math.hypot(player.x,player.z+8.3),dShelf=Math.min(...shelves.map(s=>Math.hypot(player.x-s.x,player.z-s.z)));if(dCounter<3.3){if(state.stock<1)return notify('Compra sobres desde ☰ TIENDA');state.stock--;state.money+=25;state.sales++;save();ui();notify('💰 Vendiste un sobre por 25 €')}else if(dShelf<2.6){modal.classList.add('open');notify('📦 Estantería de sobres')}else notify('Acércate a una estantería o al mostrador de caja')}
-document.getElementById('use').onclick=interact;
-function blocked(x,z){if(x< -8.55||x>8.55||z< -9.3||z>9.45)return true;for(const s of shelves){if(Math.abs(x-s.x)<1.85&&Math.abs(z-s.z)<1.05)return true}for(const tx of [-2.3,2.3])if(Math.abs(x-tx)<2&&Math.abs(z-2.5)<1.3)return true;if(Math.abs(x)<2.75&&z< -7.15)return true;return false}
-function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
-let prev=performance.now();function frame(t){requestAnimationFrame(frame);const dt=Math.min(.05,(t-prev)/1000);prev=t;if(!modal.classList.contains('open')){let sx=joy.x+(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0),fw=joy.y+(keys.has('w')||keys.has('arrowup')?1:0)-(keys.has('s')||keys.has('arrowdown')?1:0);const n=Math.hypot(sx,fw);if(n>.05){sx/=Math.max(1,n);fw/=Math.max(1,n);const dx=(Math.cos(player.yaw)*sx-Math.sin(player.yaw)*fw)*dt*3.7,dz=(-Math.sin(player.yaw)*sx-Math.cos(player.yaw)*fw)*dt*3.7;if(!blocked(player.x+dx,player.z))player.x+=dx;if(!blocked(player.x,player.z+dz))player.z+=dz}}camera.position.set(player.x,1.68,player.z);camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;for(const c of customers){c.g.position.x=c.baseX+Math.sin(t*.0005+c.phase)*.55;c.g.position.z=c.baseZ+Math.cos(t*.0004+c.phase)*.6;c.g.rotation.y=Math.sin(t*.0005+c.phase)*.5}renderer.render(scene,camera)}requestAnimationFrame(frame);notify('✓ Tienda 3D nueva · Usa el joystick para caminar');
-}catch(e){document.getElementById('errorText').textContent=e.message||String(e);error.style.display='flex';console.error(e)}
+let THREE;
+try{THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}
+catch(_){THREE=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}
+const renderer=new THREE.WebGLRenderer({canvas:byId('scene'),antialias:true,powerPreference:'default'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+const world=new THREE.Scene();world.background=new THREE.Color(0xabcddd);
+const camera=new THREE.PerspectiveCamera(76,1,.08,80);camera.rotation.order='YXZ';
+world.add(new THREE.HemisphereLight(0xf4f8ff,0x7b8499,2.3));
+const sunlight=new THREE.DirectionalLight(0xffe6c2,2.1);sunlight.position.set(-4,9,6);world.add(sunlight);
+const material=color=>new THREE.MeshStandardMaterial({color,roughness:.73});
+const M={floor:material(0xc5dce2),tile:material(0xdce9e9),wall:material(0xf2e5d1),wood:material(0xb97e51),trim:material(0x76503b),frame:material(0x34516a),gold:material(0xf5c363),blue:material(0x548ab3),pink:material(0xe58da6),green:material(0x69a68d),purple:material(0x947bc7),white:material(0xfff7e7),dark:material(0x34404d),skin:material(0xe7b48c)};
+const block=(parent,x,y,z,w,h,d,mat)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);o.position.set(x,y,z);parent.add(o);return o};
+function sign(text,x,y,z,w,h){const c=document.createElement('canvas');c.width=512;c.height=128;const p=c.getContext('2d');p.fillStyle='#1d4968';p.fillRect(0,0,512,128);p.font='bold 45px sans-serif';p.fillStyle='#ffe5a4';p.textAlign='center';p.textBaseline='middle';p.fillText(text,256,64,495);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const o=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}));o.position.set(x,y,z);world.add(o)}
+// 3D interior: 16 x 18 metres, tiled floor, walls, ceiling lights.
+block(world,0,-.18,0,16,.35,18,M.floor);
+for(let x=-7.5;x<=7.5;x++)for(let z=-8.5;z<=8.5;z++)block(world,x,.015,z,.97,.02,.97,(x+z)%2?M.tile:M.floor);
+block(world,-8,2.6,0,.25,5.2,18,M.wall);block(world,8,2.6,0,.25,5.2,18,M.wall);
+block(world,0,2.6,-9,16,5.2,.25,M.wall);
+block(world,0,4.85,-8.8,16,.35,.3,M.blue);
+for(let z of [-6,0,6])for(let x of [-5,0,5])block(world,x,4.75,z,2.5,.09,.45,M.white);
+sign('CARD SHOP DELUXE',0,3.7,-8.84,7.2,1.05);
+sign('SOBRES Y CARTAS',-5.1,2.8,-8.83,3.5,.5);
+sign('CAJA',3.7,2.8,-8.83,2.5,.5);
+// Detailed free-standing shelving: frames, individual shelves and 3D booster packs.
+const furniture=[];
+function rack(x,z,angle=0){
+ const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=angle;world.add(g);
+ block(g,0,1.5,-.4,2.65,3,.11,M.frame);
+ for(const edge of [-1,1])block(g,edge*1.26,1.5,0,.13,3,.88,M.trim);
+ for(const y of [.22,1.12,2.02,2.91])block(g,0,y,0,2.65,.1,.9,M.wood);
+ for(const y of [.63,1.53,2.43])for(let i=0;i<6;i++){
+ const pack=block(g,-1.03+i*.4,y,.08,.29,.54,.17,[M.pink,M.blue,M.gold,M.green,M.purple,M.white][i]);
+ block(g,-1.03+i*.4,y+.1,.176,.22,.13,.013,M.white)
+ }
+ furniture.push({x,z,r:1.75,type:'rack'});
+}
+rack(-5.8,-4.9);rack(-2.7,-4.9);rack(.4,-4.9);rack(-5.8,.2);rack(5.6,-4.9);rack(5.6,.2);
+function table(x,z){
+ block(world,x,.92,z,2.9,.17,1.55,M.wood);
+ for(const dx of [-1.2,1.2])for(const dz of [-.58,.58])block(world,x+dx,.47,z+dz,.15,.9,.15,M.trim);
+ for(let i=0;i<4;i++)block(world,x-.95+i*.63,1.1,z,.42,.2,.6,[M.blue,M.pink,M.green,M.purple][i]);
+ furniture.push({x,z,r:1.85,type:'table'})
+}
+table(-2.5,2.4);table(2.5,2.4);
+block(world,3.6,.67,-7.8,3.4,1.34,1.35,M.wood);
+block(world,3.6,1.37,-7.8,3.55,.12,1.5,M.trim);
+block(world,4.4,1.6,-7.8,.6,.37,.25,M.dark);
+block(world,2.75,1.5,-7.8,.65,.22,.55,M.blue);
+furniture.push({x:3.6,z:-7.8,r:2.2,type:'counter'});
+for(const x of [-7.2,7.2])for(const z of [-7.6,7.6]){
+ block(world,x,.33,z,.65,.66,.65,M.trim);
+ const leaves=new THREE.Mesh(new THREE.SphereGeometry(.52,12,10),M.green);leaves.position.set(x,1.07,z);world.add(leaves);
+}
+// Customers are 3D, not sprites.
+const people=[];
+function person(x,z,color){
+ const g=new THREE.Group();g.position.set(x,0,z);world.add(g);
+ block(g,0,1.15,0,.55,.83,.35,material(color));
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.28,12,10),M.skin);head.position.y=1.87;g.add(head);
+ for(const side of [-1,1]){block(g,side*.36,1.15,0,.16,.66,.18,material(color));block(g,side*.15,.43,0,.19,.82,.23,M.dark)}
+ people.push({g,x,z,phase:people.length*2.1});
+}
+person(-4.2,5.4,0x9c83ca);person(4.8,5.1,0x68a59b);person(.4,-1.7,0xdb936d);
+// Fresh, isolated save slot. No reference to previous game state.
+const SAVE='flowgorila-new-fps-shop-2026-v1';
+let data={cash:350,stock:10,sales:0,collection:[]};
+try{const raw=JSON.parse(localStorage.getItem(SAVE)||'null');if(raw&&typeof raw.cash==='number'&&Array.isArray(raw.collection))data={...data,...raw}}catch(_){}
+function persist(){try{localStorage.setItem(SAVE,JSON.stringify(data))}catch(_){}}
+function refresh(){byId('balance').textContent='💰 '+data.cash+' €  ·  📦 '+data.stock+' sobres  ·  🛍️ '+data.sales+' ventas';byId('inventory').textContent='Saldo: '+data.cash+' € · Sobres: '+data.stock;byId('cards').textContent='Colección: '+data.collection.length+' cartas'}
+refresh();
+const modal=byId('panel');
+byId('menu').onclick=()=>{refresh();modal.classList.add('open')};
+byId('close').onclick=()=>modal.classList.remove('open');
+byId('restock').onclick=()=>{if(data.cash<50)return notice('No tienes 50 €');data.cash-=50;data.stock+=5;persist();refresh();notice('📦 Compraste 5 sobres')};
+byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const names=['Dragón Dorado','Fénix','Lobo Celeste','Gato Mágico','Reina Prisma'];const name=names[Math.floor(Math.random()*names.length)];data.collection.push(name);persist();refresh();notice('✨ Carta conseguida: '+name)};
+const player={x:0,z:7.2,yaw:0,pitch:0},move={x:0,y:0};
+function interact(){
+ if(modal.classList.contains('open'))return;
+ const counter=Math.hypot(player.x-3.6,player.z+7.8);
+ const nearRack=furniture.some(f=>f.type==='rack'&&Math.hypot(player.x-f.x,player.z-f.z)<2.7);
+ if(counter<3.2){if(!data.stock)return notice('Compra sobres en Gestión');data.stock--;data.cash+=22;data.sales++;persist();refresh();notice('🛍️ Venta realizada: +22 €')}
+ else if(nearRack){modal.classList.add('open');refresh()}
+ else notice('Acércate a una estantería o al mostrador')}
+byId('interact').onclick=interact;
+const joy=byId('joystick'),thumb=byId('thumb');let jid=null;
+function updateJoy(e){const r=joy.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2,max=r.width*.31,k=Math.min(1,max/(Math.hypot(dx,dy)||1));move.x=dx*k/max;move.y=-dy*k/max;thumb.style.transform='translate('+dx*k+'px,'+dy*k+'px)'}
+joy.addEventListener('pointerdown',e=>{e.preventDefault();jid=e.pointerId;joy.setPointerCapture(jid);updateJoy(e)});
+joy.addEventListener('pointermove',e=>{if(jid===e.pointerId)updateJoy(e)});
+function endJoy(e){if(e.pointerId!==jid)return;jid=null;move.x=move.y=0;thumb.style.transform='translate(0,0)'}
+joy.addEventListener('pointerup',endJoy);joy.addEventListener('pointercancel',endJoy);
+let lookId=null,px=0,py=0;
+const canvas=byId('scene');
+canvas.addEventListener('pointerdown',e=>{lookId=e.pointerId;px=e.clientX;py=e.clientY;canvas.setPointerCapture(lookId)});
+canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;player.yaw-=(e.clientX-px)*.006;player.pitch=Math.max(-1.1,Math.min(1.1,player.pitch-(e.clientY-py)*.004));px=e.clientX;py=e.clientY});
+canvas.addEventListener('pointerup',()=>lookId=null);canvas.addEventListener('pointercancel',()=>lookId=null);
+const keys=new Set();
+window.addEventListener('keydown',e=>{keys.add(e.key.toLowerCase());if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();if(e.key.toLowerCase()==='e')interact()});
+window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+function collision(x,z){
+ if(x< -7.6||x>7.6||z< -8.55||z>8.6)return true;
+ for(const f of furniture){if(Math.hypot(x-f.x,z-f.z)<f.r)return true}
+ return false
+}
+function resize(){const w=Math.max(1,innerWidth),h=Math.max(1,innerHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+window.addEventListener('resize',resize);resize();
+let previous=performance.now();
+function animate(now){
+ requestAnimationFrame(animate);
+ const dt=Math.min(.05,(now-previous)/1000);previous=now;
+ if(!modal.classList.contains('open')){
+ let side=move.x+Number(keys.has('d')||keys.has('arrowright'))-Number(keys.has('a')||keys.has('arrowleft'));
+ let forward=move.y+Number(keys.has('w')||keys.has('arrowup'))-Number(keys.has('s')||keys.has('arrowdown'));
+ const length=Math.hypot(side,forward);
+ if(length>.07){
+ side/=Math.max(1,length);forward/=Math.max(1,length);
+ const dx=(Math.cos(player.yaw)*side-Math.sin(player.yaw)*forward)*dt*3.5;
+ const dz=(-Math.sin(player.yaw)*side-Math.cos(player.yaw)*forward)*dt*3.5;
+ if(!collision(player.x+dx,player.z))player.x+=dx;
+ if(!collision(player.x,player.z+dz))player.z+=dz
+ }}
+ camera.position.set(player.x,1.65,player.z);
+ camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;
+ for(const p of people){p.g.position.x=p.x+Math.sin(now*.00045+p.phase)*.3;p.g.rotation.y=Math.sin(now*.0006+p.phase)*.4}
+ renderer.render(world,camera)
+}
+requestAnimationFrame(animate);
+notice('✓ Primera persona 3D · Camina con el joystick y desliza para mirar');
+}catch(e){fail(e)}
 })();
 </script></body></html>
