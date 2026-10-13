@@ -2,13 +2,13 @@
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#101a2b">
 <title>Monster Card Shop 3D | FlowGorila</title>
 <style>
-*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#101a2b;color:white;font-family:system-ui,-apple-system,sans-serif;touch-action:none}canvas{display:block;width:100%;height:100%;touch-action:none}#hud{position:fixed;z-index:3;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}.pane{background:#12283ac7;border:1px solid #c7e5f85e;border-radius:13px;padding:10px 13px;box-shadow:0 4px 16px #0005;backdrop-filter:blur(7px)}.pane b{display:block;color:#ffe4a3}.pane small{color:#c0d8ea}#balance{text-align:right;line-height:1.6;font-weight:700}#aim{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;opacity:.85;pointer-events:none}#toast{position:fixed;top:25%;left:50%;transform:translateX(-50%);background:#0d2138e8;border:1px solid #e7c581;border-radius:13px;padding:11px 15px;max-width:90vw;text-align:center;z-index:4;pointer-events:none;transition:opacity .3s}#controls{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));z-index:4;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px;pointer-events:none}#joystick{height:118px;width:118px;border-radius:50%;border:2px solid #b4ddffad;background:#1745689c;display:grid;place-items:center;pointer-events:auto;touch-action:none}#thumb{height:53px;width:53px;border-radius:50%;background:linear-gradient(135deg,#b1e8ff,#3777b0);border:3px solid white;pointer-events:none;box-shadow:0 3px 12px #0009}#actions{display:flex;flex-direction:column;gap:9px;pointer-events:auto}button{padding:13px 15px;border-radius:12px;border:1px solid #ffe4a3;background:linear-gradient(135deg,#ef9e45,#c46b34);color:white;font-size:14px;font-weight:800;box-shadow:0 4px 15px #0007}button.alt{background:linear-gradient(135deg,#347da0,#214763);border-color:#94c8e7}#panel{display:none;position:fixed;inset:0;z-index:8;background:#071524e6;align-items:center;justify-content:center;padding:18px;touch-action:auto}#panel.open{display:flex}#panelInner{width:min(430px,100%);background:#203b53;border:1px solid #91c6e8;border-radius:18px;padding:20px;line-height:1.5}#panelInner h2{margin:0;color:#ffe2a1}#panelInner button{margin:5px 5px 5px 0}#quest{position:fixed;top:calc(max(12px,env(safe-area-inset-top)) + 74px);left:12px;z-index:4;width:min(315px,calc(100vw - 24px));background:#102b40e8;border:1px solid #8ddfe3;border-radius:15px;padding:11px 13px;box-shadow:0 7px 22px #0007;pointer-events:none}#quest strong{color:#ffdd87;font-size:13px}#questText{display:block;font-size:13px;margin-top:4px;line-height:1.35}#questProgress{font-size:11px;color:#a5e7df;margin-top:5px}#guide{position:fixed;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 140px);transform:translateX(-50%);z-index:3;background:#183d4ddd;border:1px solid #85cbd4;border-radius:22px;padding:8px 13px;font-size:12px;text-align:center;max-width:75vw;pointer-events:none}#tutorial{display:none;position:fixed;inset:0;background:#071524ed;z-index:12;align-items:center;justify-content:center;padding:20px;touch-action:auto}#tutorial.open{display:flex}#tutorialContent{background:#1c3952;border:1px solid #a6dbed;border-radius:20px;padding:22px;width:min(400px,100%);line-height:1.5}#tutorialContent h2{color:#ffe1a2;margin-top:0}#tutorialContent button{width:100%}#fatal{display:none;position:fixed;inset:0;background:#111c2e;z-index:20;padding:30px;align-items:center;justify-content:center;text-align:center;line-height:1.6}#fatal.show{display:flex}@media(max-width:420px){#joystick{width:105px;height:105px}#thumb{width:48px;height:48px}.pane{padding:8px 10px;font-size:12px}button{padding:12px}}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#101a2b;color:white;font-family:system-ui,-apple-system,sans-serif;touch-action:none}canvas{display:block;width:100%;height:100%;touch-action:none}#hud{position:fixed;z-index:3;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}.pane{background:#12283ac7;border:1px solid #c7e5f85e;border-radius:13px;padding:10px 13px;box-shadow:0 4px 16px #0005;backdrop-filter:blur(7px)}.pane b{display:block;color:#ffe4a3}.pane small{color:#c0d8ea}#balance{text-align:right;line-height:1.6;font-weight:700}#aim{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:27px;opacity:.85;pointer-events:none}#toast{position:fixed;top:25%;left:50%;transform:translateX(-50%);background:#0d2138e8;border:1px solid #e7c581;border-radius:13px;padding:11px 15px;max-width:90vw;text-align:center;z-index:4;pointer-events:none;transition:opacity .3s}#controls{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));z-index:4;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px;pointer-events:none}#joystick{height:118px;width:118px;border-radius:50%;border:2px solid #b4ddffad;background:#1745689c;display:grid;place-items:center;pointer-events:auto;touch-action:none}#thumb{height:53px;width:53px;border-radius:50%;background:linear-gradient(135deg,#b1e8ff,#3777b0);border:3px solid white;pointer-events:none;box-shadow:0 3px 12px #0009}#actions{display:flex;flex-direction:column;gap:9px;pointer-events:auto}button{padding:13px 15px;border-radius:12px;border:1px solid #ffe4a3;background:linear-gradient(135deg,#ef9e45,#c46b34);color:white;font-size:14px;font-weight:800;box-shadow:0 4px 15px #0007}button.alt{background:linear-gradient(135deg,#347da0,#214763);border-color:#94c8e7}#panel{display:none;position:fixed;inset:0;z-index:8;background:#071524e6;align-items:center;justify-content:center;padding:18px;touch-action:auto}#panel.open{display:flex}#panelInner{width:min(430px,100%);background:#203b53;border:1px solid #91c6e8;border-radius:18px;padding:20px;line-height:1.5}#panelInner h2{margin:0;color:#ffe2a1}#panelInner button{margin:5px 5px 5px 0}#quest{position:fixed;top:calc(max(12px,env(safe-area-inset-top)) + 74px);left:12px;z-index:4;width:min(315px,calc(100vw - 24px));background:#102b40e8;border:1px solid #8ddfe3;border-radius:15px;padding:11px 13px;box-shadow:0 7px 22px #0007;pointer-events:none}#quest strong{color:#ffdd87;font-size:13px}#questText{display:block;font-size:13px;margin-top:4px;line-height:1.35}#questProgress{font-size:11px;color:#a5e7df;margin-top:5px}#guide{position:fixed;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 140px);transform:translateX(-50%);z-index:3;background:#183d4ddd;border:1px solid #85cbd4;border-radius:22px;padding:8px 13px;font-size:12px;text-align:center;max-width:75vw;pointer-events:none}#tutorial{display:none;position:fixed;inset:0;background:#071524ed;z-index:12;align-items:center;justify-content:center;padding:20px;touch-action:auto}#tutorial.open{display:flex}#tutorialContent{background:#1c3952;border:1px solid #a6dbed;border-radius:20px;padding:22px;width:min(400px,100%);line-height:1.5}#tutorialContent h2{color:#ffe1a2;margin-top:0}#tutorialContent button{width:100%}#tapHint{display:none;position:fixed;z-index:7;right:15px;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 121px);background:#ffe3a5;color:#263649;border-radius:13px;padding:8px 12px;font-size:13px;font-weight:900;box-shadow:0 0 18px #ffce6e9c;pointer-events:none;animation:hintPulse 1.2s ease-in-out infinite alternate}#tapHint.show{display:block}@keyframes hintPulse{to{transform:translateY(-7px);box-shadow:0 0 26px #ffcf79}}#fatal{display:none;position:fixed;inset:0;background:#111c2e;z-index:20;padding:30px;align-items:center;justify-content:center;text-align:center;line-height:1.6}#fatal.show{display:flex}@media(max-width:420px){#joystick{width:105px;height:105px}#thumb{width:48px;height:48px}.pane{padding:8px 10px;font-size:12px}button{padding:12px}}
 </style></head><body>
 <canvas id="scene" aria-label="Tienda tridimensional desde los ojos del jugador"></canvas>
 <div id="hud"><div class="pane"><b>🃏 MONSTER CARD SHOP</b><small>TIENDA PREMIUM · PRIMERA PERSONA</small></div><div class="pane" id="balance"></div></div>
-<div id="quest"><strong>📋 PRIMERA JORNADA</strong><span id="questText"></span><div id="questProgress"></div></div><div id="guide"></div><div id="aim">＋</div><div id="toast">Preparando el mundo 3D…</div>
+<div id="quest"><strong>📋 PRIMERA JORNADA</strong><span id="questText"></span><div id="questProgress"></div></div><div id="guide"></div><div id="tapHint">👇 PULSA GESTIÓN</div><div id="aim">＋</div><div id="toast">Preparando el mundo 3D…</div>
 <div id="controls"><div id="joystick" aria-label="Joystick para caminar"><div id="thumb"></div></div><div id="actions"><button id="interact">✋ USAR</button><button id="menu" class="alt">☰ GESTIÓN</button></div></div>
-<div id="panel"><div id="panelInner"><h2>🏪 Mi tienda</h2><p>Camina por los pasillos, mira las estanterías y acércate al mostrador para vender sobres.</p><p id="inventory"></p><button id="restock">📦 Comprar 5 sobres · 50 €</button><button id="open">✨ Abrir un sobre</button><p id="cards"></p><div id="cardPreview" style="display:none;margin:10px auto;width:190px;min-height:255px;padding:10px;border:7px solid #f3cf70;border-radius:17px;background:linear-gradient(145deg,#4f83c4,#243968);text-align:center;box-shadow:0 10px 24px #0007"><div style="font-weight:900;color:#ffe7a1" id="cardTitle"></div><div id="cardArt" style="font-size:92px;margin:20px 0"></div><div id="cardRarity" style="font-weight:900;color:#fff1a4"></div></div><button id="close" class="alt">Volver a la tienda</button></div></div>
+<div id="panel"><div id="panelInner"><h2>🏪 Mi tienda</h2><p>Camina por los pasillos, mira las estanterías y acércate al mostrador para vender sobres.</p><p id="inventory"></p><button id="restock">📦 Comprar 5 sobres · 50 €</button><button id="open">✨ Abrir un sobre</button><p id="cards"></p><div id="cardPreview" style="display:none;margin:10px auto;width:190px;min-height:255px;padding:10px;border:7px solid #f3cf70;border-radius:17px;background:linear-gradient(145deg,#4f83c4,#243968);text-align:center;box-shadow:0 10px 24px #0007"><div style="font-weight:900;color:#ffe7a1" id="cardTitle"></div><img id="cardArt" alt="Ilustración de la carta" style="display:block;width:100%;height:220px;object-fit:contain;margin:8px auto;border-radius:10px"/><div id="cardRarity" style="font-weight:900;color:#fff1a4"></div></div><button id="close" class="alt">Volver a la tienda</button></div></div>
 <div id="tutorial"><div id="tutorialContent"><h2>🏪 ¡Tu primera tienda!</h2><p>Eres el dueño de una tienda de cartas de criaturas. Tu trabajo es <b>vender sobres, atender clientes, reponer productos y coleccionar cartas</b>.</p><p>🕹️ <b>Izquierda:</b> caminar con el joystick.<br>👀 <b>Derecha:</b> deslizar para mirar.<br>✋ <b>USAR:</b> interactuar cerca de un expositor o de la caja.<br>☰ <b>GESTIÓN:</b> comprar sobres y abrir paquetes.</p><p>Completa las misiones de la primera jornada para ganar recompensas y hacer crecer tu negocio.</p><button id="startDay">▶ EMPEZAR MI PRIMER DÍA</button></div></div><div id="fatal"><div><h2>El 3D no ha podido iniciarse</h2><p id="reason"></p><p>Prueba a abrir la página directamente en Safari actualizado. No se mostrará un juego 2D en su lugar.</p></div></div>
 <script>
 (async function(){
@@ -21,8 +21,8 @@ try{
 let THREE;
 try{THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js')}
 catch(_){THREE=await import('https://unpkg.com/three@0.160.1/build/three.module.js')}
-const renderer=new THREE.WebGLRenderer({canvas:byId('scene'),antialias:true,powerPreference:'default'});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+const renderer=new THREE.WebGLRenderer({canvas:byId('scene'),antialias:false,powerPreference:'low-power'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.15));
 renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;
 const world=new THREE.Scene();world.background=new THREE.Color(0xc6d9e6);
 const camera=new THREE.PerspectiveCamera(76,1,.08,80);camera.rotation.order='YXZ';
@@ -119,6 +119,22 @@ function artTexture(s,kind='pack'){
  q.fillStyle='#fff';q.font='900 27px system-ui';q.fillText(kind==='box'?'DISPLAY BOX · 24 SOBRES':kind==='card'?'CARTA COLECCIONABLE':'SOBRE · 10 CARTAS',192,439,295);
  q.font='bold 20px system-ui';q.fillStyle='#ffdd91';q.fillText(kind==='card'?'✦  EDICIÓN BRILLANTE  ✦':'SERIE PREMIUM · EDICIÓN 01',192,475);
  const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t
+}
+// Higher-resolution, readable collectible card previews without external downloads.
+function cardImage(m,rarity){
+ const s=series.find(s=>s.creature===m.icon)||series[0];
+ const cv=document.createElement('canvas');cv.width=512;cv.height=720;const q=cv.getContext('2d');
+ const g=q.createLinearGradient(0,0,512,720);g.addColorStop(0,s.accent);g.addColorStop(.46,s.color);g.addColorStop(1,'#15264d');q.fillStyle=g;q.fillRect(0,0,512,720);
+ q.strokeStyle=rarity==='LEGENDARIA'?'#fff2a5':'#f2d28e';q.lineWidth=22;q.strokeRect(14,14,484,692);
+ q.strokeStyle='#fff9d5';q.lineWidth=3;q.strokeRect(34,34,444,652);
+ q.fillStyle='#11294ce8';q.fillRect(44,46,424,90);q.textAlign='center';q.fillStyle='#fff4bc';q.font='bold 37px system-ui';q.fillText(m.name,256,104,400);
+ q.fillStyle='#ffffff38';q.beginPath();q.arc(256,344,186,0,Math.PI*2);q.fill();
+ for(let i=0;i<25;i++){q.fillStyle='#fff7bb99';q.beginPath();q.arc((i*83)%480+16,(i*147)%500+125,2+(i%4),0,Math.PI*2);q.fill()}
+ q.font='220px Apple Color Emoji,Segoe UI Emoji,sans-serif';q.fillText(m.icon,256,425);
+ q.fillStyle='#102947e8';q.beginPath();q.roundRect(48,536,416,128,15);q.fill();
+ q.fillStyle='#fff1b5';q.font='bold 30px system-ui';q.fillText('✦ '+rarity+' ✦',256,583);
+ q.fillStyle='white';q.font='21px system-ui';q.fillText('MONSTER LEGENDS · SERIE 01',256,630);
+ return cv.toDataURL('image/png')
 }
 const packMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s),roughness:.55}));
 const boxMats=series.map(s=>new THREE.MeshStandardMaterial({map:artTexture(s,'box'),roughness:.55}));
@@ -358,6 +374,36 @@ const missions=[
  {text:'Vuelve a la CAJA y realiza tres ventas en total.',target:{x:3.6,z:-5.3},done:()=>data.sales>=3,reward:100},
  {text:'Atiende a un cliente acercándote a él y pulsando USAR.',target:{x:4.8,z:5.1},done:()=>data.served>=1,reward:75}
 ];
+// Lightweight glowing in-world navigation line, directional arrow and mission beacon.
+const routeMaterial=new THREE.LineBasicMaterial({color:0x5cf7df,transparent:true,opacity:.92,depthTest:false});
+const routePositions=new Float32Array(6);
+const routeGeometry=new THREE.BufferGeometry();routeGeometry.setAttribute('position',new THREE.BufferAttribute(routePositions,3));
+const routeLine=new THREE.Line(routeGeometry,routeMaterial);routeLine.renderOrder=50;world.add(routeLine);
+const beacon=new THREE.Group();world.add(beacon);
+const beaconMat=new THREE.MeshBasicMaterial({color:0xffd76e,depthTest:false});
+const beaconRing=new THREE.Mesh(new THREE.TorusGeometry(.42,.065,6,24),beaconMat);beaconRing.rotation.x=-Math.PI/2;beaconRing.position.y=.15;beacon.add(beaconRing);
+const beaconArrow=new THREE.Mesh(new THREE.ConeGeometry(.28,.5,6),beaconMat);beaconArrow.rotation.z=Math.PI;beaconArrow.position.y=1.85;beacon.add(beaconArrow);
+const floorArrow=new THREE.Mesh(new THREE.ConeGeometry(.22,.55,5),new THREE.MeshBasicMaterial({color:0x5cf7df,depthTest:false}));floorArrow.rotation.x=Math.PI/2;floorArrow.renderOrder=51;world.add(floorArrow);
+function updateNavigation(now){
+ const i=data.quest,management=i===2||i===3;
+ byId('tapHint').classList.toggle('show',management&&!modal.classList.contains('open')&&!tutorial.classList.contains('open'));
+ const active=i<missions.length&&!management;
+ routeLine.visible=beacon.visible=floorArrow.visible=active;
+ if(!active)return;
+ let target=missions[i].target;
+ if(i===5){const p=people.reduce((best,p)=>Math.hypot(player.x-p.root.position.x,player.z-p.root.position.z)<Math.hypot(player.x-best.x,player.z-best.z)?{x:p.root.position.x,z:p.root.position.z}:best,{x:100,z:100});target=p}
+ const dx=target.x-player.x,dz=target.z-player.z,dist=Math.hypot(dx,dz);
+ if(dist<.55){routeLine.visible=floorArrow.visible=false}
+ else {
+  routePositions[0]=player.x;routePositions[1]=.075;routePositions[2]=player.z;
+  routePositions[3]=target.x;routePositions[4]=.075;routePositions[5]=target.z;
+  routeGeometry.attributes.position.needsUpdate=true;routeGeometry.computeBoundingSphere();
+  floorArrow.position.set(player.x+dx/dist*Math.min(1.6,dist*.55),.12,player.z+dz/dist*Math.min(1.6,dist*.55));
+  floorArrow.rotation.set(Math.PI/2,0,-Math.atan2(dx,-dz))
+ }
+ beacon.position.set(target.x,0,target.z);beaconArrow.position.y=1.8+Math.sin(now*.003)*.18;
+ beaconRing.scale.setScalar(1+Math.sin(now*.003)*.12)
+}
 function updateQuest(){
  const i=Math.max(0,Math.min(missions.length,Number(data.quest)||0));data.quest=i;
  byId('questText').textContent=i>=missions.length?'🎉 ¡Jornada completada! Sigue vendiendo, reponiendo y coleccionando.':missions[i].text;
@@ -384,7 +430,7 @@ try{if(!localStorage.getItem(SAVE+'-tutorial'))tutorial.classList.add('open')}ca
 byId('menu').onclick=()=>{refresh();modal.classList.add('open')};
 byId('close').onclick=()=>modal.classList.remove('open');
 byId('restock').onclick=()=>{if(data.cash<50)return notice('No tienes 50 €');data.cash-=50;data.stock+=5;data.restocks=(data.restocks||0)+1;persist();refresh();notice('📦 Compraste 5 sobres');advanceQuest()};
-byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const monsters=[{name:'Drako Llama',icon:'🐉'},{name:'Zorrito Bosque',icon:'🦊'},{name:'Delfín Celeste',icon:'🐬'},{name:'Rayo Lunar',icon:'⚡'},{name:'Fénix Rubí',icon:'🔥'},{name:'Estrella Nova',icon:'🌟'}];const m=monsters[Math.floor(Math.random()*monsters.length)];const rarity=Math.random()<.08?'LEGENDARIA':Math.random()<.3?'RARA':'COMÚN';data.collection.push(m.name+' · '+rarity);data.opens=(data.opens||0)+1;persist();refresh();advanceQuest();byId('cardPreview').style.display='block';byId('cardTitle').textContent=m.name;byId('cardArt').textContent=m.icon;byId('cardRarity').textContent='✦ '+rarity+' ✦';notice('✨ '+m.name+' · '+rarity)};
+byId('open').onclick=()=>{if(data.stock<1)return notice('No tienes sobres');data.stock--;const monsters=[{name:'Drako Llama',icon:'🐉'},{name:'Zorrito Bosque',icon:'🦊'},{name:'Delfín Celeste',icon:'🐬'},{name:'Rayo Lunar',icon:'⚡'},{name:'Fénix Rubí',icon:'🔥'},{name:'Estrella Nova',icon:'🌟'}];const m=monsters[Math.floor(Math.random()*monsters.length)];const rarity=Math.random()<.08?'LEGENDARIA':Math.random()<.3?'RARA':'COMÚN';data.collection.push(m.name+' · '+rarity);data.opens=(data.opens||0)+1;persist();refresh();advanceQuest();byId('cardPreview').style.display='block';byId('cardTitle').textContent=m.name;byId('cardArt').src=cardImage(m,rarity);byId('cardRarity').textContent='✦ '+rarity+' ✦';notice('✨ '+m.name+' · '+rarity)};
 const player={x:0,z:7.2,yaw:0,pitch:0},move={x:0,y:0};
 function interact(){
  if(modal.classList.contains('open')||tutorial.classList.contains('open'))return;
@@ -435,7 +481,7 @@ function animate(now){
  camera.position.set(player.x,1.65,player.z);
  camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;
  updatePeople(dt,now);
- if(!tutorial.classList.contains('open'))updateQuest();renderer.render(world,camera)
+ if(!tutorial.classList.contains('open'))updateQuest();updateNavigation(now);renderer.render(world,camera)
 }
 requestAnimationFrame(animate);
 updateQuest();
